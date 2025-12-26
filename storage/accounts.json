@@ -1,0 +1,20 @@
+{
+  "_comment": "Account configuration file. Maps account folder names to account types.",
+  "_account_types": ["Personal", "Business"],
+  "_usage": "When processing transactions, use this file to determine which category set (Personal or Business) should be used for categorization.",
+  "accounts": {
+    "Alistair Personal Account": {
+      "type": "Personal"
+    },
+    "Alistair & Phoebe Joint Credit Card": {
+      "type": "Personal"
+    },
+    "Century Digital Main Account": {
+      "type": "Business"
+    },
+    "Century Tax Account": {
+      "type": "Business"
+    }
+  }
+}
+

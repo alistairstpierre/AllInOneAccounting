@@ -1,0 +1,27 @@
+Type,Details,Particulars,Code,Reference,Amount,Date,ForeignCurrencyAmount,ConversionCharge
+Visa Purchase,4037-****-****-6505  If,      0.59,Openai *Chat,        0.49,-38.86,29/07/2025,USD 23.00 converted at 0.59,This includes a currency conversion charge of $0.49
+Direct Credit,Stripe Payments,,Trf Z4Zmetct,Stripe,1715.21,29/07/2025,,
+Visa Purchase,4037-****-****-6505  If,      0.60,Brightlocal,        1.27,-99.20,28/07/2025,USD 59.00 converted at 0.60,This includes a currency conversion charge of $1.27
+Payment,Nzta Cps Clearing,996551912742,Nz Transport,Car Rego,-144.22,28/07/2025,,
+Direct Credit,Stripe Payments,,Trf Tcxkygid,Stripe,855.82,25/07/2025,,
+Visa Purchase,4037-****-****-6505  If,      0.59,Myonlineguy,        4.37,-341.19,24/07/2025,USD 200.00 converted at 0.59,This includes a currency conversion charge of $4.37
+Direct Credit,Stripe Payments,,Trf Jscpwvj2,Stripe,1574.60,23/07/2025,,
+Visa Purchase,4037-****-****-6505  If,,Paddle.Net*,,-58.18,22/07/2025,,
+Visa Purchase,4037-****-****-6505  If,,Search Atlas,,-47.08,21/07/2025,,
+Visa Purchase,4037-****-****-6505  If,      0.59,Gamma.App,        0.44,-34.32,21/07/2025,USD 20.00 converted at 0.59,This includes a currency conversion charge of $0.44
+Visa Purchase,4037-****-****-6505  If,,Zoom.Com 888,,-27.99,21/07/2025,,
+Visa Purchase,4037-****-****-6505  If,      0.59,Calendly,        0.26,-20.53,21/07/2025,USD 12.00 converted at 0.59,This includes a currency conversion charge of $0.26
+Visa Purchase,4037-****-****-6505  If,,Facebk *23Nr,,-5.97,21/07/2025,,
+Transfer,9554-****-****-6788,Debit,Transfer,214528,-164.15,21/07/2025,,
+Payment,Hutt Auto Services L,Car Repair,,,-2503.51,17/07/2025,,
+Visa Purchase,4037-****-****-6505  If,,Facebk *H5Ag,,-57.24,16/07/2025,,
+Direct Credit,Stripe Payments,,Trf Rdkqzpc6,Stripe,312.58,16/07/2025,,
+Visa Purchase,4037-****-****-6505  If,      0.59,Kit.Com,        0.62,-48.97,14/07/2025,USD 29.00 converted at 0.59,This includes a currency conversion charge of $0.62
+Direct Credit,Stripe Payments,,Trf Cagw2A5S,Stripe,4662.99,14/07/2025,,
+Transfer,9554-****-****-6788,Century 30/0,6-06/07,,-375.57,11/07/2025,,
+Visa Purchase,4037-****-****-6505  Df,,Wu,,-376.66,09/07/2025,,
+Direct Debit,Gocardless,Tklchartered,87Kxha3,,-373.75,04/07/2025,,
+Visa Purchase,4037-****-****-6505  Df,,Mighty Ape,,-29.00,03/07/2025,,
+Visa Purchase,4037-****-****-6505  Df,,Eb *Beehive,,-92.33,02/07/2025,,
+Direct Debit,,Ipayroll,34793-0004,,-6050.44,01/07/2025,,
+Transfer,9554-****-****-6788,Debit,Transfer,220351,-201.35,01/07/2025,,

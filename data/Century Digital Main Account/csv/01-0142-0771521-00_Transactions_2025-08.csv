@@ -1,0 +1,43 @@
+Type,Details,Particulars,Code,Reference,Amount,Date,ForeignCurrencyAmount,ConversionCharge
+Visa Purchase,4037-****-****-6505  If,      0.58,Openai *Chat,        0.51,-40.06,29/08/2025,USD 23.00 converted at 0.58,This includes a currency conversion charge of $0.51
+Direct Credit,Stripe Payments,,Trf Gclilmtg,Stripe,158.94,29/08/2025,,
+Visa Purchase,4037-****-****-6505  If,,Search Atlas,,-26.60,26/08/2025,,
+Visa Purchase,4037-****-****-6505  If,,Search Atlas,,-17.73,26/08/2025,,
+Visa Purchase,4037-****-****-6505  If,      0.57,Myonlineguy,        4.48,-349.43,25/08/2025,USD 200.00 converted at 0.57,This includes a currency conversion charge of $4.48
+Visa Purchase,4037-****-****-6505  If,      0.58,Search Atlas,        2.21,-172.64,25/08/2025,USD 99.00 converted at 0.58,This includes a currency conversion charge of $2.21
+Payment,Andrew Hughes,Andrew Wk4,,,-420.00,25/08/2025,,
+Visa Purchase,4037-****-****-6505  If,,Paddle.Net*,,-58.18,22/08/2025,,
+Direct Debit,Gocardless,Tklchartered,87Kxha3,,-373.75,21/08/2025,,
+Direct Debit,Gocardless,Tklchartered,87Kxha3,,-373.75,21/08/2025,,
+Visa Purchase,4037-****-****-6505  Df,,Pb Tech Onli,,-55.53,21/08/2025,,
+Visa Purchase,4037-****-****-6505  Df,,Paymypark,,-53.53,21/08/2025,,
+Visa Purchase,4037-****-****-6505  If,,Zoom.Com 888,,-27.99,21/08/2025,,
+Visa Purchase,4037-****-****-6505  If,      0.59,Calendly,        0.26,-20.57,21/08/2025,USD 12.00 converted at 0.59,This includes a currency conversion charge of $0.26
+Visa Purchase,4037-****-****-6505  Df,,New World We,,-85.36,20/08/2025,,
+Visa Purchase,4037-****-****-6505  Df,,Coca-Cola Ep,,-2.50,20/08/2025,,
+Visa Purchase,4037-****-****-6505  If,      0.59,Gamma.App,        0.44,-34.30,19/08/2025,USD 20.00 converted at 0.59,This includes a currency conversion charge of $0.44
+Visa Purchase,4037-****-****-6505  If,,Capcut,,-19.99,19/08/2025,,
+Payment,Hutt Auto Services L,Car Fixes,,,-611.80,19/08/2025,,
+Direct Credit,Stripe Payments,,Trf Alvovt9R,Stripe,1968.85,19/08/2025,,
+Visa Purchase,4037-****-****-6505  If,      0.59,Search Atlas,        0.59,-46.31,18/08/2025,USD 27.00 converted at 0.59,This includes a currency conversion charge of $0.59
+Payment,Andrew Hughes,Andrew Wk3,,,-427.50,18/08/2025,,
+Direct Credit,Stripe Payments,,Trf F5Dryosl,Stripe,4001.25,18/08/2025,,
+Visa Purchase,4037-****-****-6505  Df,,Trademe F5Ou,,-1565.00,15/08/2025,,
+Visa Purchase,4037-****-****-6505  Df,,Paymypark,,-53.53,14/08/2025,,
+Transfer,01-0142-0771521-01,9066.29,,,-1813.26,13/08/2025,,
+Transfer,01-0142-0771521-01, $1 985.53,,,-397.11,13/08/2025,,
+Transfer,01-0142-0771521-01,$1142.67,,,-228.53,13/08/2025,,
+Direct Credit,Stripe Payments,,Trf Mnzpn2Om,Stripe,1142.67,13/08/2025,,
+Visa Purchase,4037-****-****-6505  If,      0.59,Elevenlabs.I,        0.12,-9.81,12/08/2025,USD 5.75 converted at 0.59,This includes a currency conversion charge of $0.12
+Transfer,9554-****-****-6788,Debit,Transfer,193517,-695.27,11/08/2025,,
+Payment,Andrew Hughes,Andrew Wk2,,,-540.00,11/08/2025,,
+Transfer,9554-****-****-6788,Debit,Transfer,193536,-201.05,11/08/2025,,
+Direct Credit,Stripe Payments,,Trf Cmnvnep1,Stripe,1985.53,11/08/2025,,
+Direct Credit,Stripe Payments,,Trf 1Qyra9Md,Stripe,9066.29,08/08/2025,,
+Visa Purchase,4037-****-****-6505  If,      0.58,Openart Ai,        0.31,-24.22,05/08/2025,USD 14.00 converted at 0.58,This includes a currency conversion charge of $0.31
+Payment,Andrew Hughes,Andrew Pay,,,-420.00,05/08/2025,,
+Transfer,9554-****-****-6788,Debit,Transfer,212407,-136.63,04/08/2025,,
+Direct Debit,,Ipayroll,34793-0005,,-6050.44,01/08/2025,,
+Transfer,01-0142-0771521-01,Debit,Transfer,151113,-6976.05,01/08/2025,,
+Transfer,01-0142-0771521-01,May 06 -> Au,g 01 Tax,,-0.01,01/08/2025,,
+Direct Credit,Stripe Payments,,Trf Bkwg9Xm5,Stripe,3053.46,01/08/2025,,
