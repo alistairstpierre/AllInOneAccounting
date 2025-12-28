@@ -32,7 +32,14 @@ export async function GET() {
         const fileContents = fs.readFileSync(filePath, 'utf-8');
         const transactions = JSON.parse(fileContents);
         if (Array.isArray(transactions)) {
-          allTransactions.push(...transactions);
+          // Extract the file name without .json extension
+          const transactionFileName = file.replace(/\.json$/, '');
+          // Add the transaction file name to each transaction
+          const transactionsWithFileName = transactions.map((t: any) => ({
+            ...t,
+            transaction_file: transactionFileName
+          }));
+          allTransactions.push(...transactionsWithFileName);
         }
       } catch (error) {
         console.error(`Error reading ${file}:`, error);

@@ -9,12 +9,18 @@ interface TransactionHeaderProps {
   sortBy: 'date' | 'amount';
   sortOrder: 'asc' | 'desc';
   onSortChange: (sortBy: 'date' | 'amount') => void;
+  isSelectionMode?: boolean;
+  isAllSelected?: boolean;
+  onCheckboxChange?: () => void;
 }
 
 export default function TransactionHeader({
   sortBy,
   sortOrder,
   onSortChange,
+  isSelectionMode = false,
+  isAllSelected = false,
+  onCheckboxChange,
 }: TransactionHeaderProps) {
   const SortArrow = ({ column }: { column: 'date' | 'amount' }) => {
     const isActive = sortBy === column;
@@ -31,8 +37,15 @@ export default function TransactionHeader({
   return (
     <div className="bg-gray-100 border border-gray-200 rounded-lg p-2 mb-2">
       <div className="flex items-center gap-3">
-        {/* Spacer for potential checkbox column - matches TransactionCard layout */}
-        <div className="w-4 flex-shrink-0"></div>
+        {/* Checkbox for selection mode */}
+        <div className="w-4 flex-shrink-0">
+          <input
+            type="checkbox"
+            checked={isSelectionMode && isAllSelected}
+            onChange={onCheckboxChange}
+            className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 cursor-pointer"
+          />
+        </div>
         <button
           onClick={() => onSortChange('date')}
           className="flex items-center text-xs font-semibold text-gray-700 hover:text-gray-900 transition-colors w-24 flex-shrink-0"

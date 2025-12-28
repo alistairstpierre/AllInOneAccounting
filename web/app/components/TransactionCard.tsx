@@ -22,11 +22,14 @@ interface Transaction {
   processed_date: string;
   foreign_currency: string;
   source_file: string;
+  transaction_file?: string;  // Transaction file name (JSON file name without extension)
   categorized: boolean;
   category: string | null;
   category_description: string | null;
   categorized_at: string | null;
+  updated_at?: string | null;  // Timestamp when transaction was last updated
   is_transfer?: boolean;  // Whether this is a transfer between accounts
+  is_credit?: boolean;  // Whether this is a credit (income) or debit (expense)
 }
 
 interface Entity {
@@ -43,6 +46,7 @@ interface TransactionCardProps {
   onEntityUpdate?: (transactionId: string, entityId: string | null) => void;
   onTransactionUpdate?: (updatedTransaction: Transaction) => void;
   onTransferUpdate?: (transactionId: string, isTransfer: boolean) => void;
+  onCreditUpdate?: (transactionId: string, isCredit: boolean) => void;
   isSelectMode?: boolean;
   isSelected?: boolean;
   onSelectChange?: (selected: boolean) => void;
@@ -71,6 +75,7 @@ export default function TransactionCard({
   onEntityUpdate,
   onTransactionUpdate,
   onTransferUpdate,
+  onCreditUpdate,
   isSelectMode = false,
   isSelected = false,
   onSelectChange,
@@ -164,6 +169,8 @@ export default function TransactionCard({
     ? transaction.category_description.match(/Matched with similar transaction: (.+)/)?.[1]
     : null;
   const isManuallyUpdated = transaction.category_description?.includes('Manually updated by user') ?? false;
+  const isUpdated = !!transaction.updated_at;  // Transaction has been updated (any field changed)
+  const isCredit = transaction.is_credit ?? false;  // Whether this is a credit (income) transaction
 
   const handleCategorySelect = async (newCategory: string) => {
     setSelectedCategory(newCategory);
@@ -187,8 +194,8 @@ export default function TransactionCard({
 
   return (
     <div className={`bg-white rounded-lg shadow-sm border ${isSelected ? 'border-blue-500' : 'border-gray-200'} hover:shadow-md transition-shadow flex`}>
-      {isManuallyUpdated && (
-        <div className="w-1 bg-blue-500 rounded-l-lg flex-shrink-0" />
+      {isUpdated && (
+        <div className="w-1 bg-green-500 rounded-l-lg flex-shrink-0" title={`Updated: ${transaction.updated_at ? new Date(transaction.updated_at).toLocaleString() : ''}`} />
       )}
       <div className="flex-1 flex flex-col">
         <div 
@@ -260,51 +267,61 @@ export default function TransactionCard({
               />
             ) : (
               <h3 
-                className="text-sm font-semibold text-gray-900 truncate cursor-pointer hover:text-blue-600 transition-colors" 
+                className={`text-sm font-semibold truncate cursor-pointer transition-colors ${
+                  isCredit 
+                    ? 'text-green-700 hover:text-green-800' 
+                    : 'text-gray-900 hover:text-blue-600'
+                }`}
                 title={`Click to edit. Original: ${transaction.merchant}`}
                 onClick={() => setIsEditingMerchant(true)}
               >
+                {isCredit && (
+                  <span className="text-green-600 font-bold mr-1">$</span>
+                )}
                 {displayBusinessName}
               </h3>
             )}
-            <div className="relative inline-block" ref={categoryDropdownRef}>
-              <span
-                className={`px-2 py-0.5 text-xs font-medium rounded-full whitespace-nowrap cursor-pointer transition-colors ${
-                  transaction.category
-                    ? 'bg-blue-100 text-blue-800 hover:bg-blue-200'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                }`}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setIsCategoryDropdownOpen(!isCategoryDropdownOpen);
-                }}
-                title="Click to change category"
-              >
-                {category}
-              </span>
-              {isCategoryDropdownOpen && (
-                <div 
-                  className="absolute z-20 mt-1 bg-white border border-gray-300 rounded-md shadow-lg min-w-[150px] max-h-60 overflow-auto"
-                  onClick={(e) => e.stopPropagation()}
+            {/* Don't show category for credits - credits are income, not expenses */}
+            {!isCredit && (
+              <div className="relative inline-block" ref={categoryDropdownRef}>
+                <span
+                  className={`px-2 py-0.5 text-xs font-medium rounded-full whitespace-nowrap cursor-pointer transition-colors ${
+                    transaction.category
+                      ? 'bg-blue-100 text-blue-800 hover:bg-blue-200'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  }`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsCategoryDropdownOpen(!isCategoryDropdownOpen);
+                  }}
+                  title="Click to change category"
                 >
-                  <div
-                    className="px-3 py-2 text-xs cursor-pointer hover:bg-gray-50 text-black"
-                    onClick={() => handleCategorySelect('')}
+                  {category}
+                </span>
+                {isCategoryDropdownOpen && (
+                  <div 
+                    className="absolute z-20 mt-1 bg-white border border-gray-300 rounded-md shadow-lg min-w-[150px] max-h-60 overflow-auto"
+                    onClick={(e) => e.stopPropagation()}
                   >
-                    Uncategorized
-                  </div>
-                  {categories.map((cat) => (
                     <div
-                      key={cat}
                       className="px-3 py-2 text-xs cursor-pointer hover:bg-gray-50 text-black"
-                      onClick={() => handleCategorySelect(cat)}
+                      onClick={() => handleCategorySelect('')}
                     >
-                      {cat}
+                      Uncategorized
                     </div>
-                  ))}
-                </div>
-              )}
-            </div>
+                    {categories.map((cat) => (
+                      <div
+                        key={cat}
+                        className="px-3 py-2 text-xs cursor-pointer hover:bg-gray-50 text-black"
+                        onClick={() => handleCategorySelect(cat)}
+                      >
+                        {cat}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
             {isMatched && matchedMerchant && (
               <span className="px-2 py-0.5 text-xs font-medium bg-purple-100 text-purple-700 rounded-full whitespace-nowrap" title={`Matched with: ${matchedMerchant}`}>
                 Matched
@@ -388,6 +405,12 @@ export default function TransactionCard({
               <span className="font-medium text-gray-700">Source File:</span>{' '}
               {transaction.source_file}
             </div>
+            {transaction.transaction_file && (
+              <div>
+                <span className="font-medium text-gray-700">Account:</span>{' '}
+                {transaction.transaction_file}
+              </div>
+            )}
             {transaction.category_description && !isMatched && (
               <div className="col-span-2">
                 <span className="font-medium text-gray-700">Description:</span>{' '}
@@ -417,22 +440,50 @@ export default function TransactionCard({
                 {new Date(transaction.categorized_at).toLocaleString()}
               </div>
             )}
-            {onTransferUpdate && (
-              <div className="col-span-2 flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  id={`transfer-${getTransactionId(transaction)}`}
-                  checked={transaction.is_transfer || false}
-                  onChange={async (e) => {
-                    if (onTransferUpdate) {
-                      onTransferUpdate(getTransactionId(transaction), e.target.checked);
-                    }
-                  }}
-                  className="w-3.5 h-3.5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                />
-                <label htmlFor={`transfer-${getTransactionId(transaction)}`} className="text-xs font-medium text-gray-700 cursor-pointer">
-                  Mark as Transfer (exclude from expenses)
-                </label>
+            {transaction.updated_at && (
+              <div>
+                <span className="font-medium text-gray-700">Last Updated:</span>{' '}
+                {new Date(transaction.updated_at).toLocaleString()}
+              </div>
+            )}
+            {(onTransferUpdate || onCreditUpdate) && (
+              <div className="col-span-2 flex items-center gap-4 flex-wrap">
+                {onTransferUpdate && (
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      id={`transfer-${getTransactionId(transaction)}`}
+                      checked={transaction.is_transfer || false}
+                      onChange={async (e) => {
+                        if (onTransferUpdate) {
+                          onTransferUpdate(getTransactionId(transaction), e.target.checked);
+                        }
+                      }}
+                      className="w-3.5 h-3.5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <label htmlFor={`transfer-${getTransactionId(transaction)}`} className="text-xs font-medium text-gray-700 cursor-pointer">
+                      Mark as Transfer (exclude from expenses)
+                    </label>
+                  </div>
+                )}
+                {onCreditUpdate && (
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      id={`credit-${getTransactionId(transaction)}`}
+                      checked={transaction.is_credit || false}
+                      onChange={async (e) => {
+                        if (onCreditUpdate) {
+                          onCreditUpdate(getTransactionId(transaction), e.target.checked);
+                        }
+                      }}
+                      className="w-3.5 h-3.5 text-green-600 border-gray-300 rounded focus:ring-green-500"
+                    />
+                    <label htmlFor={`credit-${getTransactionId(transaction)}`} className="text-xs font-medium text-gray-700 cursor-pointer">
+                      Mark as Credit (income)
+                    </label>
+                  </div>
+                )}
               </div>
             )}
             </div>

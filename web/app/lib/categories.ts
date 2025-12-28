@@ -31,6 +31,8 @@ export const BUSINESS_CATEGORIES = [
   'Software/Subscriptions',
   'Marketing/Advertising',
   'Professional Services',
+  'Salaries/Wages',
+  'Commissions',
   'Travel',
   'Meals/Entertainment',
   'Equipment',
@@ -41,6 +43,7 @@ export const BUSINESS_CATEGORIES = [
   'Legal/Accounting',
   'Telecommunications',
   'Bank Fees',
+  'Drawings',
   'Uncategorized',
 ] as const;
 

@@ -1,10 +1,15 @@
 # Business Expense Categorization Prompt
 
-This prompt is designed to help categorize business expenses, particularly focusing on online services and digital subscriptions that are common in modern business operations.
+This prompt is designed to help categorize business expenses, covering both online services/digital subscriptions and traditional local businesses that are common in modern business operations.
 
 ## Context
 
-You are categorizing business expenses for a company. Many transactions are for online services, software subscriptions, digital tools, and cloud-based platforms rather than traditional local businesses. These expenses are legitimate business costs and should be categorized appropriately.
+You are categorizing business expenses for a company. Transactions may be for:
+- **Online services**: Software subscriptions, digital tools, cloud-based platforms, SaaS services
+- **Local businesses**: Physical stores, restaurants, service providers, contractors, suppliers in your area
+- **Hybrid businesses**: Companies that operate both online and have physical locations
+
+All of these are legitimate business expenses and should be categorized appropriately. Your task is to identify the business name (cleaning up merchant names) and assign the correct business category.
 
 ## Business Expense Categories
 
@@ -108,17 +113,47 @@ Examples:
 - "Coursera" (business courses) → Education/Training
 - "Udemy" (business courses) → Education/Training
 
+## Identifying Business Names
+
+When identifying the business name from merchant transaction data:
+
+1. **Online Services**: Look for company names, service names, or platform names
+   - "Openai *Chat" → "OpenAI"
+   - "Google Workspace_Elect" → "Google Workspace"
+   - "Twilio" → "Twilio"
+   - Clean up transaction codes, locations, and formatting
+
+2. **Local Businesses**: Identify the actual business name, removing location details if they're just for identification
+   - "Freemans Lotto Pipitea Nz" → "Freemans Lotto" (local business)
+   - "Zambrero Courtney Wellington Nz" → "Zambrero" (local restaurant chain)
+   - "Badminton Wellington C Wellington Nz" → "Badminton Wellington" (local facility)
+   - Keep location if it's part of the business name (e.g., "Wellington Airport")
+
+3. **Hybrid Businesses**: Companies with both online and physical presence
+   - Identify the company name regardless of whether transaction was online or in-store
+   - "Amazon" could be online or physical (Amazon Go stores)
+   - "Starbucks" could be in-store or mobile app
+
 ## Important Notes
 
-1. **Online Services are Business Expenses**: Many modern businesses operate primarily online. Services like cloud hosting, SaaS tools, and digital platforms are legitimate business expenses, not personal entertainment.
+1. **Both Online and Local are Business Expenses**: Modern businesses use both online services (SaaS, cloud tools) and local businesses (suppliers, contractors, restaurants for meetings). Both are legitimate business expenses.
 
 2. **Context Matters**: Consider the business context. For example:
-   - "Twilio" for a business → Software/Subscriptions (communication infrastructure)
-   - "Netflix" for a business → Likely Meals/Entertainment (if for team) or may need clarification
+   - "Twilio" → Software/Subscriptions (communication infrastructure)
+   - "OpenAI" → Software/Subscriptions (AI services)
+   - "Local Restaurant" → Meals/Entertainment (business meal)
+   - "Office Supply Store" → Office Supplies
+   - "Contractor Name" → Professional Services
 
 3. **Subscription Services**: Most recurring online services should go to Software/Subscriptions unless they're clearly in another category (e.g., marketing tools → Marketing/Advertising).
 
-4. **When in Doubt**: If an expense could fit multiple categories, choose the most specific one. If truly unclear, use "Uncategorized" and note why.
+4. **Local Business Services**: 
+   - Physical stores for office supplies → Office Supplies
+   - Local contractors/freelancers → Professional Services
+   - Local restaurants (business meals) → Meals/Entertainment
+   - Local service providers → Appropriate category based on service type
+
+5. **When in Doubt**: If an expense could fit multiple categories, choose the most specific one. If truly unclear, use "Uncategorized" and note why.
 
 ## Output Format
 

@@ -7,6 +7,7 @@
 import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
+import { updateTransaction } from '../../../lib/transaction-update';
 
 const TRANSACTIONS_FILE = path.resolve(process.cwd(), '..', 'storage', 'transactions.json');
 
@@ -53,15 +54,19 @@ export async function POST(request: Request) {
         let fileUpdated = false;
 
         // Update matching transactions in this file
-        transactions.forEach((t: any) => {
+        transactions.forEach((t: any, index: number) => {
           const tId = getTransactionId(t);
           if (idsSet.has(tId)) {
-            t.category = category || null;
-            t.categorized = category !== '';
-            t.category_description = category ? 'Manually updated by user' : null;
-            t.categorized_at = category ? new Date().toISOString() : null;
-            updatedCount++;
-            fileUpdated = true;
+            const { transaction: updatedTransaction, wasUpdated } = updateTransaction(t, {
+              category: category || null
+            });
+            
+            if (wasUpdated) {
+              updatedTransaction.category_description = category ? 'Manually updated by user' : null;
+              transactions[index] = updatedTransaction;
+              updatedCount++;
+              fileUpdated = true;
+            }
           }
         });
 

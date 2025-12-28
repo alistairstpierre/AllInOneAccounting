@@ -315,9 +315,10 @@
     "foreign_currency": "",
     "source_file": "9554-xxxx-xxxx-6788_Statement_2025-12-05.ofx",
     "categorized": true,
-    "category": "Gifts & Donations",
-    "category_description": "Business: QP Social Project. Type: Social enterprise. QP Social Project is a social enterprise that may focus on community initiatives or projects, where contributions are often seen as donations to support social causes.",
-    "categorized_at": "2025-12-26T14:37:29.964325"
+    "category": "Personal Care",
+    "category_description": "Manually updated by user",
+    "categorized_at": "2025-12-28T09:53:42.508Z",
+    "updated_at": "2025-12-28T09:53:42.508Z"
   },
   {
     "id": "20251201202511290_9554XXXXXXXX6788",
@@ -459,9 +460,10 @@
     "foreign_currency": "",
     "source_file": "9554-xxxx-xxxx-6788_Statement_2025-12-05.ofx",
     "categorized": true,
-    "category": "Uncategorized",
-    "category_description": "Matched with exact merchant name and closest amount: Wellington Airport",
-    "categorized_at": "2025-12-26T14:37:15.720051"
+    "category": "Transportation",
+    "category_description": "Manually updated by user",
+    "categorized_at": "2025-12-28T09:34:54.218Z",
+    "updated_at": "2025-12-28T09:34:54.218Z"
   },
   {
     "id": "20251201202511281_9554XXXXXXXX6788",
@@ -907,9 +909,10 @@
     "foreign_currency": "",
     "source_file": "9554-xxxx-xxxx-6788_Statement_2025-12-05.ofx",
     "categorized": true,
-    "category": "Uncategorized",
-    "category_description": "Matched with exact merchant name and closest amount: Chemist Warehouse",
-    "categorized_at": "2025-12-26T14:37:15.728071"
+    "category": "Personal Care",
+    "category_description": "Manually updated by user",
+    "categorized_at": "2025-12-28T09:34:31.421Z",
+    "updated_at": "2025-12-28T09:34:31.421Z"
   },
   {
     "id": "20251124202511241_9554XXXXXXXX6788",
@@ -1067,9 +1070,10 @@
     "foreign_currency": "",
     "source_file": "9554-xxxx-xxxx-6788_Statement_2025-12-05.ofx",
     "categorized": true,
-    "category": "Food & Dining",
-    "category_description": "Business: Qp Social Project. Type: Social enterprise/restaurant. Qp Social Project is a social enterprise that operates as a restaurant, providing meals and beverages to customers.",
-    "categorized_at": "2025-12-26T14:37:44.555882"
+    "category": "Personal Care",
+    "category_description": "Manually updated by user",
+    "categorized_at": "2025-12-28T09:53:39.069Z",
+    "updated_at": "2025-12-28T09:53:39.069Z"
   },
   {
     "id": "20251124202511239_9554XXXXXXXX6788",
@@ -1086,7 +1090,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:11.460Z"
   },
   {
     "id": "202511242025112310_9554XXXXXXXX6788",
@@ -1103,7 +1108,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:11.489Z"
   },
   {
     "id": "202511242025112311_9554XXXXXXXX6788",
@@ -1120,7 +1126,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:11.475Z"
   },
   {
     "id": "20251124202511220_9554XXXXXXXX6788",
@@ -1582,9 +1589,10 @@
     "foreign_currency": "",
     "source_file": "9554-xxxx-xxxx-6788_Statement_2025-12-05.ofx",
     "categorized": true,
-    "category": "Uncategorized",
-    "category_description": "Business: Bendon Lingerie. Type: Lingerie retailer. Bendon Lingerie specializes in women's lingerie and intimate apparel, making purchases from this business fit into the clothing category.",
-    "categorized_at": "2025-12-26T14:37:50.837401"
+    "category": "Shopping",
+    "category_description": "Manually updated by user",
+    "categorized_at": "2025-12-28T09:34:49.445Z",
+    "updated_at": "2025-12-28T09:34:49.445Z"
   },
   {
     "id": "20251117202511161_9554XXXXXXXX6788",
@@ -1678,9 +1686,10 @@
     "foreign_currency": "",
     "source_file": "9554-xxxx-xxxx-6788_Statement_2025-12-05.ofx",
     "categorized": true,
-    "category": "Food & Dining",
-    "category_description": "Business: QP Social Project. Type: Social enterprise/food service. QP Social Project is involved in providing food services, often with a social mission, thus categorizing this transaction under food.",
-    "categorized_at": "2025-12-26T14:37:50.837401"
+    "category": "Personal Care",
+    "category_description": "Manually updated by user",
+    "categorized_at": "2025-12-28T09:53:42.508Z",
+    "updated_at": "2025-12-28T09:53:42.508Z"
   },
   {
     "id": "20251117202511167_9554XXXXXXXX6788",
@@ -1697,7 +1706,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:11.578Z"
   },
   {
     "id": "20251117202511168_9554XXXXXXXX6788",
@@ -1714,7 +1724,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:11.503Z"
   },
   {
     "id": "20251117202511169_9554XXXXXXXX6788",
@@ -1731,7 +1742,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:01.306Z"
   },
   {
     "id": "20251117202511150_9554XXXXXXXX6788",
@@ -1761,9 +1773,10 @@
     "foreign_currency": "",
     "source_file": "9554-xxxx-xxxx-6788_Statement_2025-12-05.ofx",
     "categorized": true,
-    "category": "Uncategorized",
-    "category_description": "Business: Ramada. Type: Hotel and hospitality. Ramada is a hotel chain where customers may pay for lodging, thus categorizing this transaction under travel/vacation.",
-    "categorized_at": "2025-12-26T14:37:50.837401"
+    "category": "Food & Dining",
+    "category_description": "Manually updated by user",
+    "categorized_at": "2025-12-28T09:34:24.455Z",
+    "updated_at": "2025-12-28T09:34:24.455Z"
   },
   {
     "id": "20251114202511140_9554XXXXXXXX6788",
@@ -2275,7 +2288,9 @@
     "categorized": true,
     "category": "Uncategorized",
     "category_description": "Business: Flight Centre. Type: Travel agency. Flight Centre is a travel agency that helps customers book flights, accommodations, and travel packages, making it a typical expense for travel-related activities.",
-    "categorized_at": "2025-12-26T14:37:02.292383"
+    "categorized_at": "2025-12-26T14:37:02.292383",
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:55:35.506Z"
   },
   {
     "id": "20251107202511067_9554XXXXXXXX6788",
@@ -2340,7 +2355,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:11.550Z"
   },
   {
     "id": "20251106202511062_9554XXXXXXXX6788",
@@ -2357,7 +2373,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:11.517Z"
   },
   {
     "id": "20251106202511063_9554XXXXXXXX6788",
@@ -2374,7 +2391,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:11.536Z"
   },
   {
     "id": "20251106202511064_9554XXXXXXXX6788",
@@ -2391,7 +2409,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:11.565Z"
   },
   {
     "id": "20251106202511050_9554XXXXXXXX6788",
@@ -2437,9 +2456,10 @@
     "foreign_currency": "",
     "source_file": "9554-xxxx-xxxx-6788_Statement_2025-11-07.ofx",
     "categorized": true,
-    "category": "Food & Dining",
-    "category_description": "Matched with exact merchant name and closest amount: Salsam",
-    "categorized_at": "2025-12-26T14:36:50.707986"
+    "category": "Entertainment",
+    "category_description": "Manually updated by user",
+    "categorized_at": "2025-12-28T10:02:18.122Z",
+    "updated_at": "2025-12-28T10:02:18.122Z"
   },
   {
     "id": "20251105202511041_9554XXXXXXXX6788",
@@ -2597,9 +2617,10 @@
     "foreign_currency": "",
     "source_file": "9554-xxxx-xxxx-6788_Statement_2025-11-07.ofx",
     "categorized": true,
-    "category": "Uncategorized",
-    "category_description": "Matched with exact merchant name and closest amount: Chemist Warehouse",
-    "categorized_at": "2025-12-26T14:36:51.499150"
+    "category": "Personal Care",
+    "category_description": "Manually updated by user",
+    "categorized_at": "2025-12-28T09:34:29.181Z",
+    "updated_at": "2025-12-28T09:34:29.181Z"
   },
   {
     "id": "20251103202511022_9554XXXXXXXX6788",
@@ -3257,7 +3278,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:11.605Z"
   },
   {
     "id": "20251028202510273_9554XXXXXXXX6788",
@@ -3274,7 +3296,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:11.635Z"
   },
   {
     "id": "20251028202510274_9554XXXXXXXX6788",
@@ -3291,7 +3314,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:11.671Z"
   },
   {
     "id": "20251028202510260_9554XXXXXXXX6788",
@@ -3644,7 +3668,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:11.702Z"
   },
   {
     "id": "20251020202510192_9554XXXXXXXX6788",
@@ -3661,7 +3686,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:11.729Z"
   },
   {
     "id": "20251020202510193_9554XXXXXXXX6788",
@@ -3678,7 +3704,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:11.767Z"
   },
   {
     "id": "20251020202510194_9554XXXXXXXX6788",
@@ -4768,7 +4795,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:11.794Z"
   },
   {
     "id": "20251001202509302_9554XXXXXXXX6788",
@@ -4785,7 +4813,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:11.826Z"
   },
   {
     "id": "20251001202509303_9554XXXXXXXX6788",
@@ -4802,7 +4831,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:11.853Z"
   },
   {
     "id": "20250930202509290_9554XXXXXXXX6788",
@@ -4963,7 +4993,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:11.901Z"
   },
   {
     "id": "20250929202509285_9554XXXXXXXX6788",
@@ -4980,7 +5011,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:11.914Z"
   },
   {
     "id": "20250929202509270_9554XXXXXXXX6788",
@@ -5862,7 +5894,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:11.945Z"
   },
   {
     "id": "20250916202509158_9554XXXXXXXX6788",
@@ -5879,7 +5912,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:11.977Z"
   },
   {
     "id": "20250916202509159_9554XXXXXXXX6788",
@@ -5896,7 +5930,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.005Z"
   },
   {
     "id": "202509162025091510_9554XXXXXXXX6788",
@@ -5930,7 +5965,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.039Z"
   },
   {
     "id": "20250915202509140_9554XXXXXXXX6788",
@@ -6651,7 +6687,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.071Z"
   },
   {
     "id": "20250901202509012_9554XXXXXXXX6788",
@@ -6668,7 +6705,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.101Z"
   },
   {
     "id": "20250901202508310_9554XXXXXXXX6788",
@@ -7902,7 +7940,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.133Z"
   },
   {
     "id": "20250811202508101_9554XXXXXXXX6788",
@@ -7919,13 +7958,14 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.168Z"
   },
   {
     "id": "20250811202508102_9554XXXXXXXX6788",
     "account": "9554********6788",
     "card": null,
-    "amount": 118.0,
+    "amount": 118,
     "merchant": "Online Payment Thank You",
     "identified_business": null,
     "transaction_date": "2025-08-10",
@@ -7936,7 +7976,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.197Z"
   },
   {
     "id": "20250811202508103_9554XXXXXXXX6788",
@@ -7953,7 +7994,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.228Z"
   },
   {
     "id": "20250811202508104_9554XXXXXXXX6788",
@@ -7970,7 +8012,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.260Z"
   },
   {
     "id": "20250811202508105_9554XXXXXXXX6788",
@@ -7987,7 +8030,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.290Z"
   },
   {
     "id": "20250811202508106_9554XXXXXXXX6788",
@@ -8004,7 +8048,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.321Z"
   },
   {
     "id": "20250811202508107_9554XXXXXXXX6788",
@@ -8021,7 +8066,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.350Z"
   },
   {
     "id": "20250811202508108_9554XXXXXXXX6788",
@@ -8038,7 +8084,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.382Z"
   },
   {
     "id": "20250811202508090_9554XXXXXXXX6788",
@@ -8343,7 +8390,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.411Z"
   },
   {
     "id": "20250804202508032_9554XXXXXXXX6788",
@@ -8360,7 +8408,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.444Z"
   },
   {
     "id": "20250804202508033_9554XXXXXXXX6788",
@@ -8377,7 +8426,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.471Z"
   },
   {
     "id": "20250804202508034_9554XXXXXXXX6788",
@@ -8394,7 +8444,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.504Z"
   },
   {
     "id": "20250804202508035_9554XXXXXXXX6788",
@@ -8411,7 +8462,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.535Z"
   },
   {
     "id": "20250804202508020_9554XXXXXXXX6788",
@@ -9500,7 +9552,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.564Z"
   },
   {
     "id": "20250722202507221_9554XXXXXXXX6788",
@@ -9517,7 +9570,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.595Z"
   },
   {
     "id": "20250721202507210_9554XXXXXXXX6788",
@@ -9646,7 +9700,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.622Z"
   },
   {
     "id": "20250721202507212_9554XXXXXXXX6788",
@@ -9663,7 +9718,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.652Z"
   },
   {
     "id": "20250721202507213_9554XXXXXXXX6788",
@@ -9680,7 +9736,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.683Z"
   },
   {
     "id": "20250721202507214_9554XXXXXXXX6788",
@@ -9697,7 +9754,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.711Z"
   },
   {
     "id": "20250721202507200_9554XXXXXXXX6788",
@@ -10339,7 +10397,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.740Z"
   },
   {
     "id": "20250710202507100_9554XXXXXXXX6788",
@@ -10436,13 +10495,14 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.768Z"
   },
   {
     "id": "20250710202507103_9554XXXXXXXX6788",
     "account": "9554********6788",
     "card": null,
-    "amount": 314.0,
+    "amount": 314,
     "merchant": "Online Payment Thank You",
     "identified_business": null,
     "transaction_date": "2025-07-10",
@@ -10453,7 +10513,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.799Z"
   },
   {
     "id": "20250710202507090_9554XXXXXXXX6788",
@@ -10934,7 +10995,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.830Z"
   },
   {
     "id": "20250701202506303_9554XXXXXXXX6788",
@@ -10951,7 +11013,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.855Z"
   },
   {
     "id": "20250701202506304_9554XXXXXXXX6788",
@@ -10968,7 +11031,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.888Z"
   },
   {
     "id": "20250701202506305_9554XXXXXXXX6788",
@@ -10985,7 +11049,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.918Z"
   },
   {
     "id": "20250630202506290_9554XXXXXXXX6788",
@@ -11578,7 +11643,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.949Z"
   },
   {
     "id": "20250624202506244_9554XXXXXXXX6788",
@@ -11595,7 +11661,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.975Z"
   },
   {
     "id": "20250624202506245_9554XXXXXXXX6788",
@@ -11612,7 +11679,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.005Z"
   },
   {
     "id": "20250624202506246_9554XXXXXXXX6788",
@@ -11629,7 +11697,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.032Z"
   },
   {
     "id": "20250623202506230_9554XXXXXXXX6788",
@@ -12174,7 +12243,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.062Z"
   },
   {
     "id": "20250616202506161_9554XXXXXXXX6788",
@@ -12191,7 +12261,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.094Z"
   },
   {
     "id": "20250616202506162_9554XXXXXXXX6788",
@@ -12208,7 +12279,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.122Z"
   },
   {
     "id": "20250616202506150_9554XXXXXXXX6788",
@@ -12641,7 +12713,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.155Z"
   },
   {
     "id": "20250609202506091_9554XXXXXXXX6788",
@@ -12675,7 +12748,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.182Z"
   },
   {
     "id": "20250609202506093_9554XXXXXXXX6788",
@@ -12709,7 +12783,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.216Z"
   },
   {
     "id": "20250609202506095_9554XXXXXXXX6788",
@@ -12726,7 +12801,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.243Z"
   },
   {
     "id": "20250609202506080_9554XXXXXXXX6788",
@@ -12871,7 +12947,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.276Z"
   },
   {
     "id": "20250609202506075_9554XXXXXXXX6788",
@@ -12888,7 +12965,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.302Z"
   },
   {
     "id": "20250609202506060_9554XXXXXXXX6788",
@@ -13321,7 +13399,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.331Z"
   },
   {
     "id": "20250603202506018_9554XXXXXXXX6788",
@@ -13355,7 +13434,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.363Z"
   },
   {
     "id": "20250603202505310_9554XXXXXXXX6788",
@@ -13820,7 +13900,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.389Z"
   },
   {
     "id": "20250526202505261_9554XXXXXXXX6788",
@@ -13837,7 +13918,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.420Z"
   },
   {
     "id": "20250526202505250_9554XXXXXXXX6788",
@@ -14558,7 +14640,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.447Z"
   },
   {
     "id": "20250520202505192_9554XXXXXXXX6788",
@@ -14655,7 +14738,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.481Z"
   },
   {
     "id": "20250519202505191_9554XXXXXXXX6788",
@@ -14672,7 +14756,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.506Z"
   },
   {
     "id": "20250519202505180_9554XXXXXXXX6788",
@@ -14822,7 +14907,7 @@
     "id": "20250521202505165_9554XXXXXXXX6788",
     "account": "9554********6788",
     "card": null,
-    "amount": 45.0,
+    "amount": 45,
     "merchant": "Canva* 04518 13605955 Sydney Au",
     "identified_business": null,
     "transaction_date": "2025-05-16",
@@ -15154,7 +15239,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.536Z"
   },
   {
     "id": "20250513202505125_9554XXXXXXXX6788",
@@ -15205,7 +15291,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.563Z"
   },
   {
     "id": "20250512202505110_9554XXXXXXXX6788",
@@ -15511,7 +15598,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.592Z"
   },
   {
     "id": "20250506202505053_9554XXXXXXXX6788",
@@ -15528,7 +15616,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.623Z"
   },
   {
     "id": "20250506202505054_9554XXXXXXXX6788",
@@ -15579,7 +15668,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.649Z"
   },
   {
     "id": "20250506202505057_9554XXXXXXXX6788",
@@ -15613,7 +15703,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.681Z"
   },
   {
     "id": "20250505202505040_9554XXXXXXXX6788",
@@ -16014,7 +16105,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.707Z"
   },
   {
     "id": "20250428202504272_9554XXXXXXXX6788",
@@ -16031,7 +16123,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.741Z"
   },
   {
     "id": "20250428202504273_9554XXXXXXXX6788",
@@ -16048,7 +16141,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.770Z"
   },
   {
     "id": "20250428202504260_9554XXXXXXXX6788",
@@ -16289,7 +16383,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.801Z"
   },
   {
     "id": "20250422202504221_9554XXXXXXXX6788",
@@ -16306,13 +16401,14 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.828Z"
   },
   {
     "id": "20250422202504222_9554XXXXXXXX6788",
     "account": "9554********6788",
     "card": null,
-    "amount": 200.0,
+    "amount": 200,
     "merchant": "Online Payment Thank You",
     "identified_business": null,
     "transaction_date": "2025-04-22",
@@ -16323,7 +16419,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.860Z"
   },
   {
     "id": "20250422202504223_9554XXXXXXXX6788",
@@ -16340,7 +16437,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.889Z"
   },
   {
     "id": "20250422202504224_9554XXXXXXXX6788",
@@ -16918,7 +17016,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.916Z"
   },
   {
     "id": "20250410202504101_9554XXXXXXXX6788",
@@ -16935,7 +17034,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.947Z"
   },
   {
     "id": "20250410202504102_9554XXXXXXXX6788",
@@ -16952,7 +17052,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.974Z"
   },
   {
     "id": "20250410202504103_9554XXXXXXXX6788",
@@ -17178,7 +17279,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.006Z"
   },
   {
     "id": "20250407202504052_9554XXXXXXXX6788",
@@ -17195,7 +17297,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.033Z"
   },
   {
     "id": "20250407202504053_9554XXXXXXXX6788",
@@ -17229,7 +17332,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.065Z"
   },
   {
     "id": "20250404202504040_9554XXXXXXXX6788",
@@ -18062,7 +18166,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.105Z"
   },
   {
     "id": "20250325202503241_9554XXXXXXXX6788",
@@ -18096,7 +18201,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.122Z"
   },
   {
     "id": "20250325202503243_9554XXXXXXXX6788",
@@ -18113,7 +18219,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.152Z"
   },
   {
     "id": "20250324202503230_9554XXXXXXXX6788",
@@ -18339,13 +18446,14 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.179Z"
   },
   {
     "id": "20250317202503172_9554XXXXXXXX6788",
     "account": "9554********6788",
     "card": null,
-    "amount": 200.0,
+    "amount": 200,
     "merchant": "Online Payment Thank You",
     "identified_business": null,
     "transaction_date": "2025-03-17",
@@ -18356,7 +18464,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.208Z"
   },
   {
     "id": "20250317202503173_9554XXXXXXXX6788",
@@ -18373,7 +18482,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.235Z"
   },
   {
     "id": "20250317202503161_9554XXXXXXXX6788",
@@ -18743,7 +18853,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.267Z"
   },
   {
     "id": "20250310202503101_9554XXXXXXXX6788",
@@ -18777,7 +18888,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.297Z"
   },
   {
     "id": "20250310202503103_9554XXXXXXXX6788",
@@ -18811,7 +18923,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.328Z"
   },
   {
     "id": "20250311202503106_9554XXXXXXXX6788",
@@ -19490,7 +19603,7 @@
     "id": "20250303202503025_9554XXXXXXXX6788",
     "account": "9554********6788",
     "card": null,
-    "amount": 7.0,
+    "amount": 7,
     "merchant": "Satche 17 23 02",
     "identified_business": null,
     "transaction_date": "2025-03-02",
@@ -19535,7 +19648,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.355Z"
   },
   {
     "id": "20250303202503028_9554XXXXXXXX6788",
@@ -19552,7 +19666,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.386Z"
   },
   {
     "id": "20250303202503029_9554XXXXXXXX6788",
@@ -19569,7 +19684,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.414Z"
   },
   {
     "id": "202503032025030210_9554XXXXXXXX6788",
@@ -19586,7 +19702,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.449Z"
   },
   {
     "id": "202503032025030211_9554XXXXXXXX6788",
@@ -19603,7 +19720,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.480Z"
   },
   {
     "id": "202503032025030212_9554XXXXXXXX6788",
@@ -19637,7 +19755,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.506Z"
   },
   {
     "id": "202503032025030214_9554XXXXXXXX6788",
@@ -20892,7 +21011,7 @@
     "id": "20250218202502180_9554XXXXXXXX6788",
     "account": "9554********6788",
     "card": null,
-    "amount": 58.0,
+    "amount": 58,
     "merchant": "Satche 10 16 02",
     "identified_business": null,
     "transaction_date": "2025-02-18",
@@ -20920,7 +21039,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.537Z"
   },
   {
     "id": "20250218202502182_9554XXXXXXXX6788",
@@ -20937,7 +21057,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.567Z"
   },
   {
     "id": "20250219202502184_9554XXXXXXXX6788",
@@ -20971,7 +21092,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.599Z"
   },
   {
     "id": "20250218202502170_9554XXXXXXXX6788",
@@ -21372,7 +21494,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.625Z"
   },
   {
     "id": "20250213202502123_9554XXXXXXXX6788",
@@ -21487,7 +21610,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.654Z"
   },
   {
     "id": "20250212202502116_9554XXXXXXXX6788",
@@ -21504,7 +21628,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.679Z"
   },
   {
     "id": "20250210202502100_9554XXXXXXXX6788",
@@ -22419,7 +22544,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.710Z"
   },
   {
     "id": "20250203202502034_9554XXXXXXXX6788",
@@ -22436,7 +22562,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.742Z"
   },
   {
     "id": "20250203202502035_9554XXXXXXXX6788",
@@ -22453,7 +22580,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.770Z"
   },
   {
     "id": "20250203202502036_9554XXXXXXXX6788",
@@ -23063,7 +23191,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.795Z"
   },
   {
     "id": "20250128202501275_9554XXXXXXXX6788",
@@ -23080,7 +23209,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.821Z"
   },
   {
     "id": "20250128202501276_9554XXXXXXXX6788",
@@ -23097,7 +23227,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.856Z"
   },
   {
     "id": "20250128202501277_9554XXXXXXXX6788",
@@ -23114,7 +23245,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.888Z"
   },
   {
     "id": "20250127202501260_9554XXXXXXXX6788",
@@ -23420,7 +23552,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.915Z"
   },
   {
     "id": "20250121202501211_9554XXXXXXXX6788",
@@ -23437,7 +23570,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.942Z"
   },
   {
     "id": "20250121202501212_9554XXXXXXXX6788",
@@ -23471,7 +23605,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.968Z"
   },
   {
     "id": "20250122202501215_9554XXXXXXXX6788",
@@ -23841,7 +23976,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:15.001Z"
   },
   {
     "id": "20250113202501122_9554XXXXXXXX6788",
@@ -23858,7 +23994,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:15.032Z"
   },
   {
     "id": "20250113202501123_9554XXXXXXXX6788",
@@ -23875,7 +24012,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:15.058Z"
   },
   {
     "id": "20250113202501124_9554XXXXXXXX6788",
@@ -23892,7 +24030,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:15.088Z"
   },
   {
     "id": "20250113202501110_9554XXXXXXXX6788",
@@ -24358,7 +24497,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:15.114Z"
   },
   {
     "id": "20250106202501052_9554XXXXXXXX6788",
@@ -24375,7 +24515,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:15.144Z"
   },
   {
     "id": "20250106202501053_9554XXXXXXXX6788",
@@ -24392,7 +24533,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:15.175Z"
   },
   {
     "id": "20250106202501054_9554XXXXXXXX6788",
@@ -24409,7 +24551,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:15.201Z"
   },
   {
     "id": "20250106202501040_9554XXXXXXXX6788",
@@ -24922,7 +25065,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:15.233Z"
   },
   {
     "id": "20241230202412296_9554XXXXXXXX6788",
@@ -24939,7 +25083,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:15.263Z"
   },
   {
     "id": "20241230202412297_9554XXXXXXXX6788",
@@ -24956,7 +25101,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:15.293Z"
   },
   {
     "id": "20241230202412298_9554XXXXXXXX6788",
@@ -24973,7 +25119,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:15.319Z"
   },
   {
     "id": "20241230202412280_9554XXXXXXXX6788",
@@ -25198,7 +25345,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:15.345Z"
   },
   {
     "id": "20241230202412279_9554XXXXXXXX6788",
@@ -25215,7 +25363,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:15.377Z"
   },
   {
     "id": "202412302024122710_9554XXXXXXXX6788",
@@ -25232,7 +25381,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:15.407Z"
   },
   {
     "id": "202412302024122711_9554XXXXXXXX6788",
@@ -25249,7 +25399,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:15.441Z"
   },
   {
     "id": "20241227202412260_9554XXXXXXXX6788",
@@ -26215,7 +26366,7 @@
     "id": "20241218202412180_9554XXXXXXXX6788",
     "account": "9554********6788",
     "card": null,
-    "amount": 214.0,
+    "amount": 214,
     "merchant": "Online Payment Thank You",
     "identified_business": null,
     "transaction_date": "2024-12-18",
@@ -26226,7 +26377,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:15.468Z"
   },
   {
     "id": "20241218202412181_9554XXXXXXXX6788",
@@ -26243,7 +26395,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:15.548Z"
   },
   {
     "id": "20241218202412182_9554XXXXXXXX6788",
@@ -26260,7 +26413,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:15.607Z"
   },
   {
     "id": "20241217202412170_9554XXXXXXXX6788",
@@ -26645,7 +26799,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:15.637Z"
   },
   {
     "id": "20241209202412092_9554XXXXXXXX6788",
@@ -26662,7 +26817,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:15.675Z"
   },
   {
     "id": "20241209202412093_9554XXXXXXXX6788",
@@ -26679,7 +26835,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:15.660Z"
   },
   {
     "id": "20241209202412094_9554XXXXXXXX6788",
@@ -26696,7 +26853,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:15.621Z"
   },
   {
     "id": "20241210202412080_9554XXXXXXXX6788",
@@ -27081,7 +27239,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:15.563Z"
   },
   {
     "id": "20241202202412019_9554XXXXXXXX6788",
@@ -27098,7 +27257,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:15.481Z"
   },
   {
     "id": "202412022024120110_9554XXXXXXXX6788",
@@ -27115,7 +27275,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:15.455Z"
   },
   {
     "id": "202412022024120111_9554XXXXXXXX6788",
@@ -27132,7 +27293,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:15.427Z"
   },
   {
     "id": "20241202202411300_9554XXXXXXXX6788",
@@ -27453,7 +27615,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:15.393Z"
   },
   {
     "id": "20241125202411252_9554XXXXXXXX6788",
@@ -27470,7 +27633,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:15.363Z"
   },
   {
     "id": "20241125202411253_9554XXXXXXXX6788",
@@ -27487,7 +27651,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:15.332Z"
   },
   {
     "id": "20241125202411254_9554XXXXXXXX6788",
@@ -27504,7 +27669,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:15.306Z"
   },
   {
     "id": "20241125202411240_9554XXXXXXXX6788",
@@ -27873,7 +28039,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:15.276Z"
   },
   {
     "id": "20241119202411185_9554XXXXXXXX6788",
@@ -27890,7 +28057,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:15.246Z"
   },
   {
     "id": "20241119202411186_9554XXXXXXXX6788",
@@ -27907,7 +28075,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:15.216Z"
   },
   {
     "id": "20241119202411187_9554XXXXXXXX6788",
@@ -27924,7 +28093,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:15.188Z"
   },
   {
     "id": "20241118202411160_9554XXXXXXXX6788",
@@ -28229,7 +28399,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:15.162Z"
   },
   {
     "id": "20241111202411104_9554XXXXXXXX6788",
@@ -28246,7 +28417,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:15.131Z"
   },
   {
     "id": "20241111202411105_9554XXXXXXXX6788",
@@ -28263,7 +28435,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:15.101Z"
   },
   {
     "id": "20241111202411106_9554XXXXXXXX6788",
@@ -28280,7 +28453,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:15.071Z"
   },
   {
     "id": "20241111202411107_9554XXXXXXXX6788",
@@ -28297,7 +28471,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:15.045Z"
   },
   {
     "id": "20241111202411090_9554XXXXXXXX6788",
@@ -28399,7 +28574,7 @@
     "id": "20241111202411084_9554XXXXXXXX6788",
     "account": "9554********6788",
     "card": null,
-    "amount": 5.0,
+    "amount": 5,
     "merchant": "Sp Hikoco Auckland Cbd Nz",
     "identified_business": null,
     "transaction_date": "2024-11-08",
@@ -28539,7 +28714,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:15.017Z"
   },
   {
     "id": "20241104202411043_9554XXXXXXXX6788",
@@ -28556,7 +28732,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.984Z"
   },
   {
     "id": "20241104202411044_9554XXXXXXXX6788",
@@ -28573,7 +28750,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.955Z"
   },
   {
     "id": "20241104202411045_9554XXXXXXXX6788",
@@ -29040,7 +29218,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.928Z"
   },
   {
     "id": "20241029202410278_9554XXXXXXXX6788",
@@ -29057,7 +29236,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.902Z"
   },
   {
     "id": "20241029202410279_9554XXXXXXXX6788",
@@ -29074,7 +29254,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.871Z"
   },
   {
     "id": "202410292024102710_9554XXXXXXXX6788",
@@ -29091,7 +29272,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.839Z"
   },
   {
     "id": "20241029202410260_9554XXXXXXXX6788",
@@ -29348,7 +29530,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.808Z"
   },
   {
     "id": "20241021202410203_9554XXXXXXXX6788",
@@ -29365,7 +29548,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.782Z"
   },
   {
     "id": "20241021202410204_9554XXXXXXXX6788",
@@ -29382,7 +29566,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.756Z"
   },
   {
     "id": "20241021202410205_9554XXXXXXXX6788",
@@ -29399,7 +29584,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.725Z"
   },
   {
     "id": "20241021202410190_9554XXXXXXXX6788",
@@ -29641,7 +29827,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.696Z"
   },
   {
     "id": "20241016202410153_9554XXXXXXXX6788",
@@ -29658,7 +29845,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.666Z"
   },
   {
     "id": "20241016202410154_9554XXXXXXXX6788",
@@ -29675,7 +29863,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.641Z"
   },
   {
     "id": "20241016202410155_9554XXXXXXXX6788",
@@ -30045,7 +30234,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.612Z"
   },
   {
     "id": "20241007202410063_9554XXXXXXXX6788",
@@ -30062,7 +30252,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.580Z"
   },
   {
     "id": "20241007202410064_9554XXXXXXXX6788",
@@ -30079,7 +30270,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.550Z"
   },
   {
     "id": "20241007202410050_9554XXXXXXXX6788",
@@ -30384,7 +30576,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.522Z"
   },
   {
     "id": "20241001202410011_9554XXXXXXXX6788",
@@ -30401,7 +30594,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.493Z"
   },
   {
     "id": "20241002202410014_9554XXXXXXXX6788",
@@ -30418,7 +30612,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.466Z"
   },
   {
     "id": "20241001202409290_9554XXXXXXXX6788",
@@ -30707,7 +30902,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.433Z"
   },
   {
     "id": "20240923202409231_9554XXXXXXXX6788",
@@ -30724,7 +30920,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.400Z"
   },
   {
     "id": "20240923202409232_9554XXXXXXXX6788",
@@ -31047,7 +31244,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.368Z"
   },
   {
     "id": "20240916202409152_9554XXXXXXXX6788",
@@ -31064,7 +31262,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.341Z"
   },
   {
     "id": "20240916202409153_9554XXXXXXXX6788",
@@ -31081,7 +31280,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.314Z"
   },
   {
     "id": "20240916202409154_9554XXXXXXXX6788",
@@ -31098,7 +31298,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.284Z"
   },
   {
     "id": "20240916202409140_9554XXXXXXXX6788",
@@ -31371,7 +31572,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.254Z"
   },
   {
     "id": "20240909202409092_9554XXXXXXXX6788",
@@ -31388,7 +31590,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.222Z"
   },
   {
     "id": "20240909202409093_9554XXXXXXXX6788",
@@ -31405,7 +31608,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.191Z"
   },
   {
     "id": "20240910202409080_9554XXXXXXXX6788",
@@ -31758,7 +31962,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.165Z"
   },
   {
     "id": "20240902202409015_9554XXXXXXXX6788",
@@ -31775,7 +31980,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.135Z"
   },
   {
     "id": "20240902202409016_9554XXXXXXXX6788",
@@ -31792,7 +31998,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.092Z"
   },
   {
     "id": "20240902202409017_9554XXXXXXXX6788",
@@ -31809,7 +32016,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.079Z"
   },
   {
     "id": "20240902202408300_9554XXXXXXXX6788",
@@ -31970,7 +32178,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.048Z"
   },
   {
     "id": "20240827202408262_9554XXXXXXXX6788",
@@ -31987,7 +32196,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:14.020Z"
   },
   {
     "id": "20240827202408263_9554XXXXXXXX6788",
@@ -32004,7 +32214,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.989Z"
   },
   {
     "id": "20240826202408250_9554XXXXXXXX6788",
@@ -32421,7 +32632,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.961Z"
   },
   {
     "id": "20240819202408181_9554XXXXXXXX6788",
@@ -32438,7 +32650,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.934Z"
   },
   {
     "id": "20240819202408182_9554XXXXXXXX6788",
@@ -32455,7 +32668,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.903Z"
   },
   {
     "id": "20240819202408170_9554XXXXXXXX6788",
@@ -32680,7 +32894,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.876Z"
   },
   {
     "id": "20240812202408122_9554XXXXXXXX6788",
@@ -32697,7 +32912,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.841Z"
   },
   {
     "id": "20240812202408123_9554XXXXXXXX6788",
@@ -32714,7 +32930,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.815Z"
   },
   {
     "id": "20240812202408100_9554XXXXXXXX6788",
@@ -32827,7 +33044,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.784Z"
   },
   {
     "id": "20240806202408060_9554XXXXXXXX6788",
@@ -32988,7 +33206,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.757Z"
   },
   {
     "id": "20240805202408045_9554XXXXXXXX6788",
@@ -33005,7 +33224,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.724Z"
   },
   {
     "id": "20240805202408030_9554XXXXXXXX6788",
@@ -33246,7 +33466,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.694Z"
   },
   {
     "id": "20240729202407281_9554XXXXXXXX6788",
@@ -33263,7 +33484,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.668Z"
   },
   {
     "id": "20240729202407282_9554XXXXXXXX6788",
@@ -33280,7 +33502,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.636Z"
   },
   {
     "id": "20240729202407283_9554XXXXXXXX6788",
@@ -33297,7 +33520,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.610Z"
   },
   {
     "id": "20240729202407270_9554XXXXXXXX6788",
@@ -33618,7 +33842,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.576Z"
   },
   {
     "id": "20240722202407220_9554XXXXXXXX6788",
@@ -33635,7 +33860,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.549Z"
   },
   {
     "id": "20240722202407221_9554XXXXXXXX6788",
@@ -33652,7 +33878,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.519Z"
   },
   {
     "id": "20240723202407210_9554XXXXXXXX6788",
@@ -33877,7 +34104,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.494Z"
   },
   {
     "id": "20240715202407142_9554XXXXXXXX6788",
@@ -33894,7 +34122,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.465Z"
   },
   {
     "id": "20240715202407143_9554XXXXXXXX6788",
@@ -33911,7 +34140,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.433Z"
   },
   {
     "id": "20240715202407144_9554XXXXXXXX6788",
@@ -33928,7 +34158,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.407Z"
   },
   {
     "id": "20240715202407130_9554XXXXXXXX6788",
@@ -34057,7 +34288,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.376Z"
   },
   {
     "id": "20240710202407101_9554XXXXXXXX6788",
@@ -34074,7 +34306,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.348Z"
   },
   {
     "id": "20240710202407102_9554XXXXXXXX6788",
@@ -34091,7 +34324,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.315Z"
   },
   {
     "id": "20240710202407103_9554XXXXXXXX6788",
@@ -34108,7 +34342,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.289Z"
   },
   {
     "id": "20240710202407104_9554XXXXXXXX6788",
@@ -34125,7 +34360,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.257Z"
   },
   {
     "id": "20240710202407105_9554XXXXXXXX6788",
@@ -34142,7 +34378,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.230Z"
   },
   {
     "id": "20240710202407090_9554XXXXXXXX6788",
@@ -35167,13 +35404,14 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.200Z"
   },
   {
     "id": "20240617202406171_9554XXXXXXXX6788",
     "account": "9554********6788",
     "card": null,
-    "amount": 315.0,
+    "amount": 315,
     "merchant": "Online Payment Thank You",
     "identified_business": null,
     "transaction_date": "2024-06-17",
@@ -35184,7 +35422,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.168Z"
   },
   {
     "id": "20240617202406160_9554XXXXXXXX6788",
@@ -35425,7 +35664,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.141Z"
   },
   {
     "id": "20240610202406101_9554XXXXXXXX6788",
@@ -35442,7 +35682,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.107Z"
   },
   {
     "id": "20240610202406102_9554XXXXXXXX6788",
@@ -35459,7 +35700,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.081Z"
   },
   {
     "id": "20240610202406103_9554XXXXXXXX6788",
@@ -35476,7 +35718,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.045Z"
   },
   {
     "id": "20240610202406104_9554XXXXXXXX6788",
@@ -35493,7 +35736,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:13.019Z"
   },
   {
     "id": "20240610202406105_9554XXXXXXXX6788",
@@ -35510,7 +35754,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.989Z"
   },
   {
     "id": "20240610202406090_9554XXXXXXXX6788",
@@ -35783,7 +36028,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.962Z"
   },
   {
     "id": "20240604202406020_9554XXXXXXXX6788",
@@ -35837,7 +36083,7 @@
     "id": "20240604202406023_9554XXXXXXXX6788",
     "account": "9554********6788",
     "card": null,
-    "amount": 10.0,
+    "amount": 10,
     "merchant": "Online Payment Thank You",
     "identified_business": null,
     "transaction_date": "2024-06-02",
@@ -35848,7 +36094,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.931Z"
   },
   {
     "id": "20240604202406010_9554XXXXXXXX6788",
@@ -36153,7 +36400,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.901Z"
   },
   {
     "id": "20240527202405260_9554XXXXXXXX6788",
@@ -36266,7 +36514,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.874Z"
   },
   {
     "id": "20240527202405253_9554XXXXXXXX6788",
@@ -36283,7 +36532,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.843Z"
   },
   {
     "id": "20240527202405254_9554XXXXXXXX6788",
@@ -36300,7 +36550,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.816Z"
   },
   {
     "id": "20240524202405240_9554XXXXXXXX6788",
@@ -36642,7 +36893,7 @@
     "id": "20240520202405200_9554XXXXXXXX6788",
     "account": "9554********6788",
     "card": null,
-    "amount": 40.0,
+    "amount": 40,
     "merchant": "Online Payment Thank You",
     "identified_business": null,
     "transaction_date": "2024-05-20",
@@ -36653,7 +36904,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.785Z"
   },
   {
     "id": "20240520202405201_9554XXXXXXXX6788",
@@ -36670,13 +36922,14 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.755Z"
   },
   {
     "id": "20240520202405202_9554XXXXXXXX6788",
     "account": "9554********6788",
     "card": null,
-    "amount": 80.0,
+    "amount": 80,
     "merchant": "Online Payment Thank You",
     "identified_business": null,
     "transaction_date": "2024-05-20",
@@ -36687,13 +36940,14 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.724Z"
   },
   {
     "id": "20240520202405203_9554XXXXXXXX6788",
     "account": "9554********6788",
     "card": null,
-    "amount": 90.0,
+    "amount": 90,
     "merchant": "Online Payment Thank You",
     "identified_business": null,
     "transaction_date": "2024-05-20",
@@ -36704,7 +36958,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.697Z"
   },
   {
     "id": "20240520202405204_9554XXXXXXXX6788",
@@ -36721,7 +36976,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.665Z"
   },
   {
     "id": "20240520202405205_9554XXXXXXXX6788",
@@ -36738,7 +36994,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.635Z"
   },
   {
     "id": "20240520202405180_9554XXXXXXXX6788",
@@ -36803,7 +37060,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.609Z"
   },
   {
     "id": "20240520202405184_9554XXXXXXXX6788",
@@ -36820,7 +37078,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.577Z"
   },
   {
     "id": "20240520202405185_9554XXXXXXXX6788",
@@ -36837,7 +37096,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.551Z"
   },
   {
     "id": "20240520202405186_9554XXXXXXXX6788",
@@ -36854,7 +37114,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.518Z"
   },
   {
     "id": "20240520202405170_9554XXXXXXXX6788",
@@ -37463,7 +37724,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.486Z"
   },
   {
     "id": "20240507202405062_9554XXXXXXXX6788",
@@ -37512,7 +37774,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.458Z"
   },
   {
     "id": "20240506202405061_9554XXXXXXXX6788",
@@ -37529,7 +37792,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.426Z"
   },
   {
     "id": "20240506202405050_9554XXXXXXXX6788",
@@ -37871,7 +38135,7 @@
     "id": "20240429202404273_9554XXXXXXXX6788",
     "account": "9554********6788",
     "card": null,
-    "amount": 20.0,
+    "amount": 20,
     "merchant": "Online Payment Thank You",
     "identified_business": null,
     "transaction_date": "2024-04-27",
@@ -37882,7 +38146,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.398Z"
   },
   {
     "id": "20240429202404274_9554XXXXXXXX6788",
@@ -37899,7 +38164,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.368Z"
   },
   {
     "id": "20240429202404275_9554XXXXXXXX6788",
@@ -37916,7 +38182,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.334Z"
   },
   {
     "id": "20240429202404276_9554XXXXXXXX6788",
@@ -37933,7 +38200,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.308Z"
   },
   {
     "id": "20240429202404261_9554XXXXXXXX6788",
@@ -38062,7 +38330,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.277Z"
   },
   {
     "id": "20240426202404250_9554XXXXXXXX6788",
@@ -38271,7 +38540,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.243Z"
   },
   {
     "id": "20240422202404206_9554XXXXXXXX6788",
@@ -38288,7 +38558,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.211Z"
   },
   {
     "id": "20240422202404207_9554XXXXXXXX6788",
@@ -38305,7 +38576,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.183Z"
   },
   {
     "id": "20240422202404208_9554XXXXXXXX6788",
@@ -38322,7 +38594,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.150Z"
   },
   {
     "id": "20240419202404190_9554XXXXXXXX6788",
@@ -38643,7 +38916,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.119Z"
   },
   {
     "id": "20240415202404142_9554XXXXXXXX6788",
@@ -38660,7 +38934,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.088Z"
   },
   {
     "id": "20240415202404130_9554XXXXXXXX6788",
@@ -38821,7 +39096,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.053Z"
   },
   {
     "id": "20240411202404111_9554XXXXXXXX6788",
@@ -38838,7 +39114,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:12.024Z"
   },
   {
     "id": "20240411202404112_9554XXXXXXXX6788",
@@ -38855,7 +39132,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:11.991Z"
   },
   {
     "id": "20240411202404100_9554XXXXXXXX6788",
@@ -38973,7 +39251,7 @@
     "id": "20240409202404091_9554XXXXXXXX6788",
     "account": "9554********6788",
     "card": null,
-    "amount": 27.0,
+    "amount": 27,
     "merchant": "Online Payment Thank You",
     "identified_business": null,
     "transaction_date": "2024-04-09",
@@ -38984,7 +39262,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:11.958Z"
   },
   {
     "id": "20240409202404092_9554XXXXXXXX6788",
@@ -39001,7 +39280,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:11.928Z"
   },
   {
     "id": "20240409202404093_9554XXXXXXXX6788",
@@ -39018,7 +39298,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:11.887Z"
   },
   {
     "id": "20240409202404080_9554XXXXXXXX6788",
@@ -39104,7 +39385,7 @@
     "id": "20240408202404060_9554XXXXXXXX6788",
     "account": "9554********6788",
     "card": null,
-    "amount": 1903.0,
+    "amount": 1903,
     "merchant": "Online Payment Thank You",
     "identified_business": null,
     "transaction_date": "2024-04-06",
@@ -39115,7 +39396,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:11.870Z"
   },
   {
     "id": "20240405202404053_9554XXXXXXXX6788",
@@ -39580,13 +39862,14 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:11.840Z"
   },
   {
     "id": "20240327202403271_9554XXXXXXXX6788",
     "account": "9554********6788",
     "card": null,
-    "amount": 995.0,
+    "amount": 995,
     "merchant": "Online Payment Thank You",
     "identified_business": null,
     "transaction_date": "2024-03-27",
@@ -39597,13 +39880,14 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:11.807Z"
   },
   {
     "id": "20240326202403260_9554XXXXXXXX6788",
     "account": "9554********6788",
     "card": null,
-    "amount": 200.0,
+    "amount": 200,
     "merchant": "Online Payment Thank You",
     "identified_business": null,
     "transaction_date": "2024-03-26",
@@ -39614,7 +39898,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:11.780Z"
   },
   {
     "id": "20240326202403261_9554XXXXXXXX6788",
@@ -39631,7 +39916,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:11.754Z"
   },
   {
     "id": "20240326202403262_9554XXXXXXXX6788",
@@ -39648,7 +39934,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:11.716Z"
   },
   {
     "id": "20240327202403250_9554XXXXXXXX6788",
@@ -40401,7 +40688,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:11.688Z"
   },
   {
     "id": "20240314202403141_9554XXXXXXXX6788",
@@ -40418,7 +40706,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:11.657Z"
   },
   {
     "id": "20240313202403130_9554XXXXXXXX6788",
@@ -40488,7 +40777,7 @@
     "id": "20240311202403110_9554XXXXXXXX6788",
     "account": "9554********6788",
     "card": "9554-****-****-6788",
-    "amount": 75.0,
+    "amount": 75,
     "merchant": "Membership Fee Reversal",
     "identified_business": null,
     "transaction_date": "2024-03-11",
@@ -40868,7 +41157,8 @@
     "category": null,
     "category_description": null,
     "categorized_at": null,
-    "is_transfer": false
+    "is_transfer": true,
+    "updated_at": "2025-12-28T09:31:11.620Z"
   },
   {
     "id": "20240227202402250_9554XXXXXXXX6788",

@@ -7,6 +7,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import DateRangePicker from './DateRangePicker';
 
 interface Entity {
   id: string;
@@ -92,18 +93,9 @@ export default function FilterBar({
         <h3 className="text-xs font-bold text-gray-900 uppercase mr-2">FILTERS</h3>
         <div className="flex items-center gap-1.5">
           <label className="text-xs font-medium text-black">Date:</label>
-          <input
-            type="date"
-            value={dateRange.start}
-            onChange={(e) => onDateRangeChange({ ...dateRange, start: e.target.value })}
-            className="px-2 py-1 border border-gray-300 rounded-md text-xs text-black bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-32"
-          />
-          <span className="text-xs text-gray-600">to</span>
-          <input
-            type="date"
-            value={dateRange.end}
-            onChange={(e) => onDateRangeChange({ ...dateRange, end: e.target.value })}
-            className="px-2 py-1 border border-gray-300 rounded-md text-xs text-black bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-32"
+          <DateRangePicker
+            dateRange={dateRange}
+            onDateRangeChange={onDateRangeChange}
           />
         </div>
         {entities.length > 0 && onEntityFilterChange && (

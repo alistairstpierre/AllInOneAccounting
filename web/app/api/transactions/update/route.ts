@@ -9,12 +9,13 @@ import fs from 'fs';
 import path from 'path';
 
 import { getAllCategories } from '../../../lib/categories';
+import { updateTransaction } from '../../../lib/transaction-update';
 
 const CATEGORIES = getAllCategories();
 
 export async function POST(request: Request) {
   try {
-    const { transactionId, category, identified_business, is_transfer } = await request.json();
+    const { transactionId, category, identified_business, is_transfer, is_credit } = await request.json();
 
     // Validate category (allow empty string for uncategorized)
     if (category !== undefined && category !== '' && !CATEGORIES.includes(category)) {
@@ -85,42 +86,41 @@ export async function POST(request: Request) {
     const fileContents = fs.readFileSync(filePath, 'utf-8');
     const transactions = JSON.parse(fileContents);
 
-    // Update the transaction
+    // Prepare updates object
+    const updates: any = {};
     if (category !== undefined) {
-      transactions[foundIndex].category = category || null;
-      transactions[foundIndex].categorized = category !== '';
-      transactions[foundIndex].category_description = category ? 'Manually updated by user' : null;
-      transactions[foundIndex].categorized_at = category ? new Date().toISOString() : null;
+      updates.category = category;
     }
     if (identified_business !== undefined) {
-      const oldIdentifiedBusiness = transactions[foundIndex].identified_business || null;
-      const newIdentifiedBusiness = identified_business || null;
-      
-      // Only update if the value actually changed
-      if (oldIdentifiedBusiness !== newIdentifiedBusiness) {
-        transactions[foundIndex].identified_business = newIdentifiedBusiness;
-        // Mark as manually updated if merchant name was changed
-        // If category wasn't also updated, preserve existing description or set new one
-        if (category === undefined) {
-          const existingDesc = transactions[foundIndex].category_description;
-          // If there's an existing LLM-generated description, append note
-          if (existingDesc && !existingDesc.includes('Manually updated by user')) {
-            transactions[foundIndex].category_description = existingDesc + ' (Merchant name manually updated)';
-          } else {
-            // Otherwise mark as manually updated
-            transactions[foundIndex].category_description = 'Manually updated by user';
-          }
-          // Update categorized_at if not already set
-          if (!transactions[foundIndex].categorized_at) {
-            transactions[foundIndex].categorized_at = new Date().toISOString();
-          }
-        }
-        // If category was also updated, category_description is already set to 'Manually updated by user'
-      }
+      updates.identified_business = identified_business;
     }
     if (is_transfer !== undefined) {
-      transactions[foundIndex].is_transfer = is_transfer;
+      updates.is_transfer = is_transfer;
     }
+    if (is_credit !== undefined) {
+      updates.is_credit = is_credit;
+    }
+
+    // Use utility function to update transaction (only marks as updated if values changed)
+    const { transaction: updatedTransaction, wasUpdated } = updateTransaction(
+      transactions[foundIndex],
+      updates
+    );
+
+    // Set category_description if category was updated and value changed
+    if (category !== undefined && wasUpdated) {
+      updatedTransaction.category_description = category ? 'Manually updated by user' : null;
+    } else if (identified_business !== undefined && wasUpdated && category === undefined) {
+      // If only merchant name was updated (and value changed), preserve or update description
+      const existingDesc = updatedTransaction.category_description;
+      if (existingDesc && !existingDesc.includes('Manually updated by user')) {
+        updatedTransaction.category_description = existingDesc + ' (Merchant name manually updated)';
+      } else if (!existingDesc) {
+        updatedTransaction.category_description = 'Manually updated by user';
+      }
+    }
+
+    transactions[foundIndex] = updatedTransaction;
 
     // Write back to file
     fs.writeFileSync(filePath, JSON.stringify(transactions, null, 2), 'utf-8');

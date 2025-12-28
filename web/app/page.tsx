@@ -7,7 +7,7 @@
 
 'use client';
 
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useRef } from 'react';
 import { getCategoriesForMode, type CategoryMode } from './lib/categories';
 import TransactionCard from './components/TransactionCard';
 import CategorySummary from './components/CategorySummary';
@@ -16,6 +16,7 @@ import TransactionHeader from './components/TransactionHeader';
 import SmartCategoryUpdateModal from './components/SmartCategoryUpdateModal';
 import SmartEntityUpdateModal from './components/SmartEntityUpdateModal';
 import SmartTransferUpdateModal from './components/SmartTransferUpdateModal';
+import SmartCreditUpdateModal from './components/SmartCreditUpdateModal';
 import UndoButton from './components/UndoButton';
 import { useUndo, UndoAction } from './hooks/useUndo';
 
@@ -30,11 +31,14 @@ interface Transaction {
   processed_date: string;
   foreign_currency: string;
   source_file: string;
+  transaction_file?: string;  // Transaction file name (JSON file name without extension)
   categorized: boolean;
   category: string | null;
   category_description: string | null;
   categorized_at: string | null;
+  updated_at?: string | null;  // Timestamp when transaction was last updated
   is_transfer?: boolean;  // Whether this is a transfer between accounts
+  is_credit?: boolean;  // Whether this is a credit (income) or debit (expense)
 }
 
 interface Entity {
@@ -51,24 +55,83 @@ function getTransactionId(transaction: Transaction | { id?: string; merchant: st
 }
 
 
+// localStorage keys
+const STORAGE_KEYS = {
+  dateRange: 'budgetOptimizer_dateRange',
+  selectedAccountIds: 'budgetOptimizer_selectedAccountIds',
+  selectedEntityFilterIds: 'budgetOptimizer_selectedEntityFilterIds',
+  searchText: 'budgetOptimizer_searchText',
+  showTransfers: 'budgetOptimizer_showTransfers',
+  showOnlyCredits: 'budgetOptimizer_showOnlyCredits',
+  selectedCategory: 'budgetOptimizer_selectedCategory',
+  categoryMode: 'budgetOptimizer_categoryMode',
+  showIncomeSummary: 'budgetOptimizer_showIncomeSummary',
+};
+
+// Helper functions to load/save from localStorage
+const loadFromStorage = <T,>(key: string, defaultValue: T): T => {
+  if (typeof window === 'undefined') return defaultValue;
+  try {
+    const item = localStorage.getItem(key);
+    if (item === null) return defaultValue;
+    return JSON.parse(item);
+  } catch {
+    return defaultValue;
+  }
+};
+
+const saveToStorage = <T,>(key: string, value: T): void => {
+  if (typeof window === 'undefined') return;
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch (error) {
+    console.error(`Error saving to localStorage (${key}):`, error);
+  }
+};
+
 export default function Home() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [entities, setEntities] = useState<Entity[]>([]);
   const [loading, setLoading] = useState(true);
   const { addAction, undo, canUndo, isUndoing, undoStackLength } = useUndo();
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [categoryMode, setCategoryMode] = useState<'Personal' | 'Business' | 'Personal + Business'>('Personal + Business');
+  
+  // Load initial state from localStorage
+  const [selectedCategory, setSelectedCategory] = useState<string>(() => 
+    loadFromStorage(STORAGE_KEYS.selectedCategory, 'all')
+  );
+  const [categoryMode, setCategoryMode] = useState<'Personal' | 'Business' | 'Personal + Business'>(() => 
+    loadFromStorage(STORAGE_KEYS.categoryMode, 'Personal + Business')
+  );
   const [sortBy, setSortBy] = useState<'date' | 'amount'>('date');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
-  const [dateRange, setDateRange] = useState<{ start: string; end: string }>({ start: '', end: '' });
+  const [dateRange, setDateRange] = useState<{ start: string; end: string }>(() => 
+    loadFromStorage(STORAGE_KEYS.dateRange, { start: '', end: '' })
+  );
   const [selectedEntityId, setSelectedEntityId] = useState<string | null>(null);
   const [isSelectionMode, setIsSelectionMode] = useState(false);
   const [selectedTransactionIds, setSelectedTransactionIds] = useState<Set<string>>(new Set());
-  const [selectedEntityFilterIds, setSelectedEntityFilterIds] = useState<string[]>([]);
-  const [selectedAccountIds, setSelectedAccountIds] = useState<string[]>([]);
+  const [selectedEntityFilterIds, setSelectedEntityFilterIds] = useState<string[]>(() => 
+    loadFromStorage(STORAGE_KEYS.selectedEntityFilterIds, [])
+  );
+  const [selectedAccountIds, setSelectedAccountIds] = useState<string[]>(() => 
+    loadFromStorage(STORAGE_KEYS.selectedAccountIds, [])
+  );
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [searchText, setSearchText] = useState<string>('');
-  const [showTransfers, setShowTransfers] = useState<boolean>(true);
+  const [searchText, setSearchText] = useState<string>(() => 
+    loadFromStorage(STORAGE_KEYS.searchText, '')
+  );
+  const [showTransfers, setShowTransfers] = useState<boolean>(() => 
+    loadFromStorage(STORAGE_KEYS.showTransfers, true)
+  );
+  const [showIncomeSummary, setShowIncomeSummary] = useState<boolean>(() => 
+    loadFromStorage(STORAGE_KEYS.showIncomeSummary, true)
+  );
+  const [showOnlyCredits, setShowOnlyCredits] = useState<boolean>(() => 
+    loadFromStorage(STORAGE_KEYS.showOnlyCredits, false)
+  );
+  
+  // Store original date range before expanding (for modal restoration)
+  const originalDateRangeRef = useRef<{ start: string; end: string } | null>(null);
   const [smartTransferUpdateModal, setSmartTransferUpdateModal] = useState<{
     isOpen: boolean;
     matchingTransactions: Transaction[];
@@ -78,6 +141,17 @@ export default function Home() {
     isOpen: false,
     matchingTransactions: [],
     isTransfer: false,
+    originalTransaction: null,
+  });
+  const [smartCreditUpdateModal, setSmartCreditUpdateModal] = useState<{
+    isOpen: boolean;
+    matchingTransactions: Transaction[];
+    isCredit: boolean;
+    originalTransaction: Transaction | null;
+  }>({
+    isOpen: false,
+    matchingTransactions: [],
+    isCredit: false,
     originalTransaction: null,
   });
   const [smartUpdateModal, setSmartUpdateModal] = useState<{
@@ -124,7 +198,7 @@ export default function Home() {
     }
   };
 
-  // Set initial date range to last month (1 month ago to today)
+  // Set initial date range to last month (1 month ago to today) if not loaded from storage
   useEffect(() => {
     if (transactions.length > 0 && !dateRange.start && !dateRange.end) {
       const today = new Date();
@@ -139,12 +213,51 @@ export default function Home() {
         return `${year}-${month}-${day}`;
       };
       
-      setDateRange({
+      const newDateRange = {
         start: formatDate(oneMonthAgo),
         end: formatDate(today),
-      });
+      };
+      setDateRange(newDateRange);
+      saveToStorage(STORAGE_KEYS.dateRange, newDateRange);
     }
   }, [transactions]);
+
+  // Save to localStorage whenever filters change
+  useEffect(() => {
+    saveToStorage(STORAGE_KEYS.dateRange, dateRange);
+  }, [dateRange]);
+
+  useEffect(() => {
+    saveToStorage(STORAGE_KEYS.selectedAccountIds, selectedAccountIds);
+  }, [selectedAccountIds]);
+
+  useEffect(() => {
+    saveToStorage(STORAGE_KEYS.selectedEntityFilterIds, selectedEntityFilterIds);
+  }, [selectedEntityFilterIds]);
+
+  useEffect(() => {
+    saveToStorage(STORAGE_KEYS.searchText, searchText);
+  }, [searchText]);
+
+  useEffect(() => {
+    saveToStorage(STORAGE_KEYS.showTransfers, showTransfers);
+  }, [showTransfers]);
+
+  useEffect(() => {
+    saveToStorage(STORAGE_KEYS.showOnlyCredits, showOnlyCredits);
+  }, [showOnlyCredits]);
+
+  useEffect(() => {
+    saveToStorage(STORAGE_KEYS.selectedCategory, selectedCategory);
+  }, [selectedCategory]);
+
+  useEffect(() => {
+    saveToStorage(STORAGE_KEYS.categoryMode, categoryMode);
+  }, [categoryMode]);
+
+  useEffect(() => {
+    saveToStorage(STORAGE_KEYS.showIncomeSummary, showIncomeSummary);
+  }, [showIncomeSummary]);
 
   const fetchTransactions = async () => {
     try {
@@ -383,6 +496,7 @@ export default function Home() {
         // Reload entities and transactions to get updated data
         await fetchEntities();
         await fetchTransactions();
+        restoreDateRange();
         setSmartEntityUpdateModal({
           isOpen: false,
           matchingTransactions: [],
@@ -503,6 +617,7 @@ export default function Home() {
       if (response.ok) {
         // Reload transactions to get updated data
         await fetchTransactions();
+        restoreDateRange();
         setSmartUpdateModal({
           isOpen: false,
           matchingTransactions: [],
@@ -598,11 +713,121 @@ export default function Home() {
     }
   };
 
+  const handleCreditUpdate = async (transactionId: string, isCredit: boolean) => {
+    const originalTransaction = transactions.find(t => getTransactionId(t) === transactionId);
+    if (!originalTransaction) return;
+
+    // Update the transaction immediately
+    try {
+      const response = await fetch('/api/transactions/update', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          transactionId,
+          is_credit: isCredit,
+        }),
+      });
+
+      if (response.ok) {
+        // Update local state
+        setTransactions((prevTransactions) =>
+          prevTransactions.map((t) =>
+            getTransactionId(t) === transactionId
+              ? { ...t, is_credit: isCredit }
+              : t
+          )
+        );
+
+        // Find similar transactions (same merchant name)
+        const merchantName = originalTransaction.identified_business || originalTransaction.merchant;
+        if (!merchantName) {
+          console.log('No merchant name found for transaction, skipping similar transaction search');
+        } else {
+          const similarResponse = await fetch('/api/transactions/find-similar', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              merchant: merchantName,
+              excludeTransactionId: transactionId,
+              dateRange: dateRange.start && dateRange.end ? dateRange : null,
+            }),
+          });
+
+          if (similarResponse.ok) {
+            const matchingTransactions = await similarResponse.json();
+            console.log(`Found ${matchingTransactions.length} similar transactions for merchant: ${merchantName}`);
+            if (matchingTransactions.length > 0) {
+              // Convert API response to full Transaction objects
+              const fullMatchingTransactions = matchingTransactions
+                .map((match: any) => transactions.find(t => getTransactionId(t) === match.id))
+                .filter((t: Transaction | undefined): t is Transaction => t !== undefined);
+
+              console.log(`Converted to ${fullMatchingTransactions.length} full transaction objects`);
+              setSmartCreditUpdateModal({
+                isOpen: true,
+                matchingTransactions: fullMatchingTransactions,
+                isCredit,
+                originalTransaction,
+              });
+            }
+          } else {
+            console.error('Failed to find similar transactions:', await similarResponse.text());
+          }
+        }
+      } else {
+        console.error('Failed to update transaction credit status');
+        fetchTransactions();
+      }
+    } catch (error) {
+      console.error('Error updating transaction credit status:', error);
+      fetchTransactions();
+    }
+  };
+
+  const handleBulkCreditUpdate = async (selectedTransactionIds: string[]) => {
+    if (selectedTransactionIds.length === 0 || !smartCreditUpdateModal.originalTransaction) return;
+
+    try {
+      // Update each transaction one by one
+      const updatePromises = selectedTransactionIds.map(id =>
+        fetch('/api/transactions/update', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            transactionId: id,
+            is_credit: smartCreditUpdateModal.isCredit,
+          }),
+        })
+      );
+
+      await Promise.all(updatePromises);
+
+      // Reload transactions to get updated data
+      await fetchTransactions();
+      restoreDateRange();
+      setSmartCreditUpdateModal({
+        isOpen: false,
+        matchingTransactions: [],
+        isCredit: false,
+        originalTransaction: null,
+      });
+    } catch (error) {
+      console.error('Error bulk updating credits:', error);
+      alert('Error updating transactions');
+    }
+  };
+
   const handleBulkTransferUpdate = async (selectedTransactionIds: string[]) => {
     if (selectedTransactionIds.length === 0 || !smartTransferUpdateModal.originalTransaction) return;
 
     try {
-      // Update each transaction individually (since bulk-update doesn't support is_transfer yet)
+      // Update each transaction one by one (since bulk-update doesn't support is_transfer yet)
       const updatePromises = selectedTransactionIds.map(id =>
         fetch('/api/transactions/update', {
           method: 'POST',
@@ -620,6 +845,7 @@ export default function Home() {
 
       // Reload transactions to get updated data
       await fetchTransactions();
+      restoreDateRange();
       setSmartTransferUpdateModal({
         isOpen: false,
         matchingTransactions: [],
@@ -664,8 +890,8 @@ export default function Home() {
       );
     }
 
-    // Filter by category
-    if (selectedCategory !== 'all') {
+    // Filter by category (only if not showing only credits)
+    if (!showOnlyCredits && selectedCategory !== 'all') {
       filtered = filtered.filter(
         (t) => t.category === selectedCategory
       );
@@ -689,6 +915,71 @@ export default function Home() {
       filtered = filtered.filter(t => !t.is_transfer);
     }
 
+    // Filter by credit/debit based on showOnlyCredits setting
+    if (showOnlyCredits) {
+      // Show only credits (income)
+      filtered = filtered.filter(t => {
+        if (t.is_credit !== undefined) {
+          return t.is_credit;
+        }
+        // Fallback for transactions without is_credit field
+        const merchant = (t.identified_business || t.merchant || '').toLowerCase();
+        const description = (t.category_description || '').toLowerCase();
+        const creditKeywords = [
+          'deposit',
+          'credit to',
+          'payment received',
+          'salary deposit',
+          'wage deposit',
+          'income deposit',
+          'transfer credit',
+          'payment from'
+        ];
+        return creditKeywords.some(keyword => 
+          merchant.includes(keyword) || description.includes(keyword)
+        );
+      });
+    } else {
+      // Filter out credits (income) - only show debits (expenses)
+      // Credits are income/deposits and shouldn't be displayed as expenses
+      // Credits remain in the data for tracking purposes but are hidden from display
+      filtered = filtered.filter(t => {
+        // Use is_credit field if available (from processor)
+        if (t.is_credit !== undefined) {
+          return !t.is_credit; // Exclude credits, include debits
+        }
+        
+        // Fallback: Check if transaction appears to be a credit/income
+        // (for transactions that haven't been updated yet)
+        const merchant = (t.identified_business || t.merchant || '').toLowerCase();
+        const description = (t.category_description || '').toLowerCase();
+        
+        // Common credit/income indicators (be conservative to avoid false positives)
+        const creditKeywords = [
+          'deposit',
+          'credit to',
+          'payment received',
+          'salary deposit',
+          'wage deposit',
+          'income deposit',
+          'transfer credit',
+          'payment from'
+        ];
+        
+        // Check if merchant or description contains credit keywords
+        // Only filter if it's clearly a credit/income transaction
+        const isCredit = creditKeywords.some(keyword => 
+          merchant.includes(keyword) || description.includes(keyword)
+        );
+        
+        if (isCredit) {
+          return false; // Exclude credits
+        }
+        
+        return true; // Include all other transactions (debits/expenses)
+      });
+    }
+
     // Sort transactions
     const sorted = [...filtered].sort((a, b) => {
       let comparison = 0;
@@ -703,7 +994,7 @@ export default function Home() {
     });
 
     return sorted;
-  }, [transactions, selectedCategory, sortBy, sortOrder, dateRange, selectedEntityFilterIds, selectedAccountIds, entities, searchText, showTransfers]);
+  }, [transactions, selectedCategory, sortBy, sortOrder, dateRange, selectedEntityFilterIds, selectedAccountIds, entities, searchText, showTransfers, showOnlyCredits]);
 
   // Reset to page 1 when filters change
   useEffect(() => {
@@ -803,6 +1094,23 @@ export default function Home() {
     setSelectedTransactionIds(new Set());
   };
 
+  const handleHeaderCheckboxChange = () => {
+    if (!isSelectionMode) {
+      // Enter selection mode and select all
+      setIsSelectionMode(true);
+      setSelectedEntityId(null);
+      handleSelectAll();
+    } else {
+      // Toggle between select all and unselect all
+      const allSelected = selectedTransactionIds.size === filteredAndSortedTransactions.length;
+      if (allSelected) {
+        handleUnselectAll();
+      } else {
+        handleSelectAll();
+      }
+    }
+  };
+
   const handleTransactionSelect = (transactionId: string, selected: boolean) => {
     setSelectedTransactionIds(prev => {
       const newSet = new Set(prev);
@@ -832,15 +1140,59 @@ export default function Home() {
       });
 
       if (response.ok) {
-        fetchEntities();
+        await fetchEntities();
+        await fetchTransactions();
         setIsSelectionMode(false);
         setSelectedTransactionIds(new Set());
+        setSelectedEntityId(null);
       } else {
         console.error('Failed to assign transactions');
       }
     } catch (error) {
       console.error('Error assigning transactions:', error);
     }
+  };
+
+  const handleBulkAssignEntity = async (entityId: string) => {
+    if (selectedTransactionIds.size === 0 || !entityId) return;
+
+    try {
+      const response = await fetch('/api/entities', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          action: 'assign',
+          entityId: entityId,
+          transactionIds: Array.from(selectedTransactionIds),
+        }),
+      });
+
+      if (response.ok) {
+        await fetchEntities();
+        await fetchTransactions();
+        setIsSelectionMode(false);
+        setSelectedTransactionIds(new Set());
+        setSelectedEntityId(null);
+      } else {
+        console.error('Failed to assign transactions');
+      }
+    } catch (error) {
+      console.error('Error assigning transactions:', error);
+    }
+  };
+
+  const handleEnterBulkSelectionMode = () => {
+    setIsSelectionMode(true);
+    setSelectedEntityId(null); // Don't pre-select an entity
+    setSelectedTransactionIds(new Set());
+  };
+
+  const handleCancelSelection = () => {
+    setIsSelectionMode(false);
+    setSelectedTransactionIds(new Set());
+    setSelectedEntityId(null);
   };
 
   const handleEntityDelete = async (entityId: string) => {
@@ -905,8 +1257,75 @@ export default function Home() {
   };
 
   const totalExpensesFiltered = useMemo(() => {
+    // Only count debits (expenses), exclude credits
     return filteredAndSortedTransactions.reduce((sum, t) => sum + t.amount, 0);
   }, [filteredAndSortedTransactions]);
+
+  // Calculate total income (credits) from all transactions (before filtering out credits)
+  const totalIncomeFiltered = useMemo(() => {
+    // Get all transactions that match current filters (before credit filtering)
+    let incomeTransactions = transactions;
+
+    // Apply same filters as filteredAndSortedTransactions (except credit filter)
+    if (selectedAccountIds.length > 0) {
+      incomeTransactions = incomeTransactions.filter(t => t.account && selectedAccountIds.includes(t.account));
+    }
+
+    if (selectedEntityFilterIds.length > 0) {
+      const entityTransactionIds = new Set<string>();
+      selectedEntityFilterIds.forEach(entityId => {
+        const entity = entities.find(e => e.id === entityId);
+        if (entity) {
+          entity.transactions.forEach(tid => entityTransactionIds.add(tid));
+        }
+      });
+      incomeTransactions = incomeTransactions.filter(t => entityTransactionIds.has(getTransactionId(t)));
+    }
+
+    if (dateRange.start) {
+      incomeTransactions = incomeTransactions.filter((t) => t.transaction_date >= dateRange.start);
+    }
+    if (dateRange.end) {
+      incomeTransactions = incomeTransactions.filter((t) => t.transaction_date <= dateRange.end);
+    }
+
+    if (searchText.trim()) {
+      const searchLower = searchText.toLowerCase().trim();
+      incomeTransactions = incomeTransactions.filter((t) => {
+        const merchant = (t.identified_business || t.merchant || '').toLowerCase();
+        const category = (t.category || '').toLowerCase();
+        const description = (t.category_description || '').toLowerCase();
+        return merchant.includes(searchLower) || 
+               category.includes(searchLower) || 
+               description.includes(searchLower);
+      });
+    }
+
+    // Only count credits (income)
+    return incomeTransactions
+      .filter(t => {
+        if (t.is_credit !== undefined) {
+          return t.is_credit;
+        }
+        // Fallback for transactions without is_credit field
+        const merchant = (t.identified_business || t.merchant || '').toLowerCase();
+        const description = (t.category_description || '').toLowerCase();
+        const creditKeywords = [
+          'deposit',
+          'credit to',
+          'payment received',
+          'salary deposit',
+          'wage deposit',
+          'income deposit',
+          'transfer credit',
+          'payment from'
+        ];
+        return creditKeywords.some(keyword => 
+          merchant.includes(keyword) || description.includes(keyword)
+        );
+      })
+      .reduce((sum, t) => sum + t.amount, 0);
+  }, [transactions, selectedAccountIds, selectedEntityFilterIds, dateRange, searchText, entities]);
 
   const dateRangeForSummary = useMemo(() => {
     if (filteredAndSortedTransactions.length === 0) return null;
@@ -917,9 +1336,22 @@ export default function Home() {
     };
   }, [filteredAndSortedTransactions]);
 
+  // Helper function to restore original date range when modal closes
+  const restoreDateRange = () => {
+    if (originalDateRangeRef.current) {
+      setDateRange(originalDateRangeRef.current);
+      originalDateRangeRef.current = null;
+    }
+  };
+
   // Handler to expand date range to include all transactions and refresh modal
   const handleExpandDateRange = async () => {
     if (transactions.length === 0) return;
+    
+    // Store the original date range before expanding (only if not already stored)
+    if (!originalDateRangeRef.current) {
+      originalDateRangeRef.current = { ...dateRange };
+    }
     
     const allDates = transactions.map(t => t.transaction_date).sort();
     const newDateRange = {
@@ -1004,6 +1436,30 @@ export default function Home() {
           matchingTransactions: fullMatchingTransactions,
         });
       }
+    } else if (smartCreditUpdateModal.isOpen && smartCreditUpdateModal.originalTransaction) {
+      const similarResponse = await fetch('/api/transactions/find-similar', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          merchant: smartCreditUpdateModal.originalTransaction.identified_business || smartCreditUpdateModal.originalTransaction.merchant,
+          excludeTransactionId: getTransactionId(smartCreditUpdateModal.originalTransaction),
+          dateRange: null, // null means no date filtering
+        }),
+      });
+      
+      if (similarResponse.ok) {
+        const matchingTransactions = await similarResponse.json();
+        // Convert API response to full Transaction objects
+        const fullMatchingTransactions = matchingTransactions
+          .map((match: any) => transactions.find(t => getTransactionId(t) === match.id))
+          .filter((t: Transaction | undefined): t is Transaction => t !== undefined);
+        setSmartCreditUpdateModal({
+          ...smartCreditUpdateModal,
+          matchingTransactions: fullMatchingTransactions,
+        });
+      }
     }
   };
 
@@ -1051,6 +1507,7 @@ export default function Home() {
         <CategorySummary
           categoryTotals={categoryTotals}
           totalExpenses={totalExpensesFiltered}
+          totalIncome={totalIncomeFiltered}
           transactionCount={filteredAndSortedTransactions.length}
           entities={entities}
           entityTotals={entityTotals}
@@ -1071,6 +1528,10 @@ export default function Home() {
           onEntityFilterChange={setSelectedEntityFilterIds}
           selectedAccountIds={selectedAccountIds}
           onAccountFilterChange={setSelectedAccountIds}
+          showIncomeSummary={showIncomeSummary}
+          onShowIncomeSummaryChange={setShowIncomeSummary}
+          showOnlyCredits={showOnlyCredits}
+          onShowOnlyCreditsChange={setShowOnlyCredits}
         />
           </div>
 
@@ -1093,47 +1554,75 @@ export default function Home() {
 
             <div className="space-y-2">
           {filteredAndSortedTransactions.length > 0 && (
-            <TransactionHeader
-              sortBy={sortBy}
-              sortOrder={sortOrder}
-              onSortChange={(newSortBy) => {
-                if (sortBy === newSortBy) {
-                  // Toggle order if clicking the same column
-                  setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
-                } else {
-                  // Set new column and default to desc
-                  setSortBy(newSortBy);
-                  setSortOrder('desc');
-                }
-              }}
-            />
-          )}
-          {isSelectionMode && (
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4 flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <button
-                  onClick={handleSelectAll}
-                  className="px-4 py-2 text-sm font-medium bg-white border border-gray-300 rounded-md hover:bg-gray-50 text-black"
-                >
-                  Select All
-                </button>
-                <button
-                  onClick={handleUnselectAll}
-                  className="px-4 py-2 text-sm font-medium bg-white border border-gray-300 rounded-md hover:bg-gray-50 text-black"
-                >
-                  Unselect All
-                </button>
-                <span className="text-sm text-gray-600">
-                  {selectedTransactionIds.size} selected
-                </span>
-              </div>
-              <button
-                onClick={handleDone}
-                className="px-4 py-2 text-sm font-medium bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
-              >
-                Done
-              </button>
-            </div>
+            <>
+              <TransactionHeader
+                sortBy={sortBy}
+                sortOrder={sortOrder}
+                onSortChange={(newSortBy) => {
+                  if (sortBy === newSortBy) {
+                    // Toggle order if clicking the same column
+                    setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+                  } else {
+                    // Set new column and default to desc
+                    setSortBy(newSortBy);
+                    setSortOrder('desc');
+                  }
+                }}
+                isSelectionMode={isSelectionMode}
+                isAllSelected={isSelectionMode && selectedTransactionIds.size === filteredAndSortedTransactions.length && filteredAndSortedTransactions.length > 0}
+                onCheckboxChange={handleHeaderCheckboxChange}
+              />
+              {isSelectionMode && (
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4 flex items-center justify-between gap-4">
+                  <span className="text-sm text-gray-600">
+                    {selectedTransactionIds.size} selected
+                  </span>
+                  {selectedEntityId ? (
+                    // Pre-selected entity mode (from CategorySummary)
+                    <div className="flex items-center gap-3">
+                      <button
+                        onClick={handleCancelSelection}
+                        className="px-3 py-1.5 text-sm font-medium bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        onClick={handleDone}
+                        className="px-4 py-2 text-sm font-medium bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+                      >
+                        Assign to {entities.find(e => e.id === selectedEntityId)?.name || 'Entity'}
+                      </button>
+                    </div>
+                  ) : (
+                    // Bulk selection mode - choose entity
+                    <div className="flex items-center gap-3">
+                      <select
+                        value=""
+                        onChange={(e) => {
+                          if (e.target.value) {
+                            handleBulkAssignEntity(e.target.value);
+                          }
+                        }}
+                        className="px-3 py-1.5 text-sm border border-gray-300 rounded-md text-black bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      >
+                        <option value="">Select entity to assign...</option>
+                        {entities.map((entity) => (
+                          <option key={entity.id} value={entity.id}>
+                            {entity.name} ({entity.type})
+                          </option>
+                        ))}
+                      </select>
+                      <button
+                        onClick={handleCancelSelection}
+                        className="px-3 py-1.5 text-sm font-medium bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+            </>
           )}
           {filteredAndSortedTransactions.length === 0 ? (
             <div className="text-center py-12 text-gray-500">
@@ -1152,6 +1641,7 @@ export default function Home() {
                     onEntityUpdate={handleEntityUpdate}
                     onTransactionUpdate={handleTransactionUpdate}
                     onTransferUpdate={handleTransferUpdate}
+                    onCreditUpdate={handleCreditUpdate}
                     isSelectMode={isSelectionMode}
                     isSelected={selectedTransactionIds.has(transactionId)}
                     onSelectChange={(selected) => handleTransactionSelect(transactionId, selected)}
@@ -1200,12 +1690,15 @@ export default function Home() {
       {smartUpdateModal.originalTransaction && (
         <SmartCategoryUpdateModal
           isOpen={smartUpdateModal.isOpen}
-          onClose={() => setSmartUpdateModal({
-            isOpen: false,
-            matchingTransactions: [],
-            newCategory: '',
-            originalTransaction: null,
-          })}
+          onClose={() => {
+            restoreDateRange();
+            setSmartUpdateModal({
+              isOpen: false,
+              matchingTransactions: [],
+              newCategory: '',
+              originalTransaction: null,
+            });
+          }}
           matchingTransactions={smartUpdateModal.matchingTransactions}
           newCategory={smartUpdateModal.newCategory}
           originalTransaction={smartUpdateModal.originalTransaction}
@@ -1219,13 +1712,16 @@ export default function Home() {
       {smartEntityUpdateModal.originalTransaction && (
         <SmartEntityUpdateModal
           isOpen={smartEntityUpdateModal.isOpen}
-          onClose={() => setSmartEntityUpdateModal({
-            isOpen: false,
-            matchingTransactions: [],
-            newEntityId: null,
-            newEntityName: '',
-            originalTransaction: null,
-          })}
+          onClose={() => {
+            restoreDateRange();
+            setSmartEntityUpdateModal({
+              isOpen: false,
+              matchingTransactions: [],
+              newEntityId: null,
+              newEntityName: '',
+              originalTransaction: null,
+            });
+          }}
           matchingTransactions={smartEntityUpdateModal.matchingTransactions}
           newEntityId={smartEntityUpdateModal.newEntityId}
           newEntityName={smartEntityUpdateModal.newEntityName}
@@ -1240,16 +1736,41 @@ export default function Home() {
       {smartTransferUpdateModal.originalTransaction && (
         <SmartTransferUpdateModal
           isOpen={smartTransferUpdateModal.isOpen}
-          onClose={() => setSmartTransferUpdateModal({
-            isOpen: false,
-            matchingTransactions: [],
-            isTransfer: false,
-            originalTransaction: null,
-          })}
+          onClose={() => {
+            restoreDateRange();
+            setSmartTransferUpdateModal({
+              isOpen: false,
+              matchingTransactions: [],
+              isTransfer: false,
+              originalTransaction: null,
+            });
+          }}
           matchingTransactions={smartTransferUpdateModal.matchingTransactions}
           isTransfer={smartTransferUpdateModal.isTransfer}
           originalTransaction={smartTransferUpdateModal.originalTransaction}
           onConfirm={handleBulkTransferUpdate}
+          getTransactionId={getTransactionId}
+          dateRange={dateRange.start && dateRange.end ? dateRange : null}
+          onExpandDateRange={handleExpandDateRange}
+        />
+      )}
+
+      {smartCreditUpdateModal.originalTransaction && (
+        <SmartCreditUpdateModal
+          isOpen={smartCreditUpdateModal.isOpen}
+          onClose={() => {
+            restoreDateRange();
+            setSmartCreditUpdateModal({
+              isOpen: false,
+              matchingTransactions: [],
+              isCredit: false,
+              originalTransaction: null,
+            });
+          }}
+          matchingTransactions={smartCreditUpdateModal.matchingTransactions}
+          isCredit={smartCreditUpdateModal.isCredit}
+          originalTransaction={smartCreditUpdateModal.originalTransaction}
+          onConfirm={handleBulkCreditUpdate}
           getTransactionId={getTransactionId}
           dateRange={dateRange.start && dateRange.end ? dateRange : null}
           onExpandDateRange={handleExpandDateRange}

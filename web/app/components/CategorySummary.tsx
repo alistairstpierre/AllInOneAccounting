@@ -22,11 +22,14 @@ interface Transaction {
   merchant: string;
   amount: number;
   transaction_date: string;
+  source_file?: string;  // Source file name (original OFX/CSV file)
+  transaction_file?: string;  // Transaction file name (JSON file name without extension)
 }
 
 interface CategorySummaryProps {
   categoryTotals: Record<string, number>;
   totalExpenses: number;
+  totalIncome?: number;
   transactionCount?: number;
   entities?: Entity[];
   entityTotals?: Record<string, number>;
@@ -44,6 +47,10 @@ interface CategorySummaryProps {
   onEntityFilterChange?: (entityIds: string[]) => void;
   selectedAccountIds?: string[];
   onAccountFilterChange?: (accountIds: string[]) => void;
+  showIncomeSummary?: boolean;
+  onShowIncomeSummaryChange?: (show: boolean) => void;
+  showOnlyCredits?: boolean;
+  onShowOnlyCreditsChange?: (show: boolean) => void;
 }
 
 // Add Entity Section Component
@@ -129,6 +136,7 @@ const formatDate = (dateString: string): string => {
 export default function CategorySummary({
   categoryTotals,
   totalExpenses,
+  totalIncome = 0,
   transactionCount,
   entities = [],
   entityTotals = {},
@@ -146,12 +154,37 @@ export default function CategorySummary({
   onEntityFilterChange,
   selectedAccountIds = [],
   onAccountFilterChange,
+  showIncomeSummary = true,
+  onShowIncomeSummaryChange,
+  showOnlyCredits = false,
+  onShowOnlyCreditsChange,
 }: CategorySummaryProps) {
   const [isAccountDropdownOpen, setIsAccountDropdownOpen] = useState(false);
   const accountDropdownRef = useRef<HTMLDivElement>(null);
   
   // Get unique accounts from transactions (bank accounts from OFX, not credit cards)
   const uniqueAccounts = Array.from(new Set(transactions.map(t => t.account).filter((account): account is string => Boolean(account)))).sort();
+  
+  // Create a mapping from account to display name (from transaction_file)
+  // Get the first transaction's transaction_file for each account to determine the display name
+  const accountToDisplayName = new Map<string, string>();
+  uniqueAccounts.forEach(account => {
+    const firstTransaction = transactions.find(t => t.account === account);
+    if (firstTransaction?.transaction_file) {
+      // Use the transaction file name (e.g., "Century Digital Main Account", "Alistair Personal Account")
+      accountToDisplayName.set(account, firstTransaction.transaction_file);
+    } else {
+      // Fallback to account ID if no transaction_file
+      accountToDisplayName.set(account, account);
+    }
+  });
+  
+  // Helper function to truncate file names to 30 characters
+  const truncateFileName = (fileName: string): string => {
+    if (fileName.length <= 30) return fileName;
+    return fileName.substring(0, 30);
+  };
+  
   // Get unique cards for entity assignment (credit cards from CSV)
   const uniqueCards = Array.from(new Set(transactions.map(t => t.card).filter((card): card is string => Boolean(card)))).sort();
   const sortedCategories = Object.entries(categoryTotals)
@@ -193,7 +226,9 @@ export default function CategorySummary({
       return 'All Accounts';
     }
     if (selectedAccountIds.length === 1) {
-      return selectedAccountIds[0];
+      const accountId = selectedAccountIds[0];
+      const displayName = accountToDisplayName.get(accountId) || accountId;
+      return truncateFileName(displayName);
     }
     return `${selectedAccountIds.length} selected`;
   };
@@ -210,14 +245,90 @@ export default function CategorySummary({
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-      <div className="mb-6">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-2xl font-bold text-gray-900">
-            Expense Summary
-          </h2>
+    <div className="space-y-6">
+      {/* Income Summary */}
+      {showIncomeSummary && (
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div className="mb-4">
+            <div className="flex items-center justify-between mb-2">
+              <h2 className="text-2xl font-bold text-gray-900">
+                Income Summary
+              </h2>
+              {onShowIncomeSummaryChange && (
+                <button
+                  onClick={() => onShowIncomeSummaryChange(false)}
+                  className="text-gray-400 hover:text-gray-600 transition-colors"
+                  title="Hide income summary"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                  </svg>
+                </button>
+              )}
+            </div>
+            <div className="text-3xl font-bold text-green-600">
+              ${totalIncome.toFixed(2)}
+            </div>
+            <div className="text-sm text-gray-600 mt-1">
+              Total credits (income) for selected period
+            </div>
+          </div>
           
-          {/* Account Filter Dropdown */}
+          {/* Credits Filter Option */}
+          {onShowOnlyCreditsChange && (
+            <div
+              className={`mt-4 p-3 rounded-lg cursor-pointer transition-colors ${
+                showOnlyCredits
+                  ? 'bg-green-100 border-2 border-green-500'
+                  : 'bg-gray-50 border-2 border-transparent hover:bg-gray-100'
+              }`}
+              onClick={() => {
+                const newValue = !showOnlyCredits;
+                onShowOnlyCreditsChange(newValue);
+                // Clear category selection when toggling credits filter
+                if (onCategoryChange) {
+                  onCategoryChange('all');
+                }
+              }}
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="text-green-600 font-bold text-lg">$</span>
+                  <span className={`text-sm font-medium ${showOnlyCredits ? 'text-green-800' : 'text-gray-700'}`}>
+                    Show Only Credits
+                  </span>
+                </div>
+                {showOnlyCredits && (
+                  <span className="text-xs text-green-700 font-medium">Active</span>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+      {!showIncomeSummary && onShowIncomeSummaryChange && (
+        <button
+          onClick={() => onShowIncomeSummaryChange(true)}
+          className="w-full bg-white rounded-lg shadow-sm border border-gray-200 p-3 text-left hover:bg-gray-50 transition-colors"
+        >
+          <div className="flex items-center justify-between">
+            <span className="text-sm font-medium text-gray-700">Show Income Summary</span>
+            <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
+        </button>
+      )}
+
+      {/* Expense Summary */}
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+        <div className="mb-6">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-2xl font-bold text-gray-900">
+              Expense Summary
+            </h2>
+            
+            {/* Account Filter Dropdown */}
           {onAccountFilterChange && (
             <div className="relative" ref={accountDropdownRef}>
               <button
@@ -242,10 +353,13 @@ export default function CategorySummary({
                       {uniqueAccounts.map((account) => {
                         const accountTransactionCount = transactions.filter(t => t.account && t.account === account).length;
                         const isSelected = selectedAccountIds.includes(account);
+                        const displayName = accountToDisplayName.get(account) || account;
+                        const truncatedName = truncateFileName(displayName);
                         return (
                           <label
                             key={account}
                             className="flex items-center px-4 py-2 hover:bg-gray-50 cursor-pointer"
+                            title={displayName.length > 30 ? displayName : undefined}
                           >
                             <input
                               type="checkbox"
@@ -255,7 +369,7 @@ export default function CategorySummary({
                               onClick={(e) => e.stopPropagation()}
                             />
                             <span className="ml-3 text-sm text-black">
-                              {account} ({accountTransactionCount})
+                              {truncatedName} ({accountTransactionCount})
                             </span>
                           </label>
                         );
@@ -468,13 +582,20 @@ export default function CategorySummary({
           {sortedCategories.map(([category, amount], index) => {
             const percentage = totalExpenses > 0 ? (amount / totalExpenses) * 100 : 0;
             const isSelected = selectedCategory === category;
+            const isDisabled = showOnlyCredits; // Disable category selection when showing only credits
             return (
               <div 
                 key={category}
-                className={`cursor-pointer rounded-lg p-2 transition-colors ${
-                  isSelected ? 'bg-blue-50 border-2 border-blue-500' : 'hover:bg-gray-50'
+                className={`rounded-lg p-2 transition-colors ${
+                  isDisabled 
+                    ? 'opacity-50 cursor-not-allowed' 
+                    : `cursor-pointer ${isSelected ? 'bg-blue-50 border-2 border-blue-500' : 'hover:bg-gray-50'}`
                 }`}
-                onClick={() => onCategoryChange?.(isSelected ? 'all' : category)}
+                onClick={() => {
+                  if (!isDisabled) {
+                    onCategoryChange?.(isSelected ? 'all' : category);
+                  }
+                }}
               >
                 <div className="flex justify-between items-center mb-1">
                   <span className={`text-sm font-medium ${isSelected ? 'text-blue-700' : 'text-gray-700'}`}>
@@ -494,6 +615,7 @@ export default function CategorySummary({
             );
           })}
         </div>
+      </div>
       </div>
     </div>
   );

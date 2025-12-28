@@ -21,6 +21,35 @@ from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Any
 from datetime import datetime
 from get_account_type import get_account_type, is_business_account
+import os
+import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
+# Load environment variables from .env file
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass  # python-dotenv not installed, will use environment variables directly
+
+# OpenAI integration
+try:
+    from openai import OpenAI
+    OPENAI_AVAILABLE = True
+    OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+    if OPENAI_API_KEY:
+        openai_client = OpenAI(api_key=OPENAI_API_KEY)
+    else:
+        openai_client = None
+        print("Warning: OPENAI_API_KEY not found in environment. LLM categorization will be skipped.")
+except ImportError:
+    OPENAI_AVAILABLE = False
+    openai_client = None
+    print("Warning: openai library not installed. Install with: pip install openai")
+except Exception as e:
+    OPENAI_AVAILABLE = False
+    openai_client = None
+    print(f"Warning: Failed to initialize OpenAI client: {e}")
 
 # Category sets (matching web/app/lib/categories.ts)
 PERSONAL_CATEGORIES = [
@@ -57,6 +86,358 @@ BUSINESS_CATEGORIES = [
     'Bank Fees',
     'Uncategorized',
 ]
+
+def load_prompt_template(prompt_file: Path) -> str:
+    """Load prompt template from file."""
+    if not prompt_file.exists():
+        return ""
+    try:
+        with open(prompt_file, 'r', encoding='utf-8') as f:
+            return f.read()
+    except Exception as e:
+        print(f"  Warning: Could not load prompt file {prompt_file}: {e}")
+        return ""
+
+def build_llm_prompt(merchant: str, amount: float, date: str, account_type: str, prompt_template: str, categories: List[str]) -> str:
+    """Build the LLM prompt for identifying and categorizing a transaction."""
+    categories_list = '\n'.join([f"- {cat}" for cat in categories])
+    
+    prompt = f"""{prompt_template}
+
+## Transaction to Categorize
+
+Merchant: {merchant}
+Amount: ${amount:.2f}
+Date: {date}
+
+## Available Categories
+
+{categories_list}
+
+## Task
+
+1. Identify the business name (clean up the merchant name, removing transaction codes, locations that are just identifiers, etc.)
+2. Select the most appropriate category from the list above
+3. Provide a brief reasoning for your choice
+
+Please respond in the following format:
+Business Name: [cleaned business name]
+Category: [category name]
+Reasoning: [brief explanation]
+"""
+    return prompt
+
+def parse_llm_response(response_text: str) -> Dict[str, Optional[str]]:
+    """Parse LLM response to extract business name, category, and reasoning."""
+    result = {
+        'identified_business': None,
+        'category': None,
+        'category_description': None
+    }
+    
+    # Try to extract Business Name
+    business_match = re.search(r'Business Name:\s*(.+?)(?:\n|$)', response_text, re.IGNORECASE)
+    if business_match:
+        result['identified_business'] = business_match.group(1).strip()
+    
+    # Try to extract Category
+    category_match = re.search(r'Category:\s*(.+?)(?:\n|$)', response_text, re.IGNORECASE)
+    if category_match:
+        result['category'] = category_match.group(1).strip()
+    
+    # Try to extract Reasoning
+    reasoning_match = re.search(r'Reasoning:\s*(.+?)(?:\n\n|\Z)', response_text, re.IGNORECASE | re.DOTALL)
+    if reasoning_match:
+        result['category_description'] = reasoning_match.group(1).strip()
+    
+    return result
+
+def identify_and_categorize_transaction_batch(transactions: List[Dict[str, Any]], account_type: str, project_root: Path, verbose: bool = True) -> List[Dict[str, Any]]:
+    """
+    Identify and categorize multiple transactions in a batch using LLM.
+    
+    Args:
+        transactions: List of transaction dicts with 'merchant', 'amount', 'date', 'transaction_id'
+        account_type: 'Business' or 'Personal'
+        project_root: Project root directory
+        verbose: Whether to print debug information
+    
+    Returns:
+        List of results with 'transaction_id', 'identified_business', 'category', 'category_description'
+    """
+    if not OPENAI_AVAILABLE or openai_client is None:
+        return [{'transaction_id': t['transaction_id'], 'identified_business': None, 'category': None, 'category_description': None} for t in transactions]
+    
+    # Filter out transfers
+    valid_transactions = [t for t in transactions if t.get('merchant') != "Account Transfer"]
+    transfers = [t for t in transactions if t.get('merchant') == "Account Transfer"]
+    
+    # Handle transfers
+    transfer_results = [{'transaction_id': t['transaction_id'], 'identified_business': "Account Transfer", 'category': None, 'category_description': None} for t in transfers]
+    
+    if not valid_transactions:
+        return transfer_results
+    
+    # Determine which prompt and categories to use
+    if account_type == 'Business':
+        prompt_file = project_root / 'business_categorization_prompt.md'
+        categories = BUSINESS_CATEGORIES
+    else:
+        prompt_file = project_root / 'personal_categorization_prompt.md'
+        categories = PERSONAL_CATEGORIES
+    
+    # Load prompt template
+    prompt_template = load_prompt_template(prompt_file)
+    if not prompt_template:
+        return transfer_results + [{'transaction_id': t['transaction_id'], 'identified_business': None, 'category': None, 'category_description': None} for t in valid_transactions]
+    
+    # Build batch prompt
+    transactions_list = "\n".join([
+        f"{i+1}. Merchant: {t['merchant']}, Amount: ${t['amount']:.2f}, Date: {t['date']}"
+        for i, t in enumerate(valid_transactions)
+    ])
+    
+    categories_list = '\n'.join([f"- {cat}" for cat in categories])
+    
+    batch_prompt = f"""{prompt_template}
+
+## Transactions to Categorize
+
+{transactions_list}
+
+## Available Categories
+
+{categories_list}
+
+## Task
+
+For each transaction above, provide:
+1. The transaction number
+2. The cleaned business name
+3. The most appropriate category
+4. Brief reasoning
+
+Please respond in the following format for each transaction:
+Transaction {valid_transactions[0]['transaction_id'][:20]}...:
+Business Name: [cleaned business name]
+Category: [category name]
+Reasoning: [brief explanation]
+
+[Repeat for each transaction]
+"""
+    
+    if verbose:
+        print(f"      [LLM] Processing batch of {len(valid_transactions)} transactions ({account_type} account)")
+    
+    try:
+        # Call OpenAI API
+        if verbose:
+            print(f"      [LLM] Calling OpenAI API...")
+        
+        response = openai_client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system", "content": "You are a helpful assistant that identifies business names and categorizes expenses. Always respond in the exact format requested for each transaction."},
+                {"role": "user", "content": batch_prompt}
+            ],
+            temperature=0.3,
+            max_tokens=min(4000, 300 * len(valid_transactions))  # Scale tokens with batch size
+        )
+        
+        response_text = response.choices[0].message.content
+        
+        if verbose:
+            print(f"      [LLM] Response received")
+            # Debug: Show first 500 chars of response if parsing fails
+            if len(valid_transactions) > 0:
+                debug_response = response_text[:500] if len(response_text) > 500 else response_text
+                # Only show if we suspect parsing issues (will check after parsing)
+        
+        # Parse batch response - try to extract each transaction's results
+        results = []
+        for i, txn in enumerate(valid_transactions):
+            # Try multiple strategies to find this transaction's results
+            txn_num = i + 1
+            txn_merchant = txn['merchant'][:40]
+            
+            # Strategy 1: Look for transaction number
+            pattern = rf'{txn_num}\.?\s+Merchant:\s*{re.escape(txn_merchant)}.*?Business Name:\s*(.+?)(?:\n|Category:)'
+            business_match = re.search(pattern, response_text, re.IGNORECASE | re.DOTALL)
+            
+            # Strategy 2: Look for merchant name directly
+            if not business_match:
+                pattern = rf'{re.escape(txn_merchant)}.*?Business Name:\s*(.+?)(?:\n|Category:)'
+                business_match = re.search(pattern, response_text, re.IGNORECASE | re.DOTALL)
+            
+            # Strategy 3: Look for numbered list item
+            if not business_match:
+                pattern = rf'{txn_num}\.?\s+.*?Business Name:\s*(.+?)(?:\n|Category:)'
+                business_match = re.search(pattern, response_text, re.IGNORECASE | re.DOTALL)
+            
+            business_name = business_match.group(1).strip() if business_match else None
+            
+            # Extract category and reasoning
+            if business_match:
+                # Find the section for this transaction
+                start_pos = business_match.start()
+                # Look for next transaction or end of response
+                next_txn_match = re.search(rf'{txn_num + 1}\.?\s+', response_text[start_pos:], re.IGNORECASE)
+                if next_txn_match:
+                    section = response_text[start_pos:start_pos + next_txn_match.start()]
+                else:
+                    section = response_text[start_pos:]
+                
+                category_match = re.search(r'Category:\s*(.+?)(?:\n|Reasoning:)', section, re.IGNORECASE)
+                category = category_match.group(1).strip() if category_match else None
+                
+                if category_match:
+                    reasoning_match = re.search(r'Reasoning:\s*(.+?)(?:\n\n|\n\d+\.|\Z)', section[category_match.end():], re.IGNORECASE | re.DOTALL)
+                    reasoning = reasoning_match.group(1).strip() if reasoning_match else None
+                else:
+                    reasoning = None
+            else:
+                category = None
+                reasoning = None
+            
+            # Validate category
+            if category and category not in categories:
+                category = 'Uncategorized'
+            
+            results.append({
+                'transaction_id': txn['transaction_id'],
+                'identified_business': business_name,
+                'category': category,
+                'category_description': reasoning
+            })
+            
+            if verbose:
+                status = "✓" if (business_name or category) else "⚠"
+                print(f"      [LLM] {status} {txn['merchant'][:40]}: {business_name or 'N/A'} → {category or 'N/A'}")
+                # If parsing failed, show a snippet of the response for debugging
+                if not business_name and not category:
+                    # Try to find any mention of this merchant in the response
+                    merchant_snippet = txn['merchant'][:30]
+                    if merchant_snippet.lower() in response_text.lower():
+                        # Find the section mentioning this merchant
+                        idx = response_text.lower().find(merchant_snippet.lower())
+                        snippet = response_text[max(0, idx-50):idx+200]
+                        print(f"      [LLM] Debug - Response snippet for '{txn['merchant'][:40]}': ...{snippet}...")
+        
+        return transfer_results + results
+        
+    except Exception as e:
+        if verbose:
+            print(f"      [LLM] ✗ Error: {e}")
+        # Return empty results on error
+        return transfer_results + [{'transaction_id': t['transaction_id'], 'identified_business': None, 'category': None, 'category_description': None} for t in valid_transactions]
+
+def identify_and_categorize_transaction(merchant: str, amount: float, date: str, account_type: str, project_root: Path, verbose: bool = True) -> Dict[str, Optional[str]]:
+    """
+    Identify business name and categorize transaction using LLM.
+    
+    Args:
+        merchant: Merchant name from transaction
+        amount: Transaction amount
+        date: Transaction date
+        account_type: 'Business' or 'Personal'
+        project_root: Project root directory
+        verbose: Whether to print debug information
+    
+    Returns:
+        {
+            'identified_business': str or None,
+            'category': str or None,
+            'category_description': str or None
+        }
+    """
+    # Skip if OpenAI is not available
+    if not OPENAI_AVAILABLE or openai_client is None:
+        if verbose:
+            print(f"      [SKIP] No OpenAI client available for: {merchant[:50]}")
+        return {
+            'identified_business': None,
+            'category': None,
+            'category_description': None
+        }
+    
+    # Skip transfers
+    if merchant == "Account Transfer":
+        if verbose:
+            print(f"      [SKIP] Transfer transaction")
+        return {
+            'identified_business': "Account Transfer",
+            'category': None,
+            'category_description': None
+        }
+    
+    # Determine which prompt and categories to use
+    if account_type == 'Business':
+        prompt_file = project_root / 'business_categorization_prompt.md'
+        categories = BUSINESS_CATEGORIES
+    else:
+        prompt_file = project_root / 'personal_categorization_prompt.md'
+        categories = PERSONAL_CATEGORIES
+    
+    # Load prompt template
+    prompt_template = load_prompt_template(prompt_file)
+    if not prompt_template:
+        return {
+            'identified_business': None,
+            'category': None,
+            'category_description': None
+        }
+    
+    # Build the prompt
+    full_prompt = build_llm_prompt(merchant, amount, date, account_type, prompt_template, categories)
+    
+    if verbose:
+        print(f"      [LLM] Processing: {merchant[:50]} (${amount:.2f}) - {account_type} account")
+    
+    try:
+        # Call OpenAI API
+        if verbose:
+            print(f"      [LLM] Calling OpenAI API...")
+        response = openai_client.chat.completions.create(
+            model="gpt-4o-mini",  # Using a cost-effective model
+            messages=[
+                {"role": "system", "content": "You are a helpful assistant that identifies business names and categorizes expenses. Always respond in the exact format requested."},
+                {"role": "user", "content": full_prompt}
+            ],
+            temperature=0.3,  # Lower temperature for more consistent results
+            max_tokens=300
+        )
+        
+        response_text = response.choices[0].message.content
+        
+        if verbose:
+            print(f"      [LLM] Response received")
+        
+        # Parse the response
+        result = parse_llm_response(response_text)
+        
+        # Validate category is in the allowed list
+        if result['category'] and result['category'] not in categories:
+            if verbose:
+                print(f"      [LLM] Warning: Invalid category '{result['category']}', using 'Uncategorized'")
+            result['category'] = 'Uncategorized'
+        
+        if verbose:
+            if result['identified_business']:
+                print(f"      [LLM] ✓ Identified: {result['identified_business']}")
+            if result['category']:
+                print(f"      [LLM] ✓ Category: {result['category']}")
+            if not result['identified_business'] and not result['category']:
+                print(f"      [LLM] ⚠ No results extracted from response")
+        
+        return result
+        
+    except Exception as e:
+        print(f"      [LLM] ✗ Error: {e}")
+        return {
+            'identified_business': None,
+            'category': None,
+            'category_description': None
+        }
 
 def save_json_safely(file_path: Path, data: Any) -> None:
     """Safely save JSON data with atomic write."""
@@ -243,16 +624,22 @@ def parse_ofx_file(ofx_path: Path) -> Tuple[Optional[str], Optional[str], List[D
             except:
                 trnamt = 0.0
             
-            # Skip deposits/revenue - only process expenses
-            # This only applies to checking/debit accounts, not credit cards
-            # Credit cards don't have deposits (all transactions are expenses/debits)
+            # Determine if transaction is a credit (income) or debit (expense)
+            # Credits: TRNTYPE=CREDIT or DEP, or positive TRNAMT for checking accounts
+            # Debits: TRNTYPE=DEBIT, PAYMENT, etc., or negative TRNAMT for checking accounts
+            trntype_upper = trntype.upper()
             if account_type == 'CHECKING':
-                # Deposits have TRNTYPE=DEP or positive TRNAMT
-                # Expenses have TRNTYPE=DEBIT/PAYMENT/etc or negative TRNAMT
-                is_deposit = (trntype.upper() == 'DEP' or trnamt > 0)
-                if is_deposit:
-                    continue  # Skip deposits/revenue, only track expenses
-            # For credit cards, all transactions are expenses (negative amounts are normal)
+                # For checking accounts:
+                # - Credits: TRNTYPE=CREDIT or DEP, or positive TRNAMT
+                # - Debits: TRNTYPE=DEBIT, PAYMENT, etc., or negative TRNAMT
+                is_credit = (trntype_upper in ['CREDIT', 'DEP'] or trnamt > 0)
+            else:
+                # For credit cards, all transactions are typically debits (expenses)
+                # But we'll check TRNTYPE to be safe
+                is_credit = (trntype_upper == 'CREDIT')
+            
+            # Note: We now track both credits and debits (previously skipped credits)
+            # Credits will be filtered from display in the UI but remain in the data
             
             transaction_date = parse_ofx_date(dtposted)
             
@@ -260,9 +647,10 @@ def parse_ofx_file(ofx_path: Path) -> Tuple[Optional[str], Optional[str], List[D
                 'fitid': fitid,
                 'dtposted': dtposted,
                 'transaction_date': transaction_date,
-                'amount': abs(trnamt),  # Store as positive for expenses
+                'amount': abs(trnamt),  # Store as positive (absolute value)
                 'trnamt': trnamt,  # Keep original signed value
                 'trntype': trntype,
+                'is_credit': is_credit,  # Track if this is a credit (income) or debit (expense)
                 'name': name.strip(),
                 'memo': memo.strip(),
                 'account_type': account_type,
@@ -360,12 +748,20 @@ def match_csv_to_ofx(ofx_transaction: Dict, csv_transactions: List[Dict]) -> Opt
 def process_account(account_folder: Path, project_root: Path) -> None:
     """Process all OFX and CSV files for a single account."""
     account_name = account_folder.name
-    print(f"\nProcessing account: {account_name}")
+    print(f"\n{'='*60}")
+    print(f"Processing account: {account_name}")
+    print(f"{'='*60}")
     
     # Get account type from configuration
     is_business = is_business_account(account_name, project_root)
     account_type_label = "Business" if is_business else "Personal"
     print(f"  Account type: {account_type_label}")
+    
+    # Show OpenAI status
+    if OPENAI_AVAILABLE and openai_client:
+        print(f"  OpenAI: ✓ Available (will categorize transactions)")
+    else:
+        print(f"  OpenAI: ✗ Not available (transactions will not be categorized)")
     
     ofx_dir = account_folder / 'ofx'
     csv_dir = account_folder / 'csv'
@@ -432,14 +828,39 @@ def process_account(account_folder: Path, project_root: Path) -> None:
     processed_transactions = []
     sanitized_account_id = sanitize_account_id(account_id)
     
-    for txn in all_transactions:
+    skipped_count = 0
+    total_to_process = len(all_transactions)
+    
+    # Collect new transactions to process
+    new_transactions_to_process = []
+    
+    print(f"  Processing {total_to_process} transaction(s)...")
+    
+    for idx, txn in enumerate(all_transactions, 1):
         fitid = txn.get('fitid', '')
         transaction_id = f"{fitid}_{sanitized_account_id}"
         
         # Skip if already exists
         if transaction_id in existing_ids:
+            skipped_count += 1
             continue
         
+        new_transactions_to_process.append((idx, txn, transaction_id))
+    
+    if skipped_count > 0:
+        print(f"  Skipped {skipped_count} existing transaction(s)")
+    
+    if not new_transactions_to_process:
+        print(f"  No new transactions to process")
+        print(f"  Total transactions: {len(existing_transactions)}")
+        return
+    
+    print(f"  Processing {len(new_transactions_to_process)} new transaction(s)...")
+    print()
+    
+    # First, prepare all transaction data (merchant names, etc.)
+    prepared_transactions = []
+    for idx, txn, transaction_id in new_transactions_to_process:
         # Process based on account type
         if detected_account_type == 'CHECKING':
             # Debit account processing
@@ -452,31 +873,17 @@ def process_account(account_folder: Path, project_root: Path) -> None:
             # Determine merchant name
             if card_number:
                 # NAME is a card, merchant comes from MEMO
-                # Extract merchant from MEMO (remove "Visa Purchase" prefix if present)
                 merchant = memo
-                # Clean up common prefixes
                 if merchant.startswith('Visa Purchase'):
-                    # Remove "Visa Purchase" and any leading/trailing whitespace
                     merchant = merchant.replace('Visa Purchase', '', 1).strip()
-                # Remove FX amount info if present (e.g., "0 55 Twilio Inc         0 28 FXAmnt=...")
-                # Keep only the merchant name part before FX info
                 if 'FXAmnt=' in merchant:
                     merchant = merchant.split('FXAmnt=')[0].strip()
-                # Clean up leading numbers and spaces (e.g., "0 55 Twilio Inc" -> "Twilio Inc")
-                # Remove patterns like "0 55 " or "0.55 " at the start (FX rate info)
                 merchant = re.sub(r'^\d+\s+\d+\.?\d*\s+', '', merchant).strip()
-                # Remove trailing FX amount numbers (e.g., "Twilio Inc         0 28" -> "Twilio Inc")
-                # Pattern: spaces followed by decimal number at the end
                 merchant = re.sub(r'\s+\d+\.?\d+\s*$', '', merchant).strip()
-                # Remove trailing single numbers (e.g., "Whatconverts         0 46" -> "Whatconverts")
-                # This handles cases where FX amount is just a number
                 merchant = re.sub(r'\s+\d+\s*$', '', merchant).strip()
-                # Remove trailing merchant codes (e.g., "*V85D", "*R50V")
                 merchant = re.sub(r'\s+\*[A-Z0-9]+$', '', merchant).strip()
-                # Clean up multiple spaces
                 merchant = re.sub(r'\s+', ' ', merchant).strip()
             else:
-                # NAME is merchant
                 merchant = name
             
             # Detect transfers
@@ -484,52 +891,118 @@ def process_account(account_folder: Path, project_root: Path) -> None:
             if is_transfer_txn:
                 merchant = "Account Transfer"
             
-            processed_txn = {
-                'id': transaction_id,
-                'account': account_id,
-                'card': card_number,
-                'amount': txn.get('amount', 0.0),
+            prepared_transactions.append({
+                'transaction_id': transaction_id,
+                'txn': txn,  # txn already contains is_credit from parse_ofx_file
                 'merchant': merchant.strip(),
-                'identified_business': None,  # Will be processed later
-                'transaction_date': txn.get('transaction_date', ''),
-                'processed_date': txn.get('transaction_date', ''),
-                'foreign_currency': memo if card_number else '',
-                'source_file': txn.get('source_file', ''),
-                'account_type': account_type_label,  # Personal or Business from accounts.json
-                'categorized': False,
-                'category': None,
-                'category_description': None,
-                'categorized_at': None,
+                'card_number': card_number,
                 'is_transfer': is_transfer_txn,
-            }
+                'foreign_currency': memo if card_number else '',
+            })
         
         else:  # CREDITCARD
             # Credit card processing
             name = txn.get('name', '')
-            
-            # Try to match with CSV to get card number
             card_number = match_csv_to_ofx(txn, csv_transactions)
             
-            processed_txn = {
-                'id': transaction_id,
-                'account': account_id,
-                'card': card_number,
-                'amount': txn.get('amount', 0.0),
+            # For credit cards, all transactions are typically debits (expenses)
+            # But check if is_credit was set in the OFX parsing
+            prepared_transactions.append({
+                'transaction_id': transaction_id,
+                'txn': txn,  # txn already contains is_credit from parse_ofx_file
                 'merchant': name.strip(),
-                'identified_business': None,  # Will be processed later
-                'transaction_date': txn.get('transaction_date', ''),
-                'processed_date': txn.get('transaction_date', ''),
+                'card_number': card_number,
+                'is_transfer': False,
                 'foreign_currency': '',
-                'source_file': txn.get('source_file', ''),
-                'account_type': account_type_label,  # Personal or Business from accounts.json
-                'categorized': False,
-                'category': None,
-                'category_description': None,
-                'categorized_at': None,
-                'is_transfer': False,  # Credit cards don't have transfers
-            }
+            })
+    
+    # Process transactions in batches
+    BATCH_SIZE = 5  # Process 5 transactions per API call
+    BATCH_DELAY = 1.2  # 1.2 second delay between batches (stays well under 500 RPM limit)
+    
+    # Group into batches
+    for batch_idx in range(0, len(prepared_transactions), BATCH_SIZE):
+        batch = prepared_transactions[batch_idx:batch_idx + BATCH_SIZE]
+        batch_num = (batch_idx // BATCH_SIZE) + 1
+        total_batches = (len(prepared_transactions) + BATCH_SIZE - 1) // BATCH_SIZE
         
-        processed_transactions.append(processed_txn)
+        print(f"  Batch {batch_num}/{total_batches}: Processing {len(batch)} transaction(s)...")
+        
+        # Prepare batch data for LLM
+        batch_data = [{
+            'transaction_id': pt['transaction_id'],
+            'merchant': pt['merchant'],
+            'amount': pt['txn'].get('amount', 0.0),
+            'date': pt['txn'].get('transaction_date', ''),
+        } for pt in batch]
+        
+        # Process batch with LLM
+        llm_results = identify_and_categorize_transaction_batch(
+            batch_data,
+            account_type_label,
+            project_root,
+            verbose=True
+        )
+        
+        # Create a mapping of transaction_id to LLM results
+        llm_results_map = {r['transaction_id']: r for r in llm_results}
+        
+        # Create final transaction objects
+        for pt in batch:
+            transaction_id = pt['transaction_id']
+            llm_result = llm_results_map.get(transaction_id, {})
+            
+            # is_credit is determined from OFX TRNTYPE/TRNAMT during parsing, NOT from LLM results
+            # This ensures credits are ALWAYS marked correctly, even if LLM fails to identify merchant
+            # The LLM only affects identified_business and category, never is_credit
+            is_credit = pt['txn'].get('is_credit', False)
+            
+            if detected_account_type == 'CHECKING':
+                processed_txn = {
+                    'id': transaction_id,
+                    'account': account_id,
+                    'card': pt['card_number'],
+                    'amount': pt['txn'].get('amount', 0.0),
+                    'merchant': pt['merchant'],
+                    'identified_business': llm_result.get('identified_business'),  # LLM may return None/N/A
+                    'transaction_date': pt['txn'].get('transaction_date', ''),
+                    'processed_date': pt['txn'].get('transaction_date', ''),
+                    'foreign_currency': pt['foreign_currency'],
+                    'source_file': pt['txn'].get('source_file', ''),
+                    'account_type': account_type_label,
+                    'categorized': bool(llm_result.get('category')),
+                    'category': llm_result.get('category'),  # LLM may return None/N/A
+                    'category_description': llm_result.get('category_description'),
+                    'categorized_at': datetime.now().isoformat() if llm_result.get('category') else None,
+                    'is_transfer': pt['is_transfer'],
+                    'is_credit': is_credit,  # Always set from OFX data, independent of LLM success
+                }
+            else:  # CREDITCARD
+                processed_txn = {
+                    'id': transaction_id,
+                    'account': account_id,
+                    'card': pt['card_number'],
+                    'amount': pt['txn'].get('amount', 0.0),
+                    'merchant': pt['merchant'],
+                    'identified_business': llm_result.get('identified_business'),  # LLM may return None/N/A
+                    'transaction_date': pt['txn'].get('transaction_date', ''),
+                    'processed_date': pt['txn'].get('transaction_date', ''),
+                    'foreign_currency': pt['foreign_currency'],
+                    'source_file': pt['txn'].get('source_file', ''),
+                    'account_type': account_type_label,
+                    'categorized': bool(llm_result.get('category')),
+                    'category': llm_result.get('category'),  # LLM may return None/N/A
+                    'category_description': llm_result.get('category_description'),
+                    'categorized_at': datetime.now().isoformat() if llm_result.get('category') else None,
+                    'is_transfer': False,
+                    'is_credit': is_credit,  # Always set from OFX data, independent of LLM success
+                }
+            
+            processed_transactions.append(processed_txn)
+        
+        # Add delay between batches to respect rate limits (except for last batch)
+        if batch_idx + BATCH_SIZE < len(prepared_transactions):
+            time.sleep(BATCH_DELAY)
     
     # Merge with existing transactions
     all_processed = existing_transactions + processed_transactions
@@ -552,10 +1025,23 @@ def process_account(account_folder: Path, project_root: Path) -> None:
     unique_transactions.sort(key=lambda x: x.get('transaction_date', ''), reverse=True)
     
     # Save transactions
+    print()
+    if skipped_count > 0:
+        print(f"  Skipped {skipped_count} existing transaction(s)")
+    
     if processed_transactions:
+        print(f"  Saving {len(processed_transactions)} new transaction(s)...")
         save_json_safely(output_file, unique_transactions)
-        print(f"  Added {len(processed_transactions)} new transaction(s)")
-        print(f"  Total transactions: {len(unique_transactions)}")
+        print(f"  ✓ Added {len(processed_transactions)} new transaction(s)")
+        print(f"  ✓ Total transactions: {len(unique_transactions)}")
+        
+        # Count categorized transactions
+        categorized_count = sum(1 for t in processed_transactions if t.get('categorized'))
+        transfer_count = sum(1 for t in processed_transactions if t.get('is_transfer'))
+        non_transfer_count = len(processed_transactions) - transfer_count
+        
+        if categorized_count > 0:
+            print(f"  ✓ Categorized: {categorized_count}/{non_transfer_count} transactions (excluding {transfer_count} transfers)")
     else:
         print(f"  No new transactions to add")
         print(f"  Total transactions: {len(unique_transactions)}")

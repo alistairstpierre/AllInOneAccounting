@@ -90,16 +90,16 @@ export async function POST(request: Request) {
           if (currentCategory === targetCategory) return false;
         }
 
-        // Check if target identified_business matches the source identified_business
-        // Only match transactions that have identified_business set (ignore raw merchant field)
+        // Check if merchant name matches (check both identified_business first, then raw merchant)
         const targetIdentifiedBusiness = (t.identified_business || '').trim().toLowerCase();
+        const targetMerchant = (t.merchant || '').trim().toLowerCase();
         const sourceMerchant = merchant.trim().toLowerCase();
         
-        // Only match if target has identified_business and it matches the source
-        // We only search by identified_business, not the raw merchant field
-        if (!targetIdentifiedBusiness) return false;
+        // Match if either identified_business or merchant matches the source
+        const merchantMatches = 
+          (targetIdentifiedBusiness && sourceMerchant === targetIdentifiedBusiness) ||
+          (targetMerchant && sourceMerchant === targetMerchant);
         
-        const merchantMatches = sourceMerchant === targetIdentifiedBusiness;
         if (!merchantMatches) return false;
         
         // Return true to include this transaction
