@@ -11,9 +11,11 @@ export type CategoryMode = 'Personal' | 'Business' | 'Personal + Business';
 export const PERSONAL_CATEGORIES = [
   'Housing',
   'Transportation',
-  'Food & Dining',
-  'Healthcare',
-  'Personal Care',
+  'Groceries',
+  'Dining & Takeout',
+  'Medical & Healthcare',
+  'Fitness & Wellness',
+  'Personal Care & Grooming',
   'Entertainment',
   'Shopping',
   'Insurance',
@@ -84,4 +86,6 @@ export function getCategoriesForMode(mode: CategoryMode): string[] {
   }
   return getAllCategories();
 }
+
+
 

@@ -95,40 +95,23 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const { addAction, undo, canUndo, isUndoing, undoStackLength } = useUndo();
   
-  // Load initial state from localStorage
-  const [selectedCategory, setSelectedCategory] = useState<string>(() => 
-    loadFromStorage(STORAGE_KEYS.selectedCategory, 'all')
-  );
-  const [categoryMode, setCategoryMode] = useState<'Personal' | 'Business' | 'Personal + Business'>(() => 
-    loadFromStorage(STORAGE_KEYS.categoryMode, 'Personal + Business')
-  );
+  // Initialize state with default values (same on server and client)
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [categoryMode, setCategoryMode] = useState<'Personal' | 'Business' | 'Personal + Business'>('Personal + Business');
   const [sortBy, setSortBy] = useState<'date' | 'amount'>('date');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
-  const [dateRange, setDateRange] = useState<{ start: string; end: string }>(() => 
-    loadFromStorage(STORAGE_KEYS.dateRange, { start: '', end: '' })
-  );
+  const [dateRange, setDateRange] = useState<{ start: string; end: string }>({ start: '', end: '' });
   const [selectedEntityId, setSelectedEntityId] = useState<string | null>(null);
   const [isSelectionMode, setIsSelectionMode] = useState(false);
   const [selectedTransactionIds, setSelectedTransactionIds] = useState<Set<string>>(new Set());
-  const [selectedEntityFilterIds, setSelectedEntityFilterIds] = useState<string[]>(() => 
-    loadFromStorage(STORAGE_KEYS.selectedEntityFilterIds, [])
-  );
-  const [selectedAccountIds, setSelectedAccountIds] = useState<string[]>(() => 
-    loadFromStorage(STORAGE_KEYS.selectedAccountIds, [])
-  );
+  const [selectedEntityFilterIds, setSelectedEntityFilterIds] = useState<string[]>([]);
+  const [selectedAccountIds, setSelectedAccountIds] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [searchText, setSearchText] = useState<string>(() => 
-    loadFromStorage(STORAGE_KEYS.searchText, '')
-  );
-  const [showTransfers, setShowTransfers] = useState<boolean>(() => 
-    loadFromStorage(STORAGE_KEYS.showTransfers, true)
-  );
-  const [showIncomeSummary, setShowIncomeSummary] = useState<boolean>(() => 
-    loadFromStorage(STORAGE_KEYS.showIncomeSummary, true)
-  );
-  const [showOnlyCredits, setShowOnlyCredits] = useState<boolean>(() => 
-    loadFromStorage(STORAGE_KEYS.showOnlyCredits, false)
-  );
+  const [searchText, setSearchText] = useState<string>('');
+  const [showTransfers, setShowTransfers] = useState<boolean>(true);
+  const [showIncomeSummary, setShowIncomeSummary] = useState<boolean>(true);
+  const [showOnlyCredits, setShowOnlyCredits] = useState<boolean>(false);
+  const [isHydrated, setIsHydrated] = useState(false);
   
   // Store original date range before expanding (for modal restoration)
   const originalDateRangeRef = useRef<{ start: string; end: string } | null>(null);
@@ -179,10 +162,26 @@ export default function Home() {
     originalTransaction: null,
   });
 
+  // Load from localStorage after component mounts (client-side only)
   useEffect(() => {
-    fetchTransactions();
-    fetchEntities();
+    setIsHydrated(true);
+    setSelectedCategory(loadFromStorage(STORAGE_KEYS.selectedCategory, 'all'));
+    setCategoryMode(loadFromStorage(STORAGE_KEYS.categoryMode, 'Personal + Business'));
+    setDateRange(loadFromStorage(STORAGE_KEYS.dateRange, { start: '', end: '' }));
+    setSelectedEntityFilterIds(loadFromStorage(STORAGE_KEYS.selectedEntityFilterIds, []));
+    setSelectedAccountIds(loadFromStorage(STORAGE_KEYS.selectedAccountIds, []));
+    setSearchText(loadFromStorage(STORAGE_KEYS.searchText, ''));
+    setShowTransfers(loadFromStorage(STORAGE_KEYS.showTransfers, true));
+    setShowIncomeSummary(loadFromStorage(STORAGE_KEYS.showIncomeSummary, true));
+    setShowOnlyCredits(loadFromStorage(STORAGE_KEYS.showOnlyCredits, false));
   }, []);
+
+  useEffect(() => {
+    if (isHydrated) {
+      fetchTransactions();
+      fetchEntities();
+    }
+  }, [isHydrated]);
 
   const fetchEntities = async () => {
     try {
@@ -200,7 +199,7 @@ export default function Home() {
 
   // Set initial date range to last month (1 month ago to today) if not loaded from storage
   useEffect(() => {
-    if (transactions.length > 0 && !dateRange.start && !dateRange.end) {
+    if (isHydrated && transactions.length > 0 && !dateRange.start && !dateRange.end) {
       const today = new Date();
       const oneMonthAgo = new Date(today);
       oneMonthAgo.setMonth(today.getMonth() - 1);
@@ -220,7 +219,7 @@ export default function Home() {
       setDateRange(newDateRange);
       saveToStorage(STORAGE_KEYS.dateRange, newDateRange);
     }
-  }, [transactions]);
+  }, [isHydrated, transactions, dateRange.start, dateRange.end]);
 
   // Save to localStorage whenever filters change
   useEffect(() => {
@@ -1463,7 +1462,10 @@ export default function Home() {
     }
   };
 
-  if (loading) {
+  // Prevent hydration mismatch - only render main content after mount
+  const shouldShowLoading = typeof window === 'undefined' || loading || !isHydrated;
+
+  if (shouldShowLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-xl text-gray-600">Loading transactions...</div>

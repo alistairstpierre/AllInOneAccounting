@@ -8,7 +8,7 @@ AllInOneAccounting helps you categorize bank transactions by importing CSV files
 
 ## Project Structure
 
-- `data/{AccountName}/` - Input data folders for each account (OFX and CSV files)
+- `data/{AccountName}/` - Input data folders for each account (CSV files)
 - `storage/transactions/` - Processed transaction JSON files
 - `storage/accounts.json` - Account configuration (defines Personal vs Business accounts)
 - `storage/entities.json` - Entity definitions (Personal/Business entities)
@@ -17,6 +17,8 @@ AllInOneAccounting helps you categorize bank transactions by importing CSV files
 - `personal_categorization_prompt.md` - Prompt template for LLM-based personal expense categorization
 - `identify_and_categorize.py` - Script to identify and categorize transactions based on entity type
 - `update_transactions_with_credit_debit.py` - Script to update existing transactions with credit/debit information
+- `categorize_transactions.py` - Main script to process CSV files and convert them to transaction JSON files
+- `assign_transactions_by_card.py` - Script to assign existing transactions to entities based on credit card numbers
 - `web/` - Next.js web application
   - `web/app/lib/transaction-update.ts` - Utility function for updating transactions (marks as updated only when values change)
 
@@ -72,3 +74,121 @@ python3 identify_and_categorize.py --no-dry-run
 
 **Note**: The script currently shows the prompts that would be used. LLM API integration (OpenAI, Anthropic, etc.) needs to be added to actually identify and categorize transactions automatically.
 
+## Category Preservation
+
+**Important**: When processing CSV files, all manual category changes are automatically preserved. The processor:
+
+1. **Matches transactions by composite key** (date, amount, merchant, card, reference, code)
+2. **Preserves all categorization fields** when updating existing transactions:
+   - `category`
+   - `identified_business`
+   - `category_description`
+   - `categorized`
+   - `categorized_at`
+3. **Only updates metadata** like `source_file` when matching duplicates
+
+### Backup and Restore
+
+Before processing CSV files, you can create a backup of all categorized transactions:
+
+```powershell
+# Create a backup of all categories
+python backup_categories.py
+```
+
+This creates a timestamped backup in `storage/category_backups/` containing all categorized transactions.
+
+To restore categories from a backup:
+
+```powershell
+# Restore from most recent backup
+python restore_categories.py
+
+# Or specify a specific backup
+python restore_categories.py 20260107_184714
+```
+
+### Verify Categories
+
+Check how many transactions have categories:
+
+```powershell
+python verify_category_preservation.py
+```
+<<<<<<< Current (Your changes)
+
+
+**Default**: If an account is not specified in the config, it defaults to "Personal".
+
+### Account Type Storage
+
+When transactions are processed, the account type (Personal or Business) is stored in each transaction's `account_type` field. This allows the system to:
+- Track which transactions belong to business vs personal accounts
+- Use appropriate category sets for categorization
+- Provide context for LLM-based categorization (see `business_categorization_prompt.md`)
+
+See `TRANSACTION_PROCESSOR_LOGIC.md` for more details on how account types are used during processing.
+
+## Entity-Based Categorization
+
+Transactions can be assigned to entities (people or organizations) in the web interface. The `identify_and_categorize.py` script processes transactions based on their assigned entity type:
+
+- **Business entities**: Uses `business_categorization_prompt.md` and business categories
+- **Personal entities**: Uses `personal_categorization_prompt.md` and personal categories
+- **Unassigned transactions**: Uses account type to determine prompt and categories
+
+### Running Entity-Based Categorization
+
+```bash
+# Dry run (shows what would be processed, no changes)
+python3 identify_and_categorize.py
+
+# Actually process transactions (requires LLM integration)
+python3 identify_and_categorize.py --no-dry-run
+```
+
+**Note**: The script currently shows the prompts that would be used. LLM API integration (OpenAI, Anthropic, etc.) needs to be added to actually identify and categorize transactions automatically.
+
+## Category Preservation
+
+**Important**: When processing CSV files, all manual category changes are automatically preserved. The processor:
+
+1. **Matches transactions by composite key** (date, amount, merchant, card, reference, code)
+2. **Preserves all categorization fields** when updating existing transactions:
+   - `category`
+   - `identified_business`
+   - `category_description`
+   - `categorized`
+   - `categorized_at`
+3. **Only updates metadata** like `source_file` when matching duplicates
+
+### Backup and Restore
+
+Before processing CSV files, you can create a backup of all categorized transactions:
+
+```powershell
+# Create a backup of all categories
+python backup_categories.py
+```
+
+This creates a timestamped backup in `storage/category_backups/` containing all categorized transactions.
+
+To restore categories from a backup:
+
+```powershell
+# Restore from most recent backup
+python restore_categories.py
+
+# Or specify a specific backup
+python restore_categories.py 20260107_184714
+```
+
+### Verify Categories
+
+Check how many transactions have categories:
+
+```powershell
+python verify_category_preservation.py
+```
+=======
+>>>>>>> Incoming (Background Agent changes)

@@ -5,3 +5,29 @@ node_modules/
 *.log
 .DS_Store
 
+
+
+
+
+
+
+
+
+<<<<<<< Current (Your changes)
+.env.local
+.env.*.local
+node_modules/
+*.log
+.DS_Store
+
+
+
+
+
+
+
+
+
+=======
+>>>>>>> Incoming (Background Agent changes)
+

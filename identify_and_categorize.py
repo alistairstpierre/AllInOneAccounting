@@ -2,13 +2,14 @@
 """
 Identify and Categorize Transactions by Entity Type
 
-This script identifies business names and categorizes transactions based on the entity type.
+This script ALWAYS generates categories for transactions that don't have them.
+The entity type or account type determines which category set to use:
 - If transaction is assigned to a Business entity: uses business prompt and business categories
 - If transaction is assigned to a Personal entity: uses personal prompt and personal categories
-- If transaction is not assigned to an entity: uses account_type to determine prompt
+- If transaction is not assigned to an entity: uses account_type from accounts.json to determine prompt
 
-This script processes transactions that have been assigned to entities and generates
-the identified_business name and category based on the entity type.
+Categories are generated for ALL transactions missing categories, regardless of type.
+The type (Business/Personal) only determines which category set and prompt template to use.
 """
 
 import json
@@ -17,6 +18,7 @@ from pathlib import Path
 from typing import Dict, List, Optional, Any
 from datetime import datetime
 import re
+from get_account_type import get_account_type
 
 # Load environment variables from .env file
 try:
@@ -42,9 +44,11 @@ except Exception as e:
 PERSONAL_CATEGORIES = [
     'Housing',
     'Transportation',
-    'Food & Dining',
-    'Healthcare',
-    'Personal Care',
+    'Groceries',
+    'Dining & Takeout',
+    'Medical & Healthcare',
+    'Fitness & Wellness',
+    'Personal Care & Grooming',
     'Entertainment',
     'Shopping',
     'Insurance',
@@ -87,10 +91,12 @@ def load_entities(project_root: Path) -> List[Dict[str, Any]]:
     with open(entities_file, 'r', encoding='utf-8') as f:
         entities = json.load(f)
     
-    # Ensure all entities have a type field
+    # Ensure all entities have a type field (default to Personal if missing)
+    # Note: Entity types should be set in entities.json - this is just a fallback
     for entity in entities:
         if 'type' not in entity:
             entity['type'] = 'Personal'
+            print(f"Warning: Entity '{entity.get('name', 'Unknown')}' missing type field, defaulting to Personal")
     
     return entities
 
@@ -273,7 +279,7 @@ def save_json_safely(file_path: Path, data: Any) -> None:
             temp_path.unlink()
         raise e
 
-def process_transactions(project_root: Path, dry_run: bool = True) -> None:
+def process_transactions(project_root: Path, dry_run: bool = True, verbose: bool = False) -> None:
     """Process all transactions and identify/categorize based on entity type."""
     print("=" * 60)
     print("Identify and Categorize Transactions by Entity Type")
@@ -315,11 +321,17 @@ def process_transactions(project_root: Path, dry_run: bool = True) -> None:
     # Track updates
     updated_count = 0
     skipped_count = 0
+    skipped_transfers = 0
+    processed_count = 0
     
     # Process each account's transactions
     for account_name, transactions in all_transactions.items():
         print(f"\nProcessing account: {account_name}")
         print(f"  Total transactions: {len(transactions)}")
+        
+        # Get account type from configuration (this is the source of truth)
+        configured_account_type = get_account_type(account_name, project_root)
+        print(f"  Account type (from config): {configured_account_type}")
         
         account_business_count = 0
         account_personal_count = 0
@@ -329,62 +341,70 @@ def process_transactions(project_root: Path, dry_run: bool = True) -> None:
         transactions_modified = False
         
         for transaction in transactions:
+            # Ensure account_type is always set based on account configuration
+            # This is the source of truth - don't rely on what's in the transaction
+            if 'account_type' not in transaction or transaction.get('account_type') != configured_account_type:
+                transaction['account_type'] = configured_account_type
+                transactions_modified = True
             transaction_id = get_transaction_id(transaction)
             entity = get_entity_for_transaction(transaction_id, entities)
             
-            # Skip if already has identified_business and category (unless we want to re-process)
-            if transaction.get('identified_business') and transaction.get('category'):
+            # Skip only if both identified_business and category are present and not null/empty
+            # Process if category is null, None, or empty string
+            category = transaction.get('category')
+            identified_business = transaction.get('identified_business')
+            
+            # Check if category is valid (not None, not empty string)
+            # category could be None, empty string "", or a valid category name
+            has_valid_category = False
+            if category is not None:
+                if isinstance(category, str):
+                    has_valid_category = bool(category.strip())
+                else:
+                    has_valid_category = bool(category)
+            
+            # Only skip if both identified_business and category are present and valid
+            if identified_business and has_valid_category:
                 skipped_count += 1
                 continue
             
+            # If we get here, we need to process this transaction (category is null/empty or missing)
+            
+            # Skip transfers - they don't need categories
+            if transaction.get('is_transfer', False):
+                skipped_transfers += 1
+                skipped_count += 1
+                continue
+            
+            # This transaction needs a category - mark it for processing
+            processed_count += 1
+            
             if entity:
+                # Get entity type - this determines which category set to use
+                # Entity type should be set in entities.json (Business or Personal)
                 entity_type = entity.get('type', 'Personal')
                 entity_name = entity.get('name', 'Unknown')
                 
+                # Always generate categories - entity type just determines which category set to use
+                # Business entities use Business categories, Personal entities use Personal categories
                 if entity_type == 'Business':
                     account_business_count += 1
                     business_entity_transactions += 1
                     print(f"  [Business Entity: {entity_name}] Processing: {transaction.get('merchant', 'Unknown')[:50]}")
-                    
-                    # Use business prompt
-                    if not dry_run and client:
-                        result = identify_and_categorize_with_llm(
-                            transaction.get('merchant', ''),
-                            transaction.get('amount', 0.0),
-                            transaction.get('transaction_date', ''),
-                            'Business',
-                            project_root,
-                            client
-                        )
-                        
-                        # Update transaction with results
-                        if result['identified_business']:
-                            transaction['identified_business'] = result['identified_business']
-                            transactions_modified = True
-                        if result['category']:
-                            transaction['category'] = result['category']
-                            transaction['categorized'] = True
-                            transaction['categorized_at'] = datetime.now().isoformat()
-                            transactions_modified = True
-                        if result['category_description']:
-                            transaction['category_description'] = result['category_description']
-                            transactions_modified = True
-                        
-                        if result['identified_business'] or result['category']:
-                            account_updated += 1
-                            updated_count += 1
                 else:
                     account_personal_count += 1
                     personal_entity_transactions += 1
                     print(f"  [Personal Entity: {entity_name}] Processing: {transaction.get('merchant', 'Unknown')[:50]}")
                     
-                    # Use personal prompt
+                # Always generate categories - type determines which prompt/categories to use
                     if not dry_run and client:
+                    if verbose:
+                        print(f"    → Generating category using {entity_type} categories...")
                         result = identify_and_categorize_with_llm(
                             transaction.get('merchant', ''),
                             transaction.get('amount', 0.0),
                             transaction.get('transaction_date', ''),
-                            'Personal',
+                        entity_type,  # Use entity type to determine category set
                             project_root,
                             client
                         )
@@ -393,11 +413,15 @@ def process_transactions(project_root: Path, dry_run: bool = True) -> None:
                         if result['identified_business']:
                             transaction['identified_business'] = result['identified_business']
                             transactions_modified = True
+                        if verbose:
+                            print(f"      ✓ Business: {result['identified_business']}")
                         if result['category']:
                             transaction['category'] = result['category']
                             transaction['categorized'] = True
                             transaction['categorized_at'] = datetime.now().isoformat()
                             transactions_modified = True
+                        if verbose:
+                            print(f"      ✓ Category: {result['category']}")
                         if result['category_description']:
                             transaction['category_description'] = result['category_description']
                             transactions_modified = True
@@ -405,19 +429,25 @@ def process_transactions(project_root: Path, dry_run: bool = True) -> None:
                         if result['identified_business'] or result['category']:
                             account_updated += 1
                             updated_count += 1
+                elif not client and not dry_run:
+                    print(f"    Warning: OpenAI client not available, skipping category generation")
             else:
-                # No entity assigned - use account_type
-                account_type = transaction.get('account_type', 'Personal')
+                # No entity assigned - use account_type from configuration (already set above)
+                # Always generate categories - account_type determines which category set to use
+                account_type = transaction.get('account_type', configured_account_type)
                 account_unassigned_count += 1
                 unassigned_transactions += 1
                 print(f"  [No Entity - Using Account Type: {account_type}] Processing: {transaction.get('merchant', 'Unknown')[:50]}")
                 
+                # Always generate categories - account_type determines which prompt/categories to use
                 if not dry_run and client:
+                    if verbose:
+                        print(f"    → Generating category using {account_type} categories...")
                     result = identify_and_categorize_with_llm(
                         transaction.get('merchant', ''),
                         transaction.get('amount', 0.0),
                         transaction.get('transaction_date', ''),
-                        account_type,
+                        account_type,  # Use account type to determine category set
                         project_root,
                         client
                     )
@@ -426,11 +456,15 @@ def process_transactions(project_root: Path, dry_run: bool = True) -> None:
                     if result['identified_business']:
                         transaction['identified_business'] = result['identified_business']
                         transactions_modified = True
+                        if verbose:
+                            print(f"      ✓ Business: {result['identified_business']}")
                     if result['category']:
                         transaction['category'] = result['category']
                         transaction['categorized'] = True
-                        transaction['categorized_at'] = json.dumps({})  # Will be set to ISO string
+                        transaction['categorized_at'] = datetime.now().isoformat()
                         transactions_modified = True
+                        if verbose:
+                            print(f"      ✓ Category: {result['category']}")
                     if result['category_description']:
                         transaction['category_description'] = result['category_description']
                         transactions_modified = True
@@ -456,8 +490,11 @@ def process_transactions(project_root: Path, dry_run: bool = True) -> None:
     print(f"Total business entity transactions: {business_entity_transactions}")
     print(f"Total personal entity transactions: {personal_entity_transactions}")
     print(f"Total unassigned transactions: {unassigned_transactions}")
+    print(f"Transactions processed (needed categories): {processed_count}")
     print(f"Transactions updated: {updated_count}")
-    print(f"Transactions skipped (already categorized): {skipped_count}")
+    print(f"Transactions skipped (already categorized): {skipped_count - skipped_transfers}")
+    if skipped_transfers > 0:
+        print(f"Transactions skipped (transfers): {skipped_transfers}")
     print()
     
     if dry_run:
@@ -474,10 +511,11 @@ def main():
     
     parser = argparse.ArgumentParser(description='Identify and categorize transactions by entity type')
     parser.add_argument('--no-dry-run', action='store_true', help='Actually process transactions (default is dry run)')
+    parser.add_argument('--verbose', '-v', action='store_true', help='Show verbose output for each transaction')
     args = parser.parse_args()
     
     project_root = Path(__file__).parent
-    process_transactions(project_root, dry_run=not args.no_dry_run)
+    process_transactions(project_root, dry_run=not args.no_dry_run, verbose=args.verbose)
 
 if __name__ == '__main__':
     main()

@@ -33,6 +33,8 @@ Available categories:
 
 When identifying the business name from merchant transaction data:
 
+**Important**: Check over all the information on the transaction to infer a name, as it could be stored within any of the values within the transaction. Sometimes the transaction details don't provide much context, so examine all available fields (merchant name, code, reference, details, particulars) to identify the actual business.
+
 1. **Online Services**: Look for company names, service names, or platform names
    - "Netflix" → "Netflix"
    - "Spotify" → "Spotify"
@@ -93,12 +95,12 @@ When identifying the business name from merchant transaction data:
 When categorizing a transaction, provide:
 1. **Business Name**: The cleaned business name
 2. **Category**: The selected category name
-3. **Reasoning**: Brief explanation of why this category was chosen
+3. **Reasoning**: Brief explanation of why this category was chosen, including what field/value provided the core information used to make the decision (e.g., "Identified from Code field: 'Netflix' - Netflix is a streaming service for movies and TV shows")
 
 Example:
 ```
 Business Name: Netflix
 Category: Entertainment
-Reasoning: Netflix is a streaming service for movies and TV shows, which is a personal entertainment expense.
+Reasoning: Identified from Merchant field: 'Netflix' - Netflix is a streaming service for movies and TV shows, which is a personal entertainment expense.
 ```
 
