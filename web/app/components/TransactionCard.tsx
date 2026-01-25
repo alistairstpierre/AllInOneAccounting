@@ -30,6 +30,7 @@ interface Transaction {
   updated_at?: string | null;  // Timestamp when transaction was last updated
   is_transfer?: boolean;  // Whether this is a transfer between accounts
   is_credit?: boolean;  // Whether this is a credit (income) or debit (expense)
+  reconciled_at?: string | null;  // Timestamp when transaction was reconciled
 }
 
 interface Entity {
@@ -47,6 +48,8 @@ interface TransactionCardProps {
   onTransactionUpdate?: (updatedTransaction: Transaction) => void;
   onTransferUpdate?: (transactionId: string, isTransfer: boolean) => void;
   onCreditUpdate?: (transactionId: string, isCredit: boolean) => void;
+  onReconciledUpdate?: (transactionId: string, reconciled: boolean) => void;
+  isLastReconciled?: boolean;  // Whether this is the last reconciled transaction
   isSelectMode?: boolean;
   isSelected?: boolean;
   onSelectChange?: (selected: boolean) => void;
@@ -76,6 +79,8 @@ export default function TransactionCard({
   onTransactionUpdate,
   onTransferUpdate,
   onCreditUpdate,
+  onReconciledUpdate,
+  isLastReconciled = false,
   isSelectMode = false,
   isSelected = false,
   onSelectChange,
@@ -192,9 +197,14 @@ export default function TransactionCard({
     }
   };
 
+  const isReconciled = !!transaction.reconciled_at;
+
   return (
     <div className={`bg-white rounded-lg shadow-sm border ${isSelected ? 'border-blue-500' : 'border-gray-200'} hover:shadow-md transition-shadow flex`}>
-      {isUpdated && (
+      {isLastReconciled && (
+        <div className="w-1 bg-orange-500 rounded-l-lg flex-shrink-0" title={`Last Reconciled: ${transaction.reconciled_at ? new Date(transaction.reconciled_at).toLocaleString() : ''}`} />
+      )}
+      {isUpdated && !isLastReconciled && (
         <div className="w-1 bg-green-500 rounded-l-lg flex-shrink-0" title={`Updated: ${transaction.updated_at ? new Date(transaction.updated_at).toLocaleString() : ''}`} />
       )}
       <div className="flex-1 flex flex-col">
@@ -446,7 +456,7 @@ export default function TransactionCard({
                 {new Date(transaction.updated_at).toLocaleString()}
               </div>
             )}
-            {(onTransferUpdate || onCreditUpdate) && (
+            {(onTransferUpdate || onCreditUpdate || onReconciledUpdate) && (
               <div className="col-span-2 flex items-center gap-4 flex-wrap">
                 {onTransferUpdate && (
                   <div className="flex items-center gap-2">
@@ -484,6 +494,30 @@ export default function TransactionCard({
                     </label>
                   </div>
                 )}
+                {onReconciledUpdate && (
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      id={`reconciled-${getTransactionId(transaction)}`}
+                      checked={isReconciled}
+                      onChange={async (e) => {
+                        if (onReconciledUpdate) {
+                          onReconciledUpdate(getTransactionId(transaction), e.target.checked);
+                        }
+                      }}
+                      className="w-3.5 h-3.5 text-orange-600 border-gray-300 rounded focus:ring-orange-500"
+                    />
+                    <label htmlFor={`reconciled-${getTransactionId(transaction)}`} className="text-xs font-medium text-gray-700 cursor-pointer">
+                      Mark as Reconciled
+                    </label>
+                  </div>
+                )}
+              </div>
+            )}
+            {isReconciled && (
+              <div className="col-span-2">
+                <span className="font-medium text-gray-700">Reconciled At:</span>{' '}
+                {new Date(transaction.reconciled_at!).toLocaleString()}
               </div>
             )}
             </div>

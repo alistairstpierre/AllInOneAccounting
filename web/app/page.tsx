@@ -39,6 +39,7 @@ interface Transaction {
   updated_at?: string | null;  // Timestamp when transaction was last updated
   is_transfer?: boolean;  // Whether this is a transfer between accounts
   is_credit?: boolean;  // Whether this is a credit (income) or debit (expense)
+  reconciled_at?: string | null;  // Timestamp when transaction was reconciled
 }
 
 interface Entity {
@@ -111,6 +112,7 @@ export default function Home() {
   const [showTransfers, setShowTransfers] = useState<boolean>(true);
   const [showIncomeSummary, setShowIncomeSummary] = useState<boolean>(true);
   const [showOnlyCredits, setShowOnlyCredits] = useState<boolean>(false);
+  const [showOnlyUnreconciled, setShowOnlyUnreconciled] = useState<boolean>(false);
   const [isHydrated, setIsHydrated] = useState(false);
   
   // Store original date range before expanding (for modal restoration)
@@ -712,6 +714,40 @@ export default function Home() {
     }
   };
 
+  const handleReconciledUpdate = async (transactionId: string, reconciled: boolean) => {
+    // Update the transaction immediately
+    try {
+      const response = await fetch('/api/transactions/update', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          transactionId,
+          reconciled_at: reconciled ? new Date().toISOString() : null,
+        }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        // Update local state
+        setTransactions((prevTransactions) =>
+          prevTransactions.map((t) =>
+            getTransactionId(t) === transactionId
+              ? { ...t, reconciled_at: result.transaction.reconciled_at || null }
+              : t
+          )
+        );
+      } else {
+        console.error('Failed to update transaction reconciliation status');
+        fetchTransactions();
+      }
+    } catch (error) {
+      console.error('Error updating transaction reconciliation status:', error);
+      fetchTransactions();
+    }
+  };
+
   const handleCreditUpdate = async (transactionId: string, isCredit: boolean) => {
     const originalTransaction = transactions.find(t => getTransactionId(t) === transactionId);
     if (!originalTransaction) return;
@@ -857,6 +893,54 @@ export default function Home() {
     }
   };
 
+  // Find the last reconciled transaction (most recent reconciled_at timestamp)
+  // Calculate this BEFORE filteredAndSortedTransactions so it can be used in the filter
+  const lastReconciledTransaction = useMemo(() => {
+    const reconciledTransactions = transactions.filter(t => t.reconciled_at);
+    if (reconciledTransactions.length === 0) return null;
+    
+    // Sort by reconciled_at timestamp (most recent first)
+    const sorted = [...reconciledTransactions].sort((a, b) => {
+      const dateA = a.reconciled_at ? new Date(a.reconciled_at).getTime() : 0;
+      const dateB = b.reconciled_at ? new Date(b.reconciled_at).getTime() : 0;
+      return dateB - dateA; // Most recent first
+    });
+    
+    return sorted[0];
+  }, [transactions]);
+
+  const lastReconciledTransactionId = lastReconciledTransaction ? getTransactionId(lastReconciledTransaction) : null;
+
+  // Automatically adjust date range when "Show only Unreconciled" is enabled
+  useEffect(() => {
+    if (showOnlyUnreconciled && lastReconciledTransaction) {
+      const lastReconciledDate = lastReconciledTransaction.transaction_date;
+      
+      // Set the start date to the day after the last reconciled transaction
+      // Parse the date and add one day
+      const lastDate = new Date(lastReconciledDate);
+      lastDate.setDate(lastDate.getDate() + 1);
+      
+      const formatDate = (date: Date) => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+      };
+      
+      const newStartDate = formatDate(lastDate);
+      
+      // Only update if the current start date is before or equal to the last reconciled date
+      // This prevents overriding user-set date ranges unnecessarily
+      if (!dateRange.start || dateRange.start <= lastReconciledDate) {
+        setDateRange(prev => ({
+          start: newStartDate,
+          end: prev.end || formatDate(new Date()) // Keep existing end date or use today
+        }));
+      }
+    }
+  }, [showOnlyUnreconciled, lastReconciledTransaction]);
+
   const filteredAndSortedTransactions = useMemo(() => {
     let filtered = transactions;
 
@@ -912,6 +996,64 @@ export default function Home() {
     // Filter out transfers if showTransfers is false
     if (!showTransfers) {
       filtered = filtered.filter(t => !t.is_transfer);
+    }
+
+    // Filter by reconciliation status - show only transactions after the last reconciled one
+    if (showOnlyUnreconciled && lastReconciledTransaction) {
+      const lastReconciledDate = lastReconciledTransaction.transaction_date;
+      const lastReconciledTimestamp = lastReconciledTransaction.reconciled_at 
+        ? new Date(lastReconciledTransaction.reconciled_at).getTime() 
+        : 0;
+      const lastReconciledId = lastReconciledTransactionId;
+      
+      // Create a sorted list to determine transaction order
+      // Sort by date (ascending), then by reconciled_at timestamp if available, then by ID for consistent ordering
+      const sortedForComparison = [...filtered].sort((a, b) => {
+        const dateCompare = a.transaction_date.localeCompare(b.transaction_date);
+        if (dateCompare !== 0) return dateCompare;
+        
+        // Same date - compare by reconciled_at timestamp if available (earlier reconciled = earlier in day)
+        if (a.reconciled_at && b.reconciled_at) {
+          const timeA = new Date(a.reconciled_at).getTime();
+          const timeB = new Date(b.reconciled_at).getTime();
+          const timeCompare = timeA - timeB;
+          if (timeCompare !== 0) return timeCompare;
+        } else if (a.reconciled_at) {
+          // a has timestamp, b doesn't - a comes after b
+          return 1;
+        } else if (b.reconciled_at) {
+          // b has timestamp, a doesn't - b comes after a
+          return -1;
+        }
+        
+        // Same date, no timestamps or both have same timestamp - sort by ID for consistent ordering
+        return getTransactionId(a).localeCompare(getTransactionId(b));
+      });
+      
+      // Find the index of the last reconciled transaction in the sorted list
+      const lastReconciledIndex = sortedForComparison.findIndex(t => 
+        getTransactionId(t) === lastReconciledId
+      );
+      
+      if (lastReconciledIndex >= 0) {
+        // Get all transactions after (not including) the last reconciled one
+        const transactionsAfterReconciled = sortedForComparison.slice(lastReconciledIndex + 1);
+        const afterIds = new Set(transactionsAfterReconciled.map(t => getTransactionId(t)));
+        
+        // Filter to only include transactions that come after the last reconciled one
+        filtered = filtered.filter(t => {
+          const txnId = getTransactionId(t);
+          // Exclude the last reconciled transaction itself
+          if (txnId === lastReconciledId) {
+            return false;
+          }
+          // Include if it's in the "after" set
+          return afterIds.has(txnId);
+        });
+      } else {
+        // Last reconciled transaction not in filtered list, show all
+        // (This can happen if date range filter excludes the reconciled transaction)
+      }
     }
 
     // Filter by credit/debit based on showOnlyCredits setting
@@ -993,15 +1135,16 @@ export default function Home() {
     });
 
     return sorted;
-  }, [transactions, selectedCategory, sortBy, sortOrder, dateRange, selectedEntityFilterIds, selectedAccountIds, entities, searchText, showTransfers, showOnlyCredits]);
+  }, [transactions, selectedCategory, sortBy, sortOrder, dateRange, selectedEntityFilterIds, selectedAccountIds, entities, searchText, showTransfers, showOnlyCredits, showOnlyUnreconciled, lastReconciledTransaction, lastReconciledTransactionId]);
 
   // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [selectedCategory, dateRange, selectedEntityFilterIds, selectedAccountIds, sortBy, sortOrder, searchText, showTransfers]);
+  }, [selectedCategory, dateRange, selectedEntityFilterIds, selectedAccountIds, sortBy, sortOrder, searchText, showTransfers, showOnlyUnreconciled]);
 
   const TRANSACTIONS_PER_PAGE = 100;
   const totalPages = Math.ceil(filteredAndSortedTransactions.length / TRANSACTIONS_PER_PAGE);
+
   const paginatedTransactions = useMemo(() => {
     const startIndex = (currentPage - 1) * TRANSACTIONS_PER_PAGE;
     const endIndex = startIndex + TRANSACTIONS_PER_PAGE;
@@ -1259,6 +1402,15 @@ export default function Home() {
     // Only count debits (expenses), exclude credits
     return filteredAndSortedTransactions.reduce((sum, t) => sum + t.amount, 0);
   }, [filteredAndSortedTransactions]);
+
+  // Calculate running total of selected transactions
+  const selectedTransactionsTotal = useMemo(() => {
+    if (!isSelectionMode || selectedTransactionIds.size === 0) return 0;
+    
+    return filteredAndSortedTransactions
+      .filter(t => selectedTransactionIds.has(getTransactionId(t)))
+      .reduce((sum, t) => sum + t.amount, 0);
+  }, [isSelectionMode, selectedTransactionIds, filteredAndSortedTransactions]);
 
   // Calculate total income (credits) from all transactions (before filtering out credits)
   const totalIncomeFiltered = useMemo(() => {
@@ -1534,6 +1686,7 @@ export default function Home() {
           onShowIncomeSummaryChange={setShowIncomeSummary}
           showOnlyCredits={showOnlyCredits}
           onShowOnlyCreditsChange={setShowOnlyCredits}
+          dateRange={dateRange}
         />
           </div>
 
@@ -1552,6 +1705,9 @@ export default function Home() {
               onSearchChange={setSearchText}
               showTransfers={showTransfers}
               onShowTransfersChange={setShowTransfers}
+              showOnlyUnreconciled={showOnlyUnreconciled}
+              onShowOnlyUnreconciledChange={setShowOnlyUnreconciled}
+              hasReconciledTransactions={!!lastReconciledTransaction}
             />
 
             <div className="space-y-2">
@@ -1576,9 +1732,16 @@ export default function Home() {
               />
               {isSelectionMode && (
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4 flex items-center justify-between gap-4">
-                  <span className="text-sm text-gray-600">
-                    {selectedTransactionIds.size} selected
-                  </span>
+                  <div className="flex items-center gap-4">
+                    <span className="text-sm text-gray-600">
+                      {selectedTransactionIds.size} selected
+                    </span>
+                    {selectedTransactionIds.size > 0 && (
+                      <span className="text-sm font-semibold text-gray-900">
+                        Total: ${selectedTransactionsTotal.toFixed(2)}
+                      </span>
+                    )}
+                  </div>
                   {selectedEntityId ? (
                     // Pre-selected entity mode (from CategorySummary)
                     <div className="flex items-center gap-3">
@@ -1635,6 +1798,7 @@ export default function Home() {
               {paginatedTransactions.map((transaction, index) => {
                 const transactionId = getTransactionId(transaction);
                 const entityId = getEntityIdForTransaction(transactionId);
+                const isLastReconciled = transactionId === lastReconciledTransactionId;
                 return (
                   <TransactionCard 
                     key={transactionId} 
@@ -1644,6 +1808,8 @@ export default function Home() {
                     onTransactionUpdate={handleTransactionUpdate}
                     onTransferUpdate={handleTransferUpdate}
                     onCreditUpdate={handleCreditUpdate}
+                    onReconciledUpdate={handleReconciledUpdate}
+                    isLastReconciled={isLastReconciled}
                     isSelectMode={isSelectionMode}
                     isSelected={selectedTransactionIds.has(transactionId)}
                     onSelectChange={(selected) => handleTransactionSelect(transactionId, selected)}

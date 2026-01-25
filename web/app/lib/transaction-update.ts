@@ -64,18 +64,18 @@ export function updateTransaction(
     }
   }
 
-  if (updates.is_credit !== undefined) {
-    const oldCredit = updatedTransaction.is_credit || false;
-    const newCredit = updates.is_credit || false;
-    if (oldCredit !== newCredit) {
-      updatedTransaction.is_credit = newCredit;
+  if (updates.reconciled_at !== undefined) {
+    const oldReconciled = updatedTransaction.reconciled_at || null;
+    const newReconciled = updates.reconciled_at || null;
+    if (oldReconciled !== newReconciled) {
+      updatedTransaction.reconciled_at = newReconciled;
       wasUpdated = true;
     }
   }
 
   // Check for any other fields
   for (const key in updates) {
-    if (key !== 'category' && key !== 'identified_business' && key !== 'is_transfer' && key !== 'is_credit') {
+    if (key !== 'category' && key !== 'identified_business' && key !== 'is_transfer' && key !== 'is_credit' && key !== 'reconciled_at') {
       const oldValue = updatedTransaction[key];
       const newValue = updates[key];
       if (oldValue !== newValue) {

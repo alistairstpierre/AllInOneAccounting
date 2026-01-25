@@ -397,34 +397,34 @@ def process_transactions(project_root: Path, dry_run: bool = True, verbose: bool
                     print(f"  [Personal Entity: {entity_name}] Processing: {transaction.get('merchant', 'Unknown')[:50]}")
                     
                 # Always generate categories - type determines which prompt/categories to use
-                    if not dry_run and client:
+                if not dry_run and client:
                     if verbose:
                         print(f"    → Generating category using {entity_type} categories...")
-                        result = identify_and_categorize_with_llm(
-                            transaction.get('merchant', ''),
-                            transaction.get('amount', 0.0),
-                            transaction.get('transaction_date', ''),
+                    result = identify_and_categorize_with_llm(
+                        transaction.get('merchant', ''),
+                        transaction.get('amount', 0.0),
+                        transaction.get('transaction_date', ''),
                         entity_type,  # Use entity type to determine category set
-                            project_root,
-                            client
-                        )
-                        
-                        # Update transaction with results
-                        if result['identified_business']:
-                            transaction['identified_business'] = result['identified_business']
-                            transactions_modified = True
-                        if verbose:
-                            print(f"      ✓ Business: {result['identified_business']}")
-                        if result['category']:
-                            transaction['category'] = result['category']
-                            transaction['categorized'] = True
-                            transaction['categorized_at'] = datetime.now().isoformat()
-                            transactions_modified = True
-                        if verbose:
-                            print(f"      ✓ Category: {result['category']}")
-                        if result['category_description']:
-                            transaction['category_description'] = result['category_description']
-                            transactions_modified = True
+                        project_root,
+                        client
+                    )
+                    
+                    # Update transaction with results
+                    if result['identified_business']:
+                        transaction['identified_business'] = result['identified_business']
+                        transactions_modified = True
+                    if verbose:
+                        print(f"      ✓ Business: {result['identified_business']}")
+                    if result['category']:
+                        transaction['category'] = result['category']
+                        transaction['categorized'] = True
+                        transaction['categorized_at'] = datetime.now().isoformat()
+                        transactions_modified = True
+                    if verbose:
+                        print(f"      ✓ Category: {result['category']}")
+                    if result['category_description']:
+                        transaction['category_description'] = result['category_description']
+                        transactions_modified = True
                         
                         if result['identified_business'] or result['category']:
                             account_updated += 1

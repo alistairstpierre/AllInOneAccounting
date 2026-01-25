@@ -6,7 +6,7 @@
 
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 
 interface Entity {
   id: string;
@@ -51,6 +51,7 @@ interface CategorySummaryProps {
   onShowIncomeSummaryChange?: (show: boolean) => void;
   showOnlyCredits?: boolean;
   onShowOnlyCreditsChange?: (show: boolean) => void;
+  dateRange?: { start: string; end: string };
 }
 
 // Add Entity Section Component
@@ -158,6 +159,7 @@ export default function CategorySummary({
   onShowIncomeSummaryChange,
   showOnlyCredits = false,
   onShowOnlyCreditsChange,
+  dateRange = { start: '', end: '' },
 }: CategorySummaryProps) {
   const [isAccountDropdownOpen, setIsAccountDropdownOpen] = useState(false);
   const accountDropdownRef = useRef<HTMLDivElement>(null);
@@ -329,8 +331,8 @@ export default function CategorySummary({
             </h2>
             
             {/* Account Filter Dropdown */}
-          {onAccountFilterChange && (
-            <div className="relative" ref={accountDropdownRef}>
+            {onAccountFilterChange && (
+              <div className="relative" ref={accountDropdownRef}>
               <button
                 type="button"
                 onClick={() => setIsAccountDropdownOpen(!isAccountDropdownOpen)}
@@ -395,6 +397,7 @@ export default function CategorySummary({
               )}
             </div>
           )}
+          </div>
         </div>
         <div className="text-3xl font-bold text-blue-600">
           ${totalExpenses.toFixed(2)}
@@ -404,6 +407,49 @@ export default function CategorySummary({
             {transactionCount} transaction{transactionCount !== 1 ? 's' : ''}
           </div>
         )}
+      </div>
+
+      <div>
+        <h3 className="text-lg font-semibold text-gray-700 mb-4">
+          Categories
+        </h3>
+        <div className="space-y-3">
+          {sortedCategories.map(([category, amount], index) => {
+            const percentage = totalExpenses > 0 ? (amount / totalExpenses) * 100 : 0;
+            const isSelected = selectedCategory === category;
+            const isDisabled = showOnlyCredits; // Disable category selection when showing only credits
+            return (
+              <div 
+                key={category}
+                className={`rounded-lg p-2 transition-colors ${
+                  isDisabled 
+                    ? 'opacity-50 cursor-not-allowed' 
+                    : `cursor-pointer ${isSelected ? 'bg-blue-50 border-2 border-blue-500' : 'hover:bg-gray-50'}`
+                }`}
+                onClick={() => {
+                  if (!isDisabled) {
+                    onCategoryChange?.(isSelected ? 'all' : category);
+                  }
+                }}
+              >
+                <div className="flex justify-between items-center mb-1">
+                  <span className={`text-sm font-medium ${isSelected ? 'text-blue-700' : 'text-gray-700'}`}>
+                    {category}
+                  </span>
+                  <span className={`text-sm font-semibold ${isSelected ? 'text-blue-900' : 'text-gray-900'}`}>
+                    ${amount.toFixed(2)} ({percentage.toFixed(1)}%)
+                  </span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div
+                    className={`${getCategoryColor(index)} h-2 rounded-full transition-all`}
+                    style={{ width: `${percentage}%` }}
+                  />
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
 
       <div className="mb-6">
@@ -572,50 +618,6 @@ export default function CategorySummary({
             })}
           </div>
         )}
-      </div>
-
-      <div>
-        <h3 className="text-lg font-semibold text-gray-700 mb-4">
-          Categories
-        </h3>
-        <div className="space-y-3">
-          {sortedCategories.map(([category, amount], index) => {
-            const percentage = totalExpenses > 0 ? (amount / totalExpenses) * 100 : 0;
-            const isSelected = selectedCategory === category;
-            const isDisabled = showOnlyCredits; // Disable category selection when showing only credits
-            return (
-              <div 
-                key={category}
-                className={`rounded-lg p-2 transition-colors ${
-                  isDisabled 
-                    ? 'opacity-50 cursor-not-allowed' 
-                    : `cursor-pointer ${isSelected ? 'bg-blue-50 border-2 border-blue-500' : 'hover:bg-gray-50'}`
-                }`}
-                onClick={() => {
-                  if (!isDisabled) {
-                    onCategoryChange?.(isSelected ? 'all' : category);
-                  }
-                }}
-              >
-                <div className="flex justify-between items-center mb-1">
-                  <span className={`text-sm font-medium ${isSelected ? 'text-blue-700' : 'text-gray-700'}`}>
-                    {category}
-                  </span>
-                  <span className={`text-sm font-semibold ${isSelected ? 'text-blue-900' : 'text-gray-900'}`}>
-                    ${amount.toFixed(2)} ({percentage.toFixed(1)}%)
-                  </span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div
-                    className={`${getCategoryColor(index)} h-2 rounded-full transition-all`}
-                    style={{ width: `${percentage}%` }}
-                  />
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
       </div>
     </div>
   );

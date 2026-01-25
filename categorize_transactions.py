@@ -69,6 +69,7 @@ PERSONAL_CATEGORIES = [
     'Education',
     'Travel',
     'Gifts & Donations',
+    'Professional Services',
     'Uncategorized',
 ]
 
@@ -120,9 +121,15 @@ def looks_like_person_name(text: str) -> bool:
     business_keywords = ['ltd', 'limited', 'inc', 'incorporated', 'llc', 'llp', 'corp', 'corporation',
                         'company', 'co', 'services', 'group', 'holdings', 'enterprises', 'solutions',
                         'systems', 'technologies', 'consulting', 'associates', 'partners', 'capital',
-                        'bank', 'credit', 'insurance', 'agency', 'agency', 'store', 'shop', 'restaurant',
+                        'bank', 'credit', 'insurance', 'agency', 'store', 'shop', 'restaurant',
                         'cafe', 'bar', 'hotel', 'motel', 'apartment', 'building', 'street', 'road',
-                        'avenue', 'drive', 'lane', 'way', 'plaza', 'mall', 'center', 'centre']
+                        'avenue', 'drive', 'lane', 'way', 'plaza', 'mall', 'center', 'centre',
+                        'emporium', 'shoes', 'clothing', 'fashion', 'boutique', 'retail', 'market',
+                        'supermarket', 'grocery', 'pharmacy', 'deli', 'bakery', 'butcher', 'fish',
+                        'seafood', 'pizza', 'burger', 'sushi', 'chinese', 'indian', 'thai', 'italian',
+                        'gym', 'fitness', 'studio', 'salon', 'spa', 'clinic', 'hospital', 'medical',
+                        'dental', 'veterinary', 'vet', 'pet', 'animal', 'car', 'auto', 'garage',
+                        'mechanic', 'repair', 'service', 'station', 'fuel', 'gas', 'petrol']
     
     text_lower = text.lower()
     if any(keyword in text_lower for keyword in business_keywords):
@@ -183,21 +190,30 @@ def build_llm_prompt(merchant: str, amount: float, date: str, account_type: str,
         if context_parts:
             context_info = "\n" + "\n".join(context_parts) + "\n"
     
-    # Check if merchant looks like a person name
-    person_note = ""
-    if looks_like_person_name(merchant):
-        if amount < 0:
-            person_note = "\nNote: The merchant name appears to be a person's name. This is likely a payment TO this person."
-        else:
-            person_note = "\nNote: The merchant name appears to be a person's name. This is likely a payment FROM this person (income/credit)."
+    # IMPORTANT: These are EXPENSES, not income/credits
+    # Credit card transactions show positive amounts for expenses
+    # Checking account transactions show negative amounts for expenses
+    # The LLM should treat these as expenses to categorize, not income
     
+    # Let the LLM figure out if it's a business or person - don't add misleading notes
     prompt = f"""{prompt_template}
 
 ## Transaction to Categorize
 
+**IMPORTANT: This is an EXPENSE (debit/purchase) transaction that needs to be categorized. This is NOT income or a credit received.**
+
+**CRITICAL INSTRUCTIONS:**
+- Use your knowledge to identify if the merchant is a business, store, or service
+- ONLY use "Professional Services" if the merchant name is CLEARLY an individual person's name (not a business)
+- Distinguish between grocery stores and restaurants - use "Groceries" for grocery stores, "Dining & Takeout" for restaurants
+- Phone/internet providers and prepaid top-ups should be categorized as "Housing" (utilities)
+- For businesses and platforms, use specific categories (Shopping, Entertainment, etc.) NOT "Professional Services"
+- Business transactions can appear on personal accounts - use appropriate categories
+- Prefer specific categories over "Professional Services" whenever possible
+
 Merchant: {merchant}
-Amount: ${amount:.2f}
-Date: {date}{context_info}{person_note}
+Amount: ${abs(amount):.2f}
+Date: {date}{context_info}
 
 ## Available Categories
 
@@ -234,10 +250,13 @@ def parse_llm_response(response_text: str) -> Dict[str, Optional[str]]:
     if category_match:
         result['category'] = category_match.group(1).strip()
     
-    # Try to extract Reasoning
-    reasoning_match = re.search(r'Reasoning:\s*(.+?)(?:\n\n|\Z)', response_text, re.IGNORECASE | re.DOTALL)
+    # Try to extract Reasoning - capture everything until end of response or next section
+    reasoning_match = re.search(r'Reasoning:\s*(.+?)(?:\n\n|```|\Z)', response_text, re.IGNORECASE | re.DOTALL)
     if reasoning_match:
-        result['category_description'] = reasoning_match.group(1).strip()
+        reasoning_text = reasoning_match.group(1).strip()
+        # Remove any trailing markdown code blocks
+        reasoning_text = re.sub(r'```\s*$', '', reasoning_text).strip()
+        result['category_description'] = reasoning_text
     
     return result
 
@@ -309,16 +328,9 @@ def identify_and_categorize_transaction_batch(transactions: List[Dict[str, Any]]
             if context_parts:
                 context_str = " (" + ", ".join(context_parts) + ")"
         
-        # Check if merchant looks like a person name
-        person_note = ""
-        if looks_like_person_name(merchant):
-            if amount < 0:
-                person_note = " [Note: Appears to be a person's name - likely payment TO this person]"
-            else:
-                person_note = " [Note: Appears to be a person's name - likely payment FROM this person]"
-        
+        # Let the LLM figure out if it's a business or person - don't add misleading notes
         transactions_list_parts.append(
-            f"{i+1}. Merchant: {merchant}, Amount: ${amount:.2f}, Date: {date}{context_str}{person_note}"
+            f"{i+1}. Merchant: {merchant}, Amount: ${abs(amount):.2f}, Date: {date}{context_str}"
         )
     
     transactions_list = "\n".join(transactions_list_parts)
@@ -327,7 +339,18 @@ def identify_and_categorize_transaction_batch(transactions: List[Dict[str, Any]]
     
     batch_prompt = f"""{prompt_template}
 
-## Transactions to Categorize
+## Transactions to Categorize (EXPENSES)
+
+**IMPORTANT: All transactions below are EXPENSES (debits/purchases) that need to be categorized. These are NOT income or credits received.**
+
+**CRITICAL INSTRUCTIONS:**
+- Use your knowledge to identify if merchants are businesses, stores, or services
+- ONLY use "Professional Services" if the merchant name is CLEARLY an individual person's name (not a business)
+- Distinguish between grocery stores and restaurants - use "Groceries" for grocery stores, "Dining & Takeout" for restaurants
+- Phone/internet providers and prepaid top-ups should be categorized as "Housing" (utilities)
+- For businesses and platforms, use specific categories (Shopping, Entertainment, etc.) NOT "Professional Services"
+- Business transactions can appear on personal accounts - use appropriate categories
+- Prefer specific categories over "Professional Services" whenever possible
 
 {transactions_list}
 
@@ -367,7 +390,7 @@ Reasoning: [brief explanation]
                 {"role": "user", "content": batch_prompt}
             ],
             temperature=0.3,
-            max_tokens=min(4000, 300 * len(valid_transactions))  # Scale tokens with batch size
+            max_tokens=min(4000, 600 * len(valid_transactions))  # Scale tokens with batch size (600 per transaction for full reasoning)
         )
         
         response_text = response.choices[0].message.content
@@ -495,8 +518,8 @@ def identify_and_categorize_transaction(merchant: str, amount: float, date: str,
     """
     # Skip if OpenAI is not available
     if not OPENAI_AVAILABLE or openai_client is None:
-        if verbose:
-            print(f"      [SKIP] No OpenAI client available for: {merchant[:50]}")
+        print(f"      [ERROR] No OpenAI client available for: {merchant[:50]}")
+        print(f"      [ERROR] OPENAI_AVAILABLE={OPENAI_AVAILABLE}, openai_client={openai_client}")
         return {
             'identified_business': None,
             'category': None,
@@ -534,6 +557,8 @@ def identify_and_categorize_transaction(merchant: str, amount: float, date: str,
     full_prompt = build_llm_prompt(merchant, amount, date, account_type, prompt_template, categories, transaction_context)
     
     try:
+        if verbose:
+            print(f"      [LLM] Calling OpenAI API for: {merchant[:40]} (Date: {date}, Amount: ${amount:.2f})")
         # Call OpenAI API
         response = openai_client.chat.completions.create(
             model="gpt-4o-mini",  # Using a cost-effective model
@@ -542,22 +567,31 @@ def identify_and_categorize_transaction(merchant: str, amount: float, date: str,
                 {"role": "user", "content": full_prompt}
             ],
             temperature=0.3,  # Lower temperature for more consistent results
-            max_tokens=300
+            max_tokens=600  # Increased to capture full reasoning
         )
         
+        if verbose:
+            print(f"      [LLM] API call successful")
         response_text = response.choices[0].message.content
+        if verbose:
+            print(f"      [LLM] Response: {response_text[:200]}")
         
         # Parse the response
         result = parse_llm_response(response_text)
+        if verbose:
+            print(f"      [LLM] Parsed result: {result}")
         
         # Validate category is in the allowed list
         if result['category'] and result['category'] not in categories:
+            if verbose:
+                print(f"      [LLM] Category '{result['category']}' not in allowed list, setting to 'Uncategorized'")
             result['category'] = 'Uncategorized'
         
         return result
         
     except Exception as e:
-        pass  # Errors are handled by caller
+        if verbose:
+            print(f"      [ERROR] Exception during LLM call: {type(e).__name__}: {str(e)}")
         return {
             'identified_business': None,
             'category': None,
@@ -1687,6 +1721,7 @@ def process_account(account_folder: Path, project_root: Path) -> None:
                 # New transaction - needs category generation unless it's a transfer
                 if not is_transfer_txn:
                     needs_category_generation = True
+                    print(f"  [DEBUG] New transaction: {csv_txn.get('transaction_date', '')} | {csv_txn.get('merchant', '')[:40]} | ${csv_txn.get('amount', 0.0):.2f}")
             
             # Step 1: Check merchant-based category matching
             # Look for existing transactions with the same merchant name that have a category
@@ -1700,7 +1735,7 @@ def process_account(account_folder: Path, project_root: Path) -> None:
                 merchant = csv_txn.get('merchant', '').strip()
                 if merchant:
                     normalized_merchant = normalize_merchant_name(merchant)
-                            if normalized_merchant in merchant_category_lookup:
+                    if normalized_merchant in merchant_category_lookup:
                         # Found a matching merchant with a category - reuse it
                         merchant_match = merchant_category_lookup[normalized_merchant]
                         matched_category = merchant_match['category']
@@ -1881,6 +1916,9 @@ def process_account(account_folder: Path, project_root: Path) -> None:
         if txn.get('_needs_category') and not txn.get('is_transfer', False):
             transactions_needing_categories.append(txn)
     
+    print(f"  [DEBUG] Found {len(processed_transactions)} processed transactions")
+    print(f"  [DEBUG] {len(transactions_needing_categories)} need categories (excluding transfers)")
+    
     # Set default category for transfers that need categories (they're excluded from LLM processing)
     for txn in processed_transactions:
         if txn.get('_needs_category') and txn.get('is_transfer', False):
@@ -1889,10 +1927,14 @@ def process_account(account_folder: Path, project_root: Path) -> None:
             txn.pop('_needs_category', None)
     if transactions_needing_categories:
         # Check if OpenAI is available
+        print(f"  [DEBUG] Checking LLM availability...")
+        print(f"  [DEBUG] OPENAI_AVAILABLE: {OPENAI_AVAILABLE}")
+        print(f"  [DEBUG] openai_client is None: {openai_client is None}")
         if not OPENAI_AVAILABLE or openai_client is None:
-            print(f"  Warning: OpenAI client not available. Categories will not be generated.")
-            print(f"  Install openai library and set OPENAI_API_KEY to generate categories.")
+            print(f"  [ERROR] OpenAI client not available. Categories will not be generated.")
+            print(f"  [ERROR] Install openai library and set OPENAI_API_KEY to generate categories.")
         else:
+            print(f"  [LLM] Connected! Categorizing {len(transactions_needing_categories)} transaction(s)...")
             # Process transactions one at a time (sequentially)
             # datetime is already imported at the top of the file
             import signal
@@ -1911,42 +1953,35 @@ def process_account(account_folder: Path, project_root: Path) -> None:
             signal.signal(signal.SIGINT, signal_handler)
             
             try:
-                # Process transactions sequentially (one at a time)
-                for txn_num, txn in enumerate(transactions_needing_categories, 1):
+                # Process transactions in batches of 3
+                BATCH_SIZE = 3
+                total_batches = (len(transactions_needing_categories) + BATCH_SIZE - 1) // BATCH_SIZE
+                
+                for batch_num in range(total_batches):
                     if stop_processing:
                         break
                     
-                    try:
+                    start_idx = batch_num * BATCH_SIZE
+                    end_idx = min(start_idx + BATCH_SIZE, len(transactions_needing_categories))
+                    batch = transactions_needing_categories[start_idx:end_idx]
+                    
+                    print(f"  [LLM] Processing batch {batch_num + 1}/{total_batches} (transactions {start_idx + 1}-{end_idx}/{len(transactions_needing_categories)})...")
+                    
+                    # Prepare batch for batch processing function
+                    batch_transactions = []
+                    for txn in batch:
                         merchant = txn.get('merchant', '')
                         amount = txn.get('amount', 0.0)
                         date = txn.get('transaction_date', '')
+                        transaction_id = txn.get('id', '')
                         
-                        # Get transaction context for checking accounts
+                        # Get transaction context
                         transaction_context = txn.get('transaction_context')
-                        
-                        # Check if transaction_context is empty (all fields are empty strings)
-                        is_empty_context = False
-                        if transaction_context:
-                            if isinstance(transaction_context, dict):
-                                is_empty_context = (
-                                    (transaction_context.get('code') or '').strip() == '' and
-                                    (transaction_context.get('reference') or '').strip() == '' and
-                                    (transaction_context.get('details') or '').strip() == '' and
-                                    (transaction_context.get('particulars') or '').strip() == ''
-                                )
-                            else:
-                                is_empty_context = True
-                        else:
-                            is_empty_context = True
-                        
-                        # If transaction_context is empty or doesn't exist, build it from transaction's code/reference fields
-                        if is_empty_context:
+                        if not transaction_context:
                             code_value = txn.get('code')
                             ref_value = txn.get('reference')
-                            
                             code_str = (code_value or '').strip() if code_value is not None else ''
                             ref_str = (ref_value or '').strip() if ref_value is not None else ''
-                            
                             transaction_context = {
                                 'details': '',
                                 'particulars': '',
@@ -1954,70 +1989,80 @@ def process_account(account_folder: Path, project_root: Path) -> None:
                                 'reference': ref_str,
                             }
                         
-                        # Process single transaction using individual API
-                        result = identify_and_categorize_transaction(
-                            merchant,
-                            amount,
-                            date,
-                            account_type_label,
-                            project_root,
-                            verbose=False,
-                            transaction_context=transaction_context
-                        )
+                        batch_transactions.append({
+                            'transaction_id': transaction_id,
+                            'merchant': merchant,
+                            'amount': amount,
+                            'date': date,
+                            'transaction_context': transaction_context
+                        })
+                    
+                    # Process batch using batch function
+                    batch_results = identify_and_categorize_transaction_batch(
+                        batch_transactions,
+                        account_type_label,
+                        project_root,
+                        verbose=True
+                    )
+                    
+                    # Apply results to transactions
+                    for i, result in enumerate(batch_results):
+                        txn = batch[i]
+                        txn_id = result.get('transaction_id')
                         
-                        # Update transaction with results
-                        if result:
+                        # Find matching transaction
+                        matching_txn = None
+                        for t in batch:
+                            if t.get('id') == txn_id:
+                                matching_txn = t
+                                break
+                        
+                        if not matching_txn:
+                            matching_txn = txn
+                        
+                        try:
                             if result.get('identified_business'):
-                                txn['identified_business'] = result['identified_business']
+                                matching_txn['identified_business'] = result['identified_business']
                             
-                            # Always set a category - use generated one or default to "Uncategorized"
                             generated_category = result.get('category')
                             if generated_category:
-                                txn['category'] = generated_category
-                                txn['categorized'] = True
-                                txn['categorized_at'] = datetime.now().isoformat()
+                                matching_txn['category'] = generated_category
+                                matching_txn['categorized'] = True
+                                matching_txn['categorized_at'] = datetime.now().isoformat()
                                 categories_generated_count += 1
                             else:
-                                # No category generated - set default
-                                txn['category'] = 'Uncategorized'
-                                txn['categorized'] = False
+                                matching_txn['category'] = 'Uncategorized'
+                                matching_txn['categorized'] = False
                             
                             if result.get('category_description'):
-                                txn['category_description'] = result['category_description']
+                                matching_txn['category_description'] = result['category_description']
                             
-                            # Remove the marker
-                            txn.pop('_needs_category', None)
+                            matching_txn.pop('_needs_category', None)
                             
-                            # Save progress every 5 transactions
-                            if txn_num % 5 == 0 or txn_num == len(transactions_needing_categories):
-                                _save_progress_incremental(existing_transactions, processed_transactions, reprocessed_existing_ids, account_type_label, output_file)
-                        else:
-                            # No result from AI - mark as uncategorized
-                            txn['category'] = 'Uncategorized'
-                            txn['categorized'] = False
-                            txn.pop('_needs_category', None)
-                        
-                        # Show final outcome
-                        final_name = txn.get('identified_business') or merchant
-                        final_category = txn.get('category', 'Uncategorized')
-                        final_amount = txn.get('amount', 0.0)
-                        is_transfer = txn.get('is_transfer', False)
-                        is_credit = txn.get('is_credit', False)
-                        
-                        transfer_str = " [Transfer]" if is_transfer else ""
-                        credit_str = " [Credit]" if is_credit else ""
-                        print(f"  {final_name[:50]:<50} | {final_category:<25} | ${final_amount:>10.2f}{transfer_str}{credit_str}")
+                            # Show result
+                            final_name = matching_txn.get('identified_business') or matching_txn.get('merchant', '')
+                            final_category = matching_txn.get('category', 'Uncategorized')
+                            final_amount = matching_txn.get('amount', 0.0)
+                            final_date = matching_txn.get('transaction_date', '')
+                            is_transfer = matching_txn.get('is_transfer', False)
+                            is_credit = matching_txn.get('is_credit', False)
                             
-                    except KeyboardInterrupt:
-                        stop_processing = True
-                        break
-                    except Exception as e:
-                        txn['category'] = 'Uncategorized'
-                        txn['categorized'] = False
-                        txn.pop('_needs_category', None)
-                        # Show error outcome
-                        final_name = txn.get('merchant', 'Unknown')
-                        print(f"  {final_name[:50]:<50} | {'Error: ' + str(e)[:20]:<25} | ${txn.get('amount', 0.0):>10.2f}")
+                            transfer_str = " [Transfer]" if is_transfer else ""
+                            credit_str = " [Credit]" if is_credit else ""
+                            print(f"  {final_date} | {final_name[:40]:<40} | {final_category:<25} | ${final_amount:>10.2f}{transfer_str}{credit_str}")
+                            
+                        except Exception as e:
+                            matching_txn['category'] = 'Uncategorized'
+                            matching_txn['categorized'] = False
+                            matching_txn.pop('_needs_category', None)
+                            print(f"  [ERROR] Failed to process transaction: {e}")
+                    
+                    # Save progress every batch
+                    _save_progress_incremental(existing_transactions, processed_transactions, reprocessed_existing_ids, account_type_label, output_file)
+                    
+                    # Small delay between batches to avoid rate limits
+                    if batch_num < total_batches - 1:  # Don't delay after last batch
+                        time.sleep(1.2)  # 1.2 second delay between batches
                         
             except KeyboardInterrupt:
                 stop_processing = True
@@ -2078,13 +2123,13 @@ def process_account(account_folder: Path, project_root: Path) -> None:
     # Save transactions
     print()
     if processed_transactions:
-        print(f"  Saving {len(processed_transactions)} new transaction(s)...")
         save_json_safely(output_file, unique_transactions)
-        print(f"  [OK] Added {len(processed_transactions)} new transaction(s)")
-        print(f"  [OK] Total transactions: {len(unique_transactions)}")
+        print(f"  [OK] Saved {len(processed_transactions)} new transaction(s)")
+        print(f"  [OK] Total transactions in file: {len(unique_transactions)}")
     else:
-        print(f"  No new transactions to add")
-        print(f"  Total transactions: {len(unique_transactions)}")
+        save_json_safely(output_file, unique_transactions)
+        print(f"  [OK] No new transactions to add")
+        print(f"  [OK] Total transactions in file: {len(unique_transactions)}")
 
 
 def main():
@@ -2127,9 +2172,10 @@ def main():
     
     for account_folder in sorted(account_folders):
         process_account(account_folder, project_root)
+        print(f"  [DONE] Finished processing {account_folder.name}")
     
     print("\n" + "=" * 60)
-    print("Processing complete!")
+    print("[COMPLETE] All accounts processed!")
     print("=" * 60)
 
 if __name__ == '__main__':

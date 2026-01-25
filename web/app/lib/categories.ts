@@ -24,6 +24,7 @@ export const PERSONAL_CATEGORIES = [
   'Education',
   'Travel',
   'Gifts & Donations',
+  'Professional Services',
   'Uncategorized',
 ] as const;
 

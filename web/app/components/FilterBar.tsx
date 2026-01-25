@@ -30,6 +30,9 @@ interface FilterBarProps {
   onSearchChange?: (searchText: string) => void;
   showTransfers?: boolean;
   onShowTransfersChange?: (show: boolean) => void;
+  showOnlyUnreconciled?: boolean;
+  onShowOnlyUnreconciledChange?: (show: boolean) => void;
+  hasReconciledTransactions?: boolean;
 }
 
 export default function FilterBar({
@@ -45,6 +48,9 @@ export default function FilterBar({
   onSearchChange,
   showTransfers = true,
   onShowTransfersChange,
+  showOnlyUnreconciled = false,
+  onShowOnlyUnreconciledChange,
+  hasReconciledTransactions = false,
 }: FilterBarProps) {
   const [isEntityDropdownOpen, setIsEntityDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -188,6 +194,20 @@ export default function FilterBar({
             />
             <label htmlFor="show-transfers" className="text-xs font-medium text-black cursor-pointer">
               Show Transfers
+            </label>
+          </div>
+        )}
+        {onShowOnlyUnreconciledChange && hasReconciledTransactions && (
+          <div className="flex items-center gap-1.5">
+            <input
+              type="checkbox"
+              id="show-unreconciled"
+              checked={showOnlyUnreconciled}
+              onChange={(e) => onShowOnlyUnreconciledChange(e.target.checked)}
+              className="w-3.5 h-3.5 text-orange-600 border-gray-300 rounded focus:ring-orange-500"
+            />
+            <label htmlFor="show-unreconciled" className="text-xs font-medium text-black cursor-pointer">
+              Show Only Unreconciled
             </label>
           </div>
         )}

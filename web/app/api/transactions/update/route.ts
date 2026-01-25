@@ -15,7 +15,7 @@ const CATEGORIES = getAllCategories();
 
 export async function POST(request: Request) {
   try {
-    const { transactionId, category, identified_business, is_transfer, is_credit } = await request.json();
+    const { transactionId, category, identified_business, is_transfer, is_credit, reconciled_at } = await request.json();
 
     // Validate category (allow empty string for uncategorized)
     if (category !== undefined && category !== '' && !CATEGORIES.includes(category)) {
@@ -99,6 +99,9 @@ export async function POST(request: Request) {
     }
     if (is_credit !== undefined) {
       updates.is_credit = is_credit;
+    }
+    if (reconciled_at !== undefined) {
+      updates.reconciled_at = reconciled_at;
     }
 
     // Use utility function to update transaction (only marks as updated if values changed)

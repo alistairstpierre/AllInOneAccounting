@@ -14,19 +14,22 @@ Your task is to identify the business name (cleaning up merchant names) and assi
 ## Personal Expense Categories
 
 Available categories:
-- **Housing**: Rent, mortgage, utilities, home improvement, maintenance
+- **Housing**: Rent, mortgage, utilities (including phone/internet like Spark, 2Degrees, Vodafone), home improvement, maintenance
 - **Transportation**: Gas, car payments, public transit, parking, vehicle maintenance
-- **Food & Dining**: Groceries, restaurants, cafes, food delivery
-- **Healthcare**: Medical expenses, prescriptions, doctor visits, health insurance
-- **Personal Care**: Grooming, hygiene products, spa services, fitness memberships
+- **Groceries**: Supermarkets, grocery stores, food markets
+- **Dining & Takeout**: Restaurants, cafes, food delivery, takeout (NOT grocery stores)
+- **Medical & Healthcare**: Medical expenses, prescriptions, doctor visits, health insurance
+- **Fitness & Wellness**: Gyms, fitness centers, wellness services
+- **Personal Care & Grooming**: Grooming, hygiene products, spa services, salons
 - **Entertainment**: Movies, streaming services, games, hobbies, recreation
-- **Shopping**: Clothing, electronics, household items, general retail
+- **Shopping**: Clothing, electronics, household items, general retail stores
 - **Insurance**: Health, auto, life, renters insurance
 - **Savings/Investing**: Investments, savings accounts, retirement contributions
 - **Debt Payment**: Credit card payments, loan payments
 - **Education**: Tuition, courses, books, educational materials
 - **Travel**: Vacations, flights, hotels, travel expenses
 - **Gifts & Donations**: Gifts, charitable donations
+- **Professional Services**: ONLY for payments to INDIVIDUAL PEOPLE (not businesses) for services like consulting, freelancing, or personal services. Do NOT use this for businesses, online services, or platforms - use more specific categories instead.
 - **Uncategorized**: Expenses that don't fit other categories
 
 ## Identifying Business Names
@@ -52,10 +55,16 @@ When identifying the business name from merchant transaction data:
 
 ## Categorization Guidelines
 
-### Food & Dining
-- Groceries → Food & Dining
-- Restaurants, cafes → Food & Dining
-- Food delivery services → Food & Dining
+### Groceries
+- Supermarkets, grocery stores → Groceries
+- Food markets → Groceries
+- Examples: Countdown, New World, Pak'nSave, Haere Mai (grocery store in Wellington, NZ), Woolworths, Coles
+
+### Dining & Takeout
+- Restaurants, cafes → Dining & Takeout
+- Food delivery services → Dining & Takeout
+- Takeout food → Dining & Takeout
+- NOTE: Grocery stores are NOT dining - use "Groceries" category instead
 
 ### Entertainment
 - Streaming services (Netflix, Spotify, etc.) → Entertainment
@@ -73,6 +82,10 @@ When identifying the business name from merchant transaction data:
 - Salons, spas → Personal Care
 - Personal hygiene products → Personal Care
 
+### Housing
+- Phone/internet providers and prepaid top-ups → Housing (utilities)
+- Utilities (electricity, water, gas, internet, phone) → Housing
+
 ### Transportation
 - Gas stations → Transportation
 - Public transit → Transportation
@@ -81,14 +94,13 @@ When identifying the business name from merchant transaction data:
 
 ## Important Notes
 
-1. **Both Online and Local**: Personal expenses include both online services (streaming, subscriptions) and local businesses (restaurants, shops). Both are legitimate personal expenses.
+1. **Business Transactions on Personal Accounts**: Sometimes business-related transactions appear on personal accounts (e.g., business software subscriptions, business services). You can use business-appropriate categories from the list above when it makes sense, but prefer personal categories when available.
 
-2. **Context Matters**: Consider the personal context. For example:
-   - "Netflix" → Entertainment (streaming service)
-   - "Local Restaurant" → Food & Dining
-   - "Gym" → Personal Care (fitness)
+2. **Both Online and Local**: Personal expenses include both online services (streaming, subscriptions) and local businesses (restaurants, shops). Both are legitimate personal expenses.
 
-3. **When in Doubt**: If an expense could fit multiple categories, choose the most specific one. If truly unclear, use "Uncategorized" and note why.
+3. **Professional Services - Use Sparingly**: ONLY use "Professional Services" when the merchant name is CLEARLY an individual person's name AND it's a payment for services. Do NOT use it for businesses, platforms, or service companies.
+
+4. **When in Doubt**: If an expense could fit multiple categories, choose the most specific one. If truly unclear, use "Uncategorized" and note why.
 
 ## Output Format
 
