@@ -1,0 +1,24 @@
+Type,Details,Particulars,Code,Reference,Amount,Date,ForeignCurrencyAmount,ConversionCharge
+Visa Purchase,4037-****-****-6505  If,      0.60,Sa Group* Se,        2.13,-166.51,13/02/2026,USD 99.00 converted at 0.60,This includes a currency conversion charge of $2.13
+Visa Purchase,4037-****-****-6505  If,,Upwork -8913,,-594.25,12/02/2026,,
+Visa Purchase,4037-****-****-6505  If,      0.60,Highlevel *,        2.09,-162.90,12/02/2026,USD 97.00 converted at 0.60,This includes a currency conversion charge of $2.09
+Visa Purchase,4037-****-****-6505  If,      0.60,Whatconverts,        0.35,-27.46,12/02/2026,USD 16.35 converted at 0.60,This includes a currency conversion charge of $0.35
+Visa Purchase,4037-****-****-6505  Df,,Google One,,-4.99,12/02/2026,,
+Direct Credit,Stripe Payments,,Trf Qvcqcist,Stripe,5287.93,12/02/2026,,
+Automatic Payment,Go,Drawings,,,-350.00,11/02/2026,,
+Visa Purchase,4037-****-****-6505  If,,Instantly,,-431.17,10/02/2026,,
+Visa Purchase,4037-****-****-6505  If,      0.59,Instantly,        1.03,-80.33,10/02/2026,USD 47.00 converted at 0.59,This includes a currency conversion charge of $1.03
+Direct Credit,Stripe Payments,,Trf Esfojp2A,Stripe,7888.86,10/02/2026,,
+Visa Purchase,4037-****-****-6505  If,,Facebk *Yuar,,-51.37,09/02/2026,,
+Visa Purchase,4037-****-****-6505  If,,Count Subscr,,-29.99,09/02/2026,,
+Payment,Wise,Wise,,,-770.00,09/02/2026,,
+Payment,Riya Khalate,Riya,,,-626.00,09/02/2026,,
+Payment,Shawn Mathew,Dune 7,,,-125.00,09/02/2026,,
+Payment,Wise,Wise,,,-100.00,09/02/2026,,
+Visa Purchase,4037-****-****-6505  If,,Facebk *Ljy6,,-162.00,05/02/2026,,
+Visa Purchase,4037-****-****-6505  Df,,The Atom,,-25.00,05/02/2026,,
+Visa Purchase,4037-****-****-6505  If,      0.59,Openart Sznt,        0.30,-23.69,05/02/2026,USD 14.00 converted at 0.59,This includes a currency conversion charge of $0.30
+Visa Purchase,4037-****-****-6505  If,,Upwork -8891,,-18.35,05/02/2026,,
+Automatic Payment,Go,Drawings,,,-350.00,04/02/2026,,
+Visa Purchase,4037-****-****-6505  Df,,Wu,,-420.59,04/02/2026,,
+Direct Credit,Stripe Payments,,Trf Rqnertit,Stripe,1819.91,03/02/2026,,

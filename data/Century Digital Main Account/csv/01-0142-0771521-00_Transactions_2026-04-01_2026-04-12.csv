@@ -1,0 +1,26 @@
+Type,Details,Particulars,Code,Reference,Amount,Date,ForeignCurrencyAmount,ConversionCharge
+Visa Purchase,4037-****-****-6505  If,      0.57,Instantly,        1.06,-83.28,10/04/2026,USD 47.00 converted at 0.57,This includes a currency conversion charge of $1.06
+Direct Credit,Stripe Payments,,Trf 8U2R8Evm,Stripe,2007.74,10/04/2026,,
+Visa Purchase,4037-****-****-6505  If,,Upwork -9083,,-128.44,09/04/2026,,
+Visa Purchase,4037-****-****-6505  If,      0.56,P.Skool.Com/,        0.75,-58.77,09/04/2026,USD 33.00 converted at 0.56,This includes a currency conversion charge of $0.75
+Automatic Payment,Go,Drawings,,,-350.00,08/04/2026,,
+Direct Credit,Stripe Payments,,Trf A2Cue7Pd,Stripe,406.39,08/04/2026,,
+Visa Purchase,4037-****-****-6505  Df,,Wu,,-575.30,07/04/2026,,
+Visa Purchase,4037-****-****-6505  If,      0.56,Openart Ai,        0.32,-24.96,07/04/2026,USD 14.00 converted at 0.56,This includes a currency conversion charge of $0.32
+Visa Purchase,4037-****-****-6505  If,      0.56,Cloudflare,        0.23,-18.65,07/04/2026,USD 10.46 converted at 0.56,This includes a currency conversion charge of $0.23
+Visa Purchase,4037-****-****-6505  If,      0.56,Openai,        0.22,-17.83,07/04/2026,USD 10.00 converted at 0.56,This includes a currency conversion charge of $0.22
+Visa Purchase,4037-****-****-6505  If,      0.57,Elevenlabs.I,        0.13,-10.17,07/04/2026,USD 5.75 converted at 0.57,This includes a currency conversion charge of $0.13
+Payment,Riya Khalate,Riya,,,-300.00,07/04/2026,,
+Direct Credit,Stripe Payments,,Trf Wzxhrua6,Stripe,1604.29,07/04/2026,,
+Visa Purchase,4037-****-****-6505  If,,Upwork -9062,,-425.29,02/04/2026,,
+Visa Purchase,4037-****-****-6505  If,      0.56,Clickup,        0.86,-67.58,02/04/2026,USD 38.00 converted at 0.56,This includes a currency conversion charge of $0.86
+Visa Purchase,4037-****-****-6505  Df,,Google Works,,-53.28,02/04/2026,,
+Visa Purchase,4037-****-****-6505  Df,,Google Works,,-43.47,02/04/2026,,
+Payment,Wise,,,,-237.65,02/04/2026,,
+Direct Credit,Stripe Payments,,Trf Qnsxxris,Stripe,813.04,02/04/2026,,
+Automatic Payment,Go,Drawings,,,-350.00,01/04/2026,,
+Direct Debit,,Ipayroll,34793-0014,,-6098.58,01/04/2026,,
+Visa Purchase,4037-****-****-6505  If,      0.57,Descript,        0.79,-61.81,01/04/2026,USD 35.00 converted at 0.57,This includes a currency conversion charge of $0.79
+Visa Purchase,4037-****-****-6505  If,      0.56,Vercel Inc.,        0.45,-35.56,01/04/2026,USD 20.00 converted at 0.56,This includes a currency conversion charge of $0.45
+Visa Purchase,4037-****-****-6505  If,      0.56,Figma,        0.45,-35.56,01/04/2026,USD 20.00 converted at 0.56,This includes a currency conversion charge of $0.45
+Payment,Riya Khalate,Riya,,,-600.00,01/04/2026,,

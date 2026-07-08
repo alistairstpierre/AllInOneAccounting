@@ -715,35 +715,62 @@ export default function Home() {
   };
 
   const handleReconciledUpdate = async (transactionId: string, reconciled: boolean) => {
-    // Update the transaction immediately
     try {
-      const response = await fetch('/api/transactions/update', {
+      if (!reconciled) {
+        // Un-reconcile: only this transaction
+        const response = await fetch('/api/transactions/update', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ transactionId, reconciled_at: null }),
+        });
+        if (response.ok) {
+          const result = await response.json();
+          setTransactions((prev) =>
+            prev.map((t) =>
+              getTransactionId(t) === transactionId
+                ? { ...t, reconciled_at: result.transaction.reconciled_at || null }
+                : t
+            )
+          );
+        } else {
+          fetchTransactions();
+        }
+        return;
+      }
+
+      // Reconcile = "reconcile up to and including this transaction" = this one + all older (earlier in time)
+      // Use chronological order (oldest first) so we mark the selected transaction and everything before it in time
+      const byDateAsc = [...filteredAndSortedTransactions].sort((a, b) => {
+        const dateCmp = a.transaction_date.localeCompare(b.transaction_date);
+        if (dateCmp !== 0) return dateCmp;
+        return getTransactionId(a).localeCompare(getTransactionId(b));
+      });
+      const idx = byDateAsc.findIndex((t) => getTransactionId(t) === transactionId);
+      const idsToReconcile =
+        idx >= 0
+          ? byDateAsc.slice(0, idx + 1).map((t) => getTransactionId(t))
+          : [transactionId];
+      const timestamp = new Date().toISOString();
+
+      const response = await fetch('/api/transactions/bulk-reconcile', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          transactionId,
-          reconciled_at: reconciled ? new Date().toISOString() : null,
-        }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ transactionIds: idsToReconcile, reconciled_at: timestamp }),
       });
 
       if (response.ok) {
-        const result = await response.json();
-        // Update local state
-        setTransactions((prevTransactions) =>
-          prevTransactions.map((t) =>
-            getTransactionId(t) === transactionId
-              ? { ...t, reconciled_at: result.transaction.reconciled_at || null }
-              : t
+        const idsSet = new Set(idsToReconcile);
+        setTransactions((prev) =>
+          prev.map((t) =>
+            idsSet.has(getTransactionId(t)) ? { ...t, reconciled_at: timestamp } : t
           )
         );
       } else {
-        console.error('Failed to update transaction reconciliation status');
+        console.error('Failed to bulk reconcile');
         fetchTransactions();
       }
     } catch (error) {
-      console.error('Error updating transaction reconciliation status:', error);
+      console.error('Error updating reconciliation:', error);
       fetchTransactions();
     }
   };
@@ -911,35 +938,6 @@ export default function Home() {
 
   const lastReconciledTransactionId = lastReconciledTransaction ? getTransactionId(lastReconciledTransaction) : null;
 
-  // Automatically adjust date range when "Show only Unreconciled" is enabled
-  useEffect(() => {
-    if (showOnlyUnreconciled && lastReconciledTransaction) {
-      const lastReconciledDate = lastReconciledTransaction.transaction_date;
-      
-      // Set the start date to the day after the last reconciled transaction
-      // Parse the date and add one day
-      const lastDate = new Date(lastReconciledDate);
-      lastDate.setDate(lastDate.getDate() + 1);
-      
-      const formatDate = (date: Date) => {
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
-      };
-      
-      const newStartDate = formatDate(lastDate);
-      
-      // Only update if the current start date is before or equal to the last reconciled date
-      // This prevents overriding user-set date ranges unnecessarily
-      if (!dateRange.start || dateRange.start <= lastReconciledDate) {
-        setDateRange(prev => ({
-          start: newStartDate,
-          end: prev.end || formatDate(new Date()) // Keep existing end date or use today
-        }));
-      }
-    }
-  }, [showOnlyUnreconciled, lastReconciledTransaction]);
 
   const filteredAndSortedTransactions = useMemo(() => {
     let filtered = transactions;
@@ -998,62 +996,9 @@ export default function Home() {
       filtered = filtered.filter(t => !t.is_transfer);
     }
 
-    // Filter by reconciliation status - show only transactions after the last reconciled one
-    if (showOnlyUnreconciled && lastReconciledTransaction) {
-      const lastReconciledDate = lastReconciledTransaction.transaction_date;
-      const lastReconciledTimestamp = lastReconciledTransaction.reconciled_at 
-        ? new Date(lastReconciledTransaction.reconciled_at).getTime() 
-        : 0;
-      const lastReconciledId = lastReconciledTransactionId;
-      
-      // Create a sorted list to determine transaction order
-      // Sort by date (ascending), then by reconciled_at timestamp if available, then by ID for consistent ordering
-      const sortedForComparison = [...filtered].sort((a, b) => {
-        const dateCompare = a.transaction_date.localeCompare(b.transaction_date);
-        if (dateCompare !== 0) return dateCompare;
-        
-        // Same date - compare by reconciled_at timestamp if available (earlier reconciled = earlier in day)
-        if (a.reconciled_at && b.reconciled_at) {
-          const timeA = new Date(a.reconciled_at).getTime();
-          const timeB = new Date(b.reconciled_at).getTime();
-          const timeCompare = timeA - timeB;
-          if (timeCompare !== 0) return timeCompare;
-        } else if (a.reconciled_at) {
-          // a has timestamp, b doesn't - a comes after b
-          return 1;
-        } else if (b.reconciled_at) {
-          // b has timestamp, a doesn't - b comes after a
-          return -1;
-        }
-        
-        // Same date, no timestamps or both have same timestamp - sort by ID for consistent ordering
-        return getTransactionId(a).localeCompare(getTransactionId(b));
-      });
-      
-      // Find the index of the last reconciled transaction in the sorted list
-      const lastReconciledIndex = sortedForComparison.findIndex(t => 
-        getTransactionId(t) === lastReconciledId
-      );
-      
-      if (lastReconciledIndex >= 0) {
-        // Get all transactions after (not including) the last reconciled one
-        const transactionsAfterReconciled = sortedForComparison.slice(lastReconciledIndex + 1);
-        const afterIds = new Set(transactionsAfterReconciled.map(t => getTransactionId(t)));
-        
-        // Filter to only include transactions that come after the last reconciled one
-        filtered = filtered.filter(t => {
-          const txnId = getTransactionId(t);
-          // Exclude the last reconciled transaction itself
-          if (txnId === lastReconciledId) {
-            return false;
-          }
-          // Include if it's in the "after" set
-          return afterIds.has(txnId);
-        });
-      } else {
-        // Last reconciled transaction not in filtered list, show all
-        // (This can happen if date range filter excludes the reconciled transaction)
-      }
+    // Filter by reconciliation: when "Show only unreconciled" is on, hide any transaction that has been reconciled
+    if (showOnlyUnreconciled) {
+      filtered = filtered.filter(t => !t.reconciled_at);
     }
 
     // Filter by credit/debit based on showOnlyCredits setting
@@ -1135,7 +1080,7 @@ export default function Home() {
     });
 
     return sorted;
-  }, [transactions, selectedCategory, sortBy, sortOrder, dateRange, selectedEntityFilterIds, selectedAccountIds, entities, searchText, showTransfers, showOnlyCredits, showOnlyUnreconciled, lastReconciledTransaction, lastReconciledTransactionId]);
+  }, [transactions, selectedCategory, sortBy, sortOrder, dateRange, selectedEntityFilterIds, selectedAccountIds, entities, searchText, showTransfers, showOnlyCredits, showOnlyUnreconciled]);
 
   // Reset to page 1 when filters change
   useEffect(() => {

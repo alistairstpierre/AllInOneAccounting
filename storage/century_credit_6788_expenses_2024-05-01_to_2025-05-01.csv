@@ -1,0 +1,145 @@
+transaction_date,amount,merchant,category,account,card
+2024-05-01,28.27,Paypro 448003688867    Emailverific  Gb,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2024-05-06,442,Wise                   Auckland      Nz,Professional Services,9554-****-****-6788,4055-****-****-0170
+2024-05-08,9.68,Neverbounce            Neverbounce.C Wa,Professional Services,9554-****-****-6788,4055-****-****-0170
+2024-05-18,27.42,Neverbounce            Neverbounce.C Wa,Professional Services,9554-****-****-6788,4055-****-****-0170
+2024-05-20,2657.48,Imperium Acquisition   London        Gb,Education/Training,9554-****-****-6788,4055-****-****-1925
+2024-06-06,162.49,Skool.Com              Skool.Com     Ca,Education,9554-****-****-6788,4055-****-****-0170
+2024-06-12,42.59,Paypal *Outscraper     4029357733    Sg,Professional Services,9554-****-****-6788,4055-****-****-1925
+2024-07-21,504.56,Myonlineguy            Perth         Au,Education/Training,9554-****-****-6788,4055-****-****-0170
+2024-07-30,50.36,Wise                   Auckland      Nz,Professional Services,9554-****-****-6788,4055-****-****-0170
+2024-08-19,3.39,Vapi Api               Vapi.Ai       Ca,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2024-08-21,12.42,Microsoft*Skype        Luxembourg    Lu,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2024-08-21,496.37,Myonlineguy            Perth         Au,Education/Training,9554-****-****-6788,4055-****-****-0170
+2024-09-01,130.56,Wise                   Auckland      Nz,Professional Services,9554-****-****-6788,4055-****-****-0170
+2024-09-01,16.27,Highlevel Inc.         Httpsgohighle Tx,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2024-09-08,159.67,Highlevel Agency Sub   Httpsgohighle Tx,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2024-09-10,16.54,Highlevel Inc.         Httpsgohighle Tx,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2024-09-18,7.53,Microsoft*Skype        Luxembourg    Lu,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2024-09-18,12.28,Microsoft*Skype        Luxembourg    Lu,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2024-09-19,3.58,Vapi Api               Vapi.Ai       Ca,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2024-09-19,423,Facebk *4Tpw59Y2E2     Fb.Me/Ads     Ie,Education/Training,9554-****-****-6788,4055-****-****-0170
+2024-09-21,487.9,Myonlineguy            Perth         Au,Education/Training,9554-****-****-6788,4055-****-****-0170
+2024-09-29,322.82,Facebk *Bw8Gedq2E2     Fb.Me/Ads     Ie,Marketing/Advertising,9554-****-****-6788,4055-****-****-0170
+2024-09-29,48.87,Facebk *Xc924Bc2E2     Fb.Me/Ads     Ie,Marketing/Advertising,9554-****-****-6788,4055-****-****-0170
+2024-09-29,16.1,Highlevel Inc.         Httpsgohighle Tx,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2024-10-01,16.01,Highlevel Inc.         Httpsgohighle Tx,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2024-10-02,109.84,Wise                   Auckland      Nz,Professional Services,9554-****-****-6788,4055-****-****-0170
+2024-10-07,16.49,Highlevel Inc.         Httpsgohighle Tx,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2024-10-08,160.79,Highlevel Agency Sub   Httpsgohighle Tx,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2024-10-09,930.08,Innovative Solution    Guelph        On,Professional Services,9554-****-****-6788,4055-****-****-0170
+2024-10-10,58.56,Descript               Httpswww.Desc Ca,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2024-10-18,12.54,Microsoft*Skype        Luxembourg    Lu,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2024-10-18,7.7,Microsoft*Skype        Luxembourg    Lu,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2024-10-21,500.47,Myonlineguy            Perth         Au,Education/Training,9554-****-****-6788,4055-****-****-0170
+2024-10-26,25.45,Loom Subscription      Httpswww.Loom Ca,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2024-10-30,17.02,Highlevel Inc.         Gohighlevel.C Tx,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2024-10-31,133.27,Wise                   Auckland      Nz,Professional Services,9554-****-****-6788,4055-****-****-0170
+2024-11-07,17.14,Highlevel Inc.         Httpsgohighle Tx,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2024-11-08,165.73,Highlevel Agency Sub   Gohighlevel.C Tx,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2024-11-10,59.64,Descript               Httpswww.Desc Ca,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2024-11-16,148.02,Transferwise           Aukland       Nz,Professional Services,9554-****-****-6788,4055-****-****-0170
+2024-11-18,7.96,Microsoft*Skype        Luxembourg    Lu,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2024-11-18,12.98,Microsoft*Skype        Luxembourg    Lu,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2024-11-21,516.69,Myonlineguy            Perth         Au,Education/Training,9554-****-****-6788,4055-****-****-0170
+2024-11-26,26.04,Loom Subscription      Httpswww.Loom Ca,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2024-11-27,17.48,Highlevel Inc.         Gohighlevel.C Tx,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2024-11-30,131.77,Transferwise           Aukland       Nz,Professional Services,9554-****-****-6788,4055-****-****-0170
+2024-12-04,57.2,Min Bus Innovation & E Wellington    Nz,Education/Training,9554-****-****-6788,4055-****-****-0170
+2024-12-06,16.95,Microsoft*Pc 1 Month   Msbill.Info   Sg,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2024-12-08,17.41,Highlevel Inc.         Gohighlevel.C Tx,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2024-12-08,168.87,Highlevel Agency Sub   Gohighlevel.C Tx,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2024-12-10,61.09,Descript               Httpswww.Desc Ca,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2024-12-13,353.85,Transferwise           Aukland       Nz,Professional Services,9554-****-****-6788,4055-****-****-0170
+2024-12-14,354.72,Transferwise           Aukland       Nz,Professional Services,9554-****-****-6788,4055-****-****-0170
+2024-12-17,89.72,Transferwise           Aukland       Nz,Professional Services,9554-****-****-6788,4055-****-****-0170
+2024-12-18,13.18,Microsoft*Skype        Luxembourg    Lu,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2024-12-21,362.75,Transferwise           Aukland       Nz,Professional Services,9554-****-****-6788,4055-****-****-0170
+2024-12-23,359.91,Transferwise           Aukland       Nz,Professional Services,9554-****-****-6788,4055-****-****-0170
+2024-12-26,26.99,Loom Subscription      Loom.Com      Ca,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2024-12-29,73.4,Transferwise           Aukland       Nz,Professional Services,9554-****-****-6788,4055-****-****-0170
+2024-12-30,18.05,Highlevel Inc.         Gohighlevel.C Tx,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2025-01-01,175.91,P.Skool.Com/Fnvtk      Www.Skool.Com Ca,Education,9554-****-****-6788,4055-****-****-0170
+2025-01-01,67.1,Instantly              Instantly.Ai  Wy,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2025-01-02,17.23,Vidiq                  Vidiq.Com     Ca,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2025-01-02,272.02,Instantly              Instantly.Ai  Wy,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2025-01-04,68.74,Dnh*Godaddy.Com Nzd    310858883143  Nl,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2025-01-04,456.68,Transferwise           Aukland       Nz,Professional Services,9554-****-****-6788,4055-****-****-0170
+2025-01-05,2179.64,Dnh*Godaddy.Com Nzd    480-505-8855  Az,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2025-01-06,18.14,Highlevel Inc.         Gohighlevel.C Tx,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2025-01-07,46.44,Transferwise           Aukland       Nz,Professional Services,9554-****-****-6788,4055-****-****-0170
+2025-01-08,106.69,Upwork -768824933Ref   Upwork.Com/Bi Ie,Education,9554-****-****-6788,4055-****-****-0170
+2025-01-08,174.5,Highlevel Agency Sub   Gohighlevel.C Tx,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2025-01-09,107.66,Upwork -769081442Ref   Upwork.Com/Bi Ie,Professional Services,9554-****-****-6788,4055-****-****-0170
+2025-01-10,63.99,Descript               Descript.Com  Ca,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2025-01-12,46.81,Transferwise           Aukland       Nz,Professional Services,9554-****-****-6788,4055-****-****-0170
+2025-01-14,108.51,Upwork -770654683Ref   Upwork.Com/Bi Ie,Professional Services,9554-****-****-6788,4055-****-****-0170
+2025-01-15,163.24,Transferwise           Aukland       Nz,Professional Services,9554-****-****-6788,4055-****-****-0170
+2025-01-20,92.78,Transferwise           Aukland       Nz,Professional Services,9554-****-****-6788,4055-****-****-0170
+2025-01-21,38.67,Upwork -772742077Ref   Upwork.Com/Bi Ie,Professional Services,9554-****-****-6788,4055-****-****-0170
+2025-01-21,543.1,Myonlineguy            Perth         Au,Education/Training,9554-****-****-6788,4055-****-****-0170
+2025-01-22,181.8,Transferwise           Aukland       Nz,Professional Services,9554-****-****-6788,4055-****-****-0170
+2025-01-23,17.94,Highlevel Inc.         Gohighlevel.C Tx,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2025-01-26,26.8,Loom Subscription      Loom.Com      Ca,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2025-01-26,102.93,Brightlocal Ltd        Brighton      Gb,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2025-01-26,102.93,Brightlocal Ltd        Brighton      Gb,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2025-01-27,134.32,Upwork -773665319Ref   Upwork.Com/Bi Ie,Education,9554-****-****-6788,4055-****-****-0170
+2025-01-28,299.09,Transferwise           Aukland       Nz,Professional Services,9554-****-****-6788,4055-****-****-0170
+2025-01-30,207.21,Brightlocal Ltd        Brighton      Gb,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2025-01-30,135.99,Upwork -775283012Ref   Upwork.Com/Bi Ie,Professional Services,9554-****-****-6788,4055-****-****-0170
+2025-01-31,18.74,Transferwise           Aukland       Nz,Professional Services,9554-****-****-6788,4055-****-****-0170
+2025-01-31,18.02,Highlevel Inc.         Gohighlevel.C Tx,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2025-01-31,26.75,Mailchimp              678-9990141   Ga,Marketing/Advertising,9554-****-****-6788,4055-****-****-0170
+2025-01-31,156.39,Transferwise           Aukland       Nz,Professional Services,9554-****-****-6788,4055-****-****-0170
+2025-02-01,94.39,Transferwise           Aukland       Nz,Professional Services,9554-****-****-6788,4055-****-****-0170
+2025-02-01,174.75,P.Skool.Com/Fnvtk      Www.Skool.Com Ca,Education,9554-****-****-6788,4055-****-****-0170
+2025-02-02,17.11,Vidiq                  Vidiq.Com     Ca,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2025-02-02,6.41,Google Gsuite_Electric Auckland      Nz,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2025-02-02,66.66,Instantly              Instantly.Ai  Wy,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2025-02-04,24.87,Brightlocal Ltd        Brighton      Gb,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2025-02-04,49.28,Upwork -777081810Ref   Upwork.Com/Bi Ie,Professional Services,9554-****-****-6788,4055-****-****-0170
+2025-02-04,137.98,Upwork -777096556Ref   Upwork.Com/Bi Ie,Professional Services,9554-****-****-6788,4055-****-****-0170
+2025-02-04,132.57,Upwork -777104199Ref   Upwork.Com/Bi Ie,Professional Services,9554-****-****-6788,4055-****-****-0170
+2025-02-06,103.4,Brightlocal Ltd        Brighton      Gb,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2025-02-08,174.26,Highlevel Agency Sub   Gohighlevel.C Tx,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2025-02-10,396.81,Upwork -779157080Ref   Upwork.Com/Bi Ie,Education,9554-****-****-6788,4055-****-****-0170
+2025-02-10,67.35,Upwork -779236019Ref   Upwork.Com/Bi Ie,Professional Services,9554-****-****-6788,4055-****-****-0170
+2025-02-13,136.57,Upwork -779690901Ref   Upwork.Com/Bi Ie,Professional Services,9554-****-****-6788,4055-****-****-0170
+2025-02-15,17.89,Highlevel Inc.         Gohighlevel.C Tx,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2025-02-17,439.18,Upwork -780218507Ref   Upwork.Com/Bi Ie,Professional Services,9554-****-****-6788,4055-****-****-0170
+2025-02-19,176.31,Wu                     Auckland      Nz,Professional Services,9554-****-****-6788,4055-****-****-0170
+2025-02-21,384.48,Brightlocal Ltd        Brighton      Gb,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2025-02-24,19.11,Upwork -783527444Ref   Upwork.Com/Bi Ie,Professional Services,9554-****-****-6788,4055-****-****-0170
+2025-02-24,562.81,Upwork -782427480Ref   Upwork.Com/Bi Ie,Professional Services,9554-****-****-6788,4055-****-****-0170
+2025-02-24,133.66,Upwork -782409616Ref   Upwork.Com/Bi Ie,Professional Services,9554-****-****-6788,4055-****-****-0170
+2025-02-26,140.3,Brightlocal Ltd        Brighton      Gb,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2025-02-26,26.64,Loom Subscription      Www.Loom.Com  Ca,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2025-02-28,26.76,Mailchimp              678-9990141   Ga,Marketing/Advertising,9554-****-****-6788,4055-****-****-0170
+2025-02-28,18,Highlevel Inc.         Gohighlevel.C Tx,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2025-03-01,176,P.Skool.Com/Fnvtk      Www.Skool.Com Ca,Education,9554-****-****-6788,4055-****-****-0170
+2025-03-02,17.24,Vidiq                  Vidiq.Com     Ca,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2025-03-02,12.42,Google Gsuite_Electric Auckland      Nz,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2025-03-02,67.13,Instantly              Instantly.Ai  Wy,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2025-03-02,25.63,Dnh*Godaddy.Com Nzd    310858883143  Nl,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2025-03-07,133.54,Upwork -786572627Ref   Upwork.Com/Bi Ie,Professional Services,9554-****-****-6788,4055-****-****-0170
+2025-03-08,172.69,Highlevel Agency Sub   Gohighlevel.C Tx,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2025-03-14,17.84,Highlevel Inc.         Gohighlevel.C Tx,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2025-03-22,9.56,Upwork -791248132Ref   Upwork.Com/Bi Ie,Professional Services,9554-****-****-6788,4055-****-****-0170
+2025-03-26,95.02,Upwork -792769988Ref   Upwork.Com/Bi Ie,Professional Services,9554-****-****-6788,4055-****-****-0170
+2025-03-26,26.64,Loom Subscription      Loom.Com      Ca,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2025-03-26,140.3,Brightlocal Ltd        Brighton      Gb,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2025-03-28,16.95,Instantly              Instantly.Ai  Wy,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2025-03-30,17.75,Highlevel Inc.         Gohighlevel.C Tx,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2025-03-31,26.76,Mailchimp              678-9990141   Ga,Marketing/Advertising,9554-****-****-6788,4055-****-****-0170
+2025-04-01,174.03,P.Skool.Com/Fnvtk      Www.Skool.Com Ca,Education,9554-****-****-6788,4055-****-****-0170
+2025-04-02,12.42,Google Gsuite_Electric Auckland      Nz,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2025-04-02,17,Vidiq                  Vidiq.Com     Ca,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2025-04-02,173.58,Instantly              Instantly.Ai  Wy,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2025-04-03,133.68,Upwork -795242062Ref   Upwork.Com/Bi Ie,Professional Services,9554-****-****-6788,4055-****-****-0170
+2025-04-07,108.06,Upwork -796932781Ref   Upwork.Com/Bi Ie,Professional Services,9554-****-****-6788,4055-****-****-0170
+2025-04-08,457.02,Wu                     Auckland      Nz,Professional Services,9554-****-****-6788,4055-****-****-0170
+2025-04-08,178.46,Highlevel Agency Sub   Gohighlevel.C Tx,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2025-04-12,17.67,Highlevel Inc.         Gohighlevel.C Tx,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2025-04-26,134.7,Brightlocal Ltd        Brighton      Gb,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2025-04-26,25.58,Loom Subscription      Loom.Com      Ca,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170
+2025-04-30,17.1,Highlevel Inc.         Gohighlevel.C Tx,Software/Subscriptions,9554-****-****-6788,4055-****-****-0170

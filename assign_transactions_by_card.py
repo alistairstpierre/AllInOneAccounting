@@ -2,9 +2,11 @@
 """
 Assign Existing Transactions to Entities by Credit Card
 
-This script assigns all existing transactions to entities based on credit card numbers.
-It checks all transactions in storage/transactions/ and assigns them to entities
-that have matching credit cards in their cards array.
+Fills in entity membership for transactions that are not yet linked to any entity:
+if a transaction's `card` matches an entity's `cards` entry, it is appended to that
+entity's `transactions` list. Transactions already listed on any entity are skipped
+so re-running categorize_transactions / process_new_transactions does not undo
+manual assignments from the web app.
 
 Usage:
     python assign_transactions_by_card.py
@@ -80,10 +82,22 @@ def load_all_transactions(project_root: Path) -> List[Dict[str, Any]]:
     
     return all_transactions
 
+def _transaction_linked_to_any_entity(transaction_id: str, entities: List[Dict[str, Any]]) -> bool:
+    """True if this transaction id appears on any entity (user or prior run linked it)."""
+    for entity in entities:
+        if transaction_id in entity.get('transactions', []):
+            return True
+    return False
+
+
 def assign_transactions_to_entities_by_card(transactions: List[Dict[str, Any]], project_root: Path) -> Dict[str, int]:
     """
     Assign transactions to entities based on credit card numbers.
-    
+
+    Only assigns transactions that are not yet linked to any entity. If a transaction
+    already appears in any entity's `transactions` list (e.g. set in the web app),
+    it is left alone so re-running the CSV processor does not override manual choices.
+
     Returns:
         Dictionary with statistics: {'assigned': count, 'already_assigned': count, 'no_card': count, 'no_match': count}
     """
@@ -123,25 +137,23 @@ def assign_transactions_to_entities_by_card(transactions: List[Dict[str, Any]], 
         'no_match': 0
     }
     entities_modified = False
-    
-    # Track which transactions are assigned to which entities
-    transaction_to_entity = {}
-    for entity in entities:
-        for transaction_id in entity.get('transactions', []):
-            transaction_to_entity[transaction_id] = entity
-    
+
     for transaction in transactions:
         transaction_card = transaction.get('card')
         if not transaction_card:
             stats['no_card'] += 1
             continue
-        
+
         transaction_id = get_transaction_id(transaction)
-        
+
+        if _transaction_linked_to_any_entity(transaction_id, entities):
+            stats['already_assigned'] += 1
+            continue
+
         # Normalize the transaction's card number
         normalized_transaction_card = normalize_card_number(transaction_card)
         transaction_card_stripped = transaction_card.strip()
-        
+
         # Try to find matching entity using normalized card
         matching_entity = None
         if normalized_transaction_card in card_to_entity:
@@ -155,44 +167,25 @@ def assign_transactions_to_entities_by_card(transactions: List[Dict[str, Any]], 
                 if variant in card_to_entity:
                     matching_entity = card_to_entity[variant]
                     break
-        
+
         if not matching_entity:
             stats['no_match'] += 1
             continue
-        
-        # Check if transaction is already assigned to this entity
-        current_entity = transaction_to_entity.get(transaction_id)
-        
-        if current_entity == matching_entity:
-            stats['already_assigned'] += 1
+
+        # Sanity check: the entity we matched must actually have this card in its list
+        matching_entity_cards = entity_cards_map.get(matching_entity.get('id'), set())
+        if normalized_transaction_card not in matching_entity_cards:
+            # Should not happen if card_to_entity is built correctly; skip to avoid wrong assignment
+            stats['no_match'] += 1
             continue
-        
-        # Check if transaction is assigned to a different entity
-        should_reassign = True
-        if current_entity:
-            # Check if current entity has this card (using normalized comparison)
-            current_entity_id = current_entity.get('id', '')
-            current_entity_normalized_cards = entity_cards_map.get(current_entity_id, set())
-            if normalized_transaction_card in current_entity_normalized_cards:
-                should_reassign = False
-                stats['already_assigned'] += 1
-                continue
-        
-        if should_reassign:
-            # Remove from current entity if assigned elsewhere
-            if current_entity:
-                if transaction_id in current_entity.get('transactions', []):
-                    current_entity['transactions'].remove(transaction_id)
-                    entities_modified = True
-            
-            # Add to matching entity
-            if 'transactions' not in matching_entity:
-                matching_entity['transactions'] = []
-            if transaction_id not in matching_entity['transactions']:
-                matching_entity['transactions'].append(transaction_id)
-                entities_modified = True
-                stats['assigned'] += 1
-                transaction_to_entity[transaction_id] = matching_entity
+
+        # Add to matching entity (transaction was not linked to any entity)
+        if 'transactions' not in matching_entity:
+            matching_entity['transactions'] = []
+        if transaction_id not in matching_entity['transactions']:
+            matching_entity['transactions'].append(transaction_id)
+            entities_modified = True
+            stats['assigned'] += 1
     
     # Save entities if any changes were made
     if entities_modified:

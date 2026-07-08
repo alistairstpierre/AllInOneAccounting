@@ -201,11 +201,21 @@ export default function TransactionCard({
 
   return (
     <div className={`bg-white rounded-lg shadow-sm border ${isSelected ? 'border-blue-500' : 'border-gray-200'} hover:shadow-md transition-shadow flex`}>
-      {isLastReconciled && (
-        <div className="w-1 bg-orange-500 rounded-l-lg flex-shrink-0" title={`Last Reconciled: ${transaction.reconciled_at ? new Date(transaction.reconciled_at).toLocaleString() : ''}`} />
-      )}
-      {isUpdated && !isLastReconciled && (
-        <div className="w-1 bg-green-500 rounded-l-lg flex-shrink-0" title={`Updated: ${transaction.updated_at ? new Date(transaction.updated_at).toLocaleString() : ''}`} />
+      {(isReconciled || isUpdated) && (
+        <div className="flex flex-shrink-0 rounded-l-lg overflow-hidden">
+          {isReconciled && (
+            <div
+              className="w-1 bg-orange-500"
+              title={transaction.reconciled_at ? `Reconciled: ${new Date(transaction.reconciled_at).toLocaleString()}` : 'Reconciled'}
+            />
+          )}
+          {isUpdated && (
+            <div
+              className="w-1 bg-green-500"
+              title={transaction.updated_at ? `Updated: ${new Date(transaction.updated_at).toLocaleString()}` : 'Updated'}
+            />
+          )}
+        </div>
       )}
       <div className="flex-1 flex flex-col">
         <div 
