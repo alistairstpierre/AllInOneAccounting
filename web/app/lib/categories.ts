@@ -46,6 +46,7 @@ export const BUSINESS_CATEGORIES = [
   'Legal/Accounting',
   'Telecommunications',
   'Bank Fees',
+  'Taxes',
   'Drawings',
   'Uncategorized',
 ] as const;

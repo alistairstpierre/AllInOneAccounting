@@ -1,0 +1,27 @@
+Type,Details,Particulars,Code,Reference,Amount,Date,ForeignCurrencyAmount,ConversionCharge
+Visa Purchase,4037-****-****-6505  If,,Upwork -9500,,-358.86,10/09/2026,,
+Direct Credit,Stripe Payments,,Trf 61Xvd0Fp,Stripe,11217.30,10/09/2026,,
+Automatic Payment,Go,Drawings,,,-350.00,09/09/2026,,
+Visa Purchase,4037-****-****-6505  If,      0.58,P.Skool.Com/,        0.73,-57.01,09/09/2026,USD 33.00 converted at 0.58,This includes a currency conversion charge of $0.73
+Direct Credit,Stripe Payments,,Trf Qsgu8Nvi,Stripe,184.43,09/09/2026,,
+Visa Purchase,4037-****-****-6505  If,      0.58,Openart Ai,        0.31,-24.30,07/09/2026,USD 14.00 converted at 0.58,This includes a currency conversion charge of $0.31
+Visa Purchase,4037-****-****-6505  If,,Rella* Trial,,-53.25,04/09/2026,,
+Visa Purchase,4037-****-****-6505  If,,Upwork -9482,,-258.83,03/09/2026,,
+Visa Purchase,4037-****-****-6505  If,      0.58,Elevenlabs.I,        0.12,-9.90,03/09/2026,USD 5.75 converted at 0.58,This includes a currency conversion charge of $0.12
+Automatic Payment,Go,Drawings,,,-350.00,02/09/2026,,
+Visa Purchase,4037-****-****-6505  Df,,Wu,,-499.48,02/09/2026,,
+Visa Purchase,4037-****-****-6505  If,      0.58,Clickup,        1.25,-97.89,02/09/2026,USD 57.00 converted at 0.58,This includes a currency conversion charge of $1.25
+Visa Purchase,4037-****-****-6505  Df,,Google Works,,-43.47,02/09/2026,,
+Visa Purchase,4037-****-****-6505  Df,,Google Works,,-28.98,02/09/2026,,
+Visa Purchase,4037-****-****-6505  Df,,Google Cloud,,-14.27,02/09/2026,,
+Direct Debit,,Ipayroll,34793-0019,,-6101.11,01/09/2026,,
+Visa Purchase,4037-****-****-6505  If,      0.59,Vercel Inc.,        0.44,-34.32,01/09/2026,USD 20.00 converted at 0.59,This includes a currency conversion charge of $0.44
+Visa Purchase,4037-****-****-6505  If,      0.59,Whatconverts,        1.97,-153.61,31/08/2026,USD 90.00 converted at 0.59,This includes a currency conversion charge of $1.97
+Visa Purchase,4037-****-****-6505  If,      0.59,Openai *Chat,        0.50,-39.25,31/08/2026,USD 23.00 converted at 0.59,This includes a currency conversion charge of $0.50
+Visa Purchase,4037-****-****-6505  If,      0.59,Skool.Com,        0.19,-15.36,31/08/2026,USD 9.00 converted at 0.59,This includes a currency conversion charge of $0.19
+Visa Purchase,4037-****-****-6505  If,,Upwork -9465,,-61.99,27/08/2026,,
+Automatic Payment,Go,Drawings,,,-350.00,26/08/2026,,
+Visa Purchase,4037-****-****-6505  If,,Higgsfield I,,-224.96,26/08/2026,,
+Visa Purchase,4037-****-****-6505  If,      0.59,Retellai.Com,        0.04,-3.40,26/08/2026,USD 2.00 converted at 0.59,This includes a currency conversion charge of $0.04
+Direct Credit,Stripe Payments,,Trf 5Jq1P3Pq,Stripe,393.27,26/08/2026,,
+Visa Purchase,4037-****-****-6505  If,      0.59,P.Skool.Com/,        0.59,-46.11,25/08/2026,USD 27.00 converted at 0.59,This includes a currency conversion charge of $0.59

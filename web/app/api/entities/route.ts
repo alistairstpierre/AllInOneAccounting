@@ -18,6 +18,7 @@ interface Entity {
   type: EntityType; // Type of entity: Personal or Business
   transactions: string[]; // Array of transaction IDs (merchant_amount_date)
   cards?: string[]; // Assigned credit cards (array)
+  accounts?: string[]; // Assigned bank account numbers (array)
 }
 
 function getTransactionId(transaction: any): string {
@@ -42,6 +43,10 @@ function loadEntities(): Entity[] {
       } else if (!entity.cards) {
         // Initialize empty cards array if neither exists
         entity.cards = [];
+      }
+      if (!entity.accounts) {
+        entity.accounts = [];
+        needsMigration = true;
       }
       // Add default type for backward compatibility
       if (!entity.type) {

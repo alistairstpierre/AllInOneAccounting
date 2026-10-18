@@ -48,6 +48,7 @@ interface Entity {
   type: 'Personal' | 'Business';
   transactions: string[];
   cards?: string[]; // Assigned credit cards (array)
+  accounts?: string[]; // Assigned bank account numbers (array)
 }
 
 function getTransactionId(transaction: Transaction | { id?: string; merchant: string; amount: number; transaction_date: string }): string {
@@ -1343,6 +1344,39 @@ export default function Home() {
     }
   };
 
+  const handleAccountAssign = async (entityId: string, account: string, action: 'add' | 'remove' = 'add') => {
+    try {
+      const response = await fetch('/api/entities/assign-by-account', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          entityId,
+          account,
+          action,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        await fetchEntities();
+        if (action === 'add' && account) {
+          alert(`Successfully assigned ${data.assignedCount || 0} transactions from this account to the entity.`);
+        } else if (action === 'remove') {
+          alert(`Account removed from entity.`);
+        }
+      } else {
+        const errorData = await response.json();
+        alert(`Failed to ${action === 'add' ? 'assign' : 'remove'} account: ${errorData.error || 'Unknown error'}`);
+        console.error(`Failed to ${action} account`);
+      }
+    } catch (error) {
+      console.error('Error assigning transactions by account:', error);
+      alert('Error assigning transactions by account');
+    }
+  };
+
   const totalExpensesFiltered = useMemo(() => {
     // Only count debits (expenses), exclude credits
     return filteredAndSortedTransactions.reduce((sum, t) => sum + t.amount, 0);
@@ -1620,6 +1654,7 @@ export default function Home() {
           onEntityDelete={handleEntityDelete}
           transactions={transactions}
           onCardAssign={handleCardAssign}
+          onAccountAssign={handleAccountAssign}
           selectedCategory={selectedCategory}
           onCategoryChange={setSelectedCategory}
           onEntityCreate={handleEntityCreate}

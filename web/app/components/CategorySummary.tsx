@@ -14,6 +14,7 @@ interface Entity {
   type: 'Personal' | 'Business';
   transactions: string[];
   cards?: string[]; // Assigned credit cards (array)
+  accounts?: string[]; // Assigned bank account numbers (array)
 }
 
 interface Transaction {
@@ -40,6 +41,7 @@ interface CategorySummaryProps {
   onEntityDelete?: (entityId: string) => void;
   transactions?: Transaction[];
   onCardAssign?: (entityId: string, card: string, action?: 'add' | 'remove') => void;
+  onAccountAssign?: (entityId: string, account: string, action?: 'add' | 'remove') => void;
   selectedCategory?: string;
   onCategoryChange?: (category: string) => void;
   onEntityCreate?: (name: string, type: 'Personal' | 'Business') => void;
@@ -148,6 +150,7 @@ export default function CategorySummary({
   onEntityDelete,
   transactions = [],
   onCardAssign,
+  onAccountAssign,
   selectedCategory,
   onCategoryChange,
   onEntityCreate,
@@ -511,6 +514,15 @@ export default function CategorySummary({
                             ))}
                           </div>
                         )}
+                        {entity.accounts && entity.accounts.length > 0 && (
+                          <div className="flex items-center gap-1 flex-wrap">
+                            {entity.accounts.map((account) => (
+                              <span key={account} className="text-xs px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded-full">
+                                {truncateFileName(accountToDisplayName.get(account) || account)}
+                              </span>
+                            ))}
+                          </div>
+                        )}
                         <span className="text-sm text-gray-500">
                           ${entityTotal.toFixed(2)} ({entityTransactionCounts[entity.id] || 0} transactions)
                         </span>
@@ -589,6 +601,64 @@ export default function CategorySummary({
                                     }}
                                     className="text-blue-700 hover:text-blue-900 font-bold"
                                     title="Remove card"
+                                  >
+                                    ×
+                                  </button>
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      )}
+                      {uniqueAccounts.length > 0 && onAccountAssign && (
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <label className="text-sm text-gray-600">Assign account:</label>
+                          <select
+                            value=""
+                            onChange={(e) => {
+                              const selectedAccount = e.target.value;
+                              if (selectedAccount && selectedAccount !== '') {
+                                const isAlreadyAssigned = entity.accounts?.includes(selectedAccount);
+                                if (isAlreadyAssigned) {
+                                  alert(`Account is already assigned to "${entity.name}"`);
+                                  e.target.value = '';
+                                  return;
+                                }
+                                const displayName = accountToDisplayName.get(selectedAccount) || selectedAccount;
+                                if (confirm(`Assign all transactions from "${displayName}" (including income/credits) to "${entity.name}"?`)) {
+                                  onAccountAssign(entity.id, selectedAccount);
+                                  e.target.value = '';
+                                }
+                              }
+                            }}
+                            className="px-3 py-1 text-sm border border-gray-300 rounded-md text-black bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          >
+                            <option value="">Select an account to assign...</option>
+                            {uniqueAccounts.map((account) => {
+                              const isAssigned = entity.accounts?.includes(account);
+                              const accountTransactionCount = transactions.filter(t => t.account === account).length;
+                              const displayName = accountToDisplayName.get(account) || account;
+                              return (
+                                <option key={account} value={account} disabled={isAssigned}>
+                                  {displayName} ({accountTransactionCount} transactions){isAssigned ? ' - Already assigned' : ''}
+                                </option>
+                              );
+                            })}
+                          </select>
+                          {entity.accounts && entity.accounts.length > 0 && (
+                            <div className="flex items-center gap-1 flex-wrap">
+                              {entity.accounts.map((account) => (
+                                <span key={account} className="text-xs px-2 py-1 bg-emerald-100 text-emerald-800 rounded-md flex items-center gap-1">
+                                  {truncateFileName(accountToDisplayName.get(account) || account)}
+                                  <button
+                                    onClick={() => {
+                                      const displayName = accountToDisplayName.get(account) || account;
+                                      if (confirm(`Remove account "${displayName}" from "${entity.name}"? This will not unassign transactions, only remove the account association.`)) {
+                                        onAccountAssign(entity.id, account, 'remove');
+                                      }
+                                    }}
+                                    className="text-emerald-800 hover:text-emerald-950 font-bold"
+                                    title="Remove account"
                                   >
                                     ×
                                   </button>

@@ -1,0 +1,16 @@
+Type,Details,Particulars,Code,Reference,Amount,Date,ForeignCurrencyAmount,ConversionCharge
+Visa Purchase,4037-****-****-6505  Df,,Paymypark,,-53.53,05/06/2026,,
+Visa Purchase,4037-****-****-6505  If,      0.58,Openart Ai,        0.31,-24.22,05/06/2026,USD 14.00 converted at 0.58,This includes a currency conversion charge of $0.31
+Direct Credit,Stripe Payments,,Trf Cekujhuz,Stripe,390.15,05/06/2026,,
+Automatic Payment,Go,Drawings,,,-350.00,03/06/2026,,
+Visa Purchase,4037-****-****-6505  If,      0.59,Elevenlabs.I,        0.12,-9.86,03/06/2026,USD 5.75 converted at 0.59,This includes a currency conversion charge of $0.12
+Visa Purchase,4037-****-****-6505  Df,,Wu,,-595.15,02/06/2026,,
+Visa Purchase,4037-****-****-6505  If,      0.59,Clickup,        1.25,-97.52,02/06/2026,USD 57.00 converted at 0.59,This includes a currency conversion charge of $1.25
+Visa Purchase,4037-****-****-6505  If,      0.59,Descript,        0.76,-59.88,02/06/2026,USD 35.00 converted at 0.59,This includes a currency conversion charge of $0.76
+Visa Purchase,4037-****-****-6505  If,      0.59,Descript,        0.71,-56.01,02/06/2026,USD 32.74 converted at 0.59,This includes a currency conversion charge of $0.71
+Visa Purchase,4037-****-****-6505  Df,,Google Works,,-38.50,02/06/2026,,
+Visa Purchase,4037-****-****-6505  If,      0.59,Figma,        0.43,-34.22,02/06/2026,USD 20.00 converted at 0.59,This includes a currency conversion charge of $0.43
+Visa Purchase,4037-****-****-6505  If,      0.59,Vercel Inc.,        0.43,-34.22,02/06/2026,USD 20.00 converted at 0.59,This includes a currency conversion charge of $0.43
+Visa Purchase,4037-****-****-6505  Df,,Google Works,,-10.28,02/06/2026,,
+Visa Purchase,4037-****-****-6505  Df,,Google Cloud,,-4.84,02/06/2026,,
+Transfer,06-0441-0179990-00,Credit,Transfer,001641,158.99,02/06/2026,,

@@ -49,7 +49,7 @@ BUSINESS_CATEGORIES = [
     'Office Supplies', 'Software/Subscriptions', 'Marketing/Advertising', 'Professional Services',
     'Travel', 'Meals/Entertainment', 'Equipment', 'Rent/Utilities', 'Insurance',
     'Education/Training', 'Transportation', 'Legal/Accounting', 'Telecommunications',
-    'Bank Fees', 'Uncategorized',
+    'Bank Fees', 'Taxes', 'Uncategorized',
 ]
 
 
@@ -595,19 +595,26 @@ def main() -> None:
         print(f"\nProcessing: {account_folder.name}")
         process_account(account_folder, project_root)
 
-    # Assign transactions to entities by card (4037 → Century, 4055/4835 → Alistair, etc.)
+    # Assign transactions to entities by card, then by bank account
+    # (account covers Direct Credits like Stripe that have no card number)
     try:
         from assign_transactions_by_card import (
             assign_transactions_to_entities_by_card,
+            assign_transactions_to_entities_by_account,
             load_all_transactions,
         )
         all_txns = load_all_transactions(project_root)
         if all_txns:
-            stats = assign_transactions_to_entities_by_card(all_txns, project_root)
-            if stats.get('assigned', 0) > 0:
-                print(f"\n  [OK] Assigned {stats['assigned']} transaction(s) to entities by card")
+            card_stats = assign_transactions_to_entities_by_card(all_txns, project_root)
+            if card_stats.get('assigned', 0) > 0:
+                print(f"\n  [OK] Assigned {card_stats['assigned']} transaction(s) to entities by card")
+            account_stats = assign_transactions_to_entities_by_account(
+                load_all_transactions(project_root), project_root
+            )
+            if account_stats.get('assigned', 0) > 0:
+                print(f"\n  [OK] Assigned {account_stats['assigned']} transaction(s) to entities by account")
     except Exception as e:
-        print(f"\n  [Warning] Entity assignment by card skipped: {e}")
+        print(f"\n  [Warning] Entity assignment skipped: {e}")
 
     print("\nDone.")
 

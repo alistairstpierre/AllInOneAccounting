@@ -1,12 +1,18 @@
 #!/usr/bin/env python3
 """
-Assign Existing Transactions to Entities by Credit Card
+Assign Existing Transactions to Entities by Credit Card or Bank Account
 
 Fills in entity membership for transactions that are not yet linked to any entity:
-if a transaction's `card` matches an entity's `cards` entry, it is appended to that
-entity's `transactions` list. Transactions already listed on any entity are skipped
-so re-running categorize_transactions / process_new_transactions does not undo
-manual assignments from the web app.
+- if a transaction's `card` matches an entity's `cards` entry, or
+- if a transaction's `account` matches an entity's `accounts` entry,
+it is appended to that entity's `transactions` list.
+
+Account matching covers bank-account credits/debits that have no card number
+(e.g. Stripe Direct Credits on Century Digital Main Account).
+
+Transactions already listed on any entity are skipped so re-running
+categorize_transactions / process_new_transactions does not undo manual
+assignments from the web app.
 
 Usage:
     python assign_transactions_by_card.py
@@ -44,6 +50,8 @@ def load_entities(project_root: Path) -> List[Dict[str, Any]]:
                 entity['transactions'] = []
             if 'cards' not in entity:
                 entity['cards'] = []
+            if 'accounts' not in entity:
+                entity['accounts'] = []
         
         return entities
     except Exception as e:
@@ -193,12 +201,77 @@ def assign_transactions_to_entities_by_card(transactions: List[Dict[str, Any]], 
     
     return stats
 
+
+def assign_transactions_to_entities_by_account(transactions: List[Dict[str, Any]], project_root: Path) -> Dict[str, int]:
+    """
+    Assign transactions to entities based on bank account numbers.
+
+    Matches transaction `account` (e.g. 01-0142-0771521-00) to an entity's
+    `accounts` list. Only assigns transactions not yet linked to any entity.
+
+    Returns:
+        Dictionary with statistics: {'assigned': count, 'already_assigned': count,
+        'no_account': count, 'no_match': count}
+    """
+    entities = load_entities(project_root)
+    if not entities:
+        print("No entities found. Please create entities first.")
+        return {'assigned': 0, 'already_assigned': 0, 'no_account': 0, 'no_match': 0}
+
+    account_to_entity: Dict[str, Dict[str, Any]] = {}
+    for entity in entities:
+        for account in entity.get('accounts', []):
+            if account and str(account).strip():
+                account_to_entity[str(account).strip()] = entity
+
+    if not account_to_entity:
+        print("No bank accounts assigned to entities. Skipping account-based assignment.")
+        return {'assigned': 0, 'already_assigned': 0, 'no_account': 0, 'no_match': 0}
+
+    stats = {
+        'assigned': 0,
+        'already_assigned': 0,
+        'no_account': 0,
+        'no_match': 0,
+    }
+    entities_modified = False
+
+    for transaction in transactions:
+        transaction_account = transaction.get('account')
+        if not transaction_account:
+            stats['no_account'] += 1
+            continue
+
+        transaction_id = get_transaction_id(transaction)
+
+        if _transaction_linked_to_any_entity(transaction_id, entities):
+            stats['already_assigned'] += 1
+            continue
+
+        matching_entity = account_to_entity.get(str(transaction_account).strip())
+        if not matching_entity:
+            stats['no_match'] += 1
+            continue
+
+        if 'transactions' not in matching_entity:
+            matching_entity['transactions'] = []
+        if transaction_id not in matching_entity['transactions']:
+            matching_entity['transactions'].append(transaction_id)
+            entities_modified = True
+            stats['assigned'] += 1
+
+    if entities_modified:
+        save_entities(project_root, entities)
+
+    return stats
+
+
 def main():
     """Main function."""
     project_root = Path(__file__).parent
     
     print("=" * 60)
-    print("Assign Transactions to Entities by Credit Card")
+    print("Assign Transactions to Entities by Card / Account")
     print("=" * 60)
     print()
     
@@ -220,30 +293,49 @@ def main():
         print("No entities found. Please create entities first.")
         return
     
-    # Count entities with cards
+    # Count entities with cards / accounts
     entities_with_cards = sum(1 for e in entities if e.get('cards'))
+    entities_with_accounts = sum(1 for e in entities if e.get('accounts'))
     print(f"  {entities_with_cards} entity/entities have credit cards assigned")
+    print(f"  {entities_with_accounts} entity/entities have bank accounts assigned")
     
-    if entities_with_cards == 0:
-        print("\nNo entities have credit cards assigned. Please assign cards to entities first.")
+    if entities_with_cards == 0 and entities_with_accounts == 0:
+        print("\nNo entities have cards or accounts assigned. Assign them first.")
         return
     
-    # Assign transactions
-    print("\nAssigning transactions to entities based on credit cards...")
-    stats = assign_transactions_to_entities_by_card(transactions, project_root)
+    # Assign by card, then by account (account covers Stripe Direct Credits etc.)
+    card_stats = {'assigned': 0, 'already_assigned': 0, 'no_card': 0, 'no_match': 0}
+    account_stats = {'assigned': 0, 'already_assigned': 0, 'no_account': 0, 'no_match': 0}
+
+    if entities_with_cards > 0:
+        print("\nAssigning transactions to entities based on credit cards...")
+        card_stats = assign_transactions_to_entities_by_card(transactions, project_root)
+
+    if entities_with_accounts > 0:
+        print("\nAssigning transactions to entities based on bank accounts...")
+        # Reload after card assignment so we don't double-assign
+        transactions = load_all_transactions(project_root)
+        account_stats = assign_transactions_to_entities_by_account(transactions, project_root)
     
     # Print results
     print("\n" + "=" * 60)
     print("Results:")
     print("=" * 60)
-    print(f"  [OK] Assigned: {stats['assigned']} transaction(s)")
-    print(f"  - Already assigned: {stats['already_assigned']} transaction(s)")
-    print(f"  - No card number: {stats['no_card']} transaction(s)")
-    print(f"  - No matching entity: {stats['no_match']} transaction(s)")
+    print("By card:")
+    print(f"  [OK] Assigned: {card_stats['assigned']} transaction(s)")
+    print(f"  - Already assigned: {card_stats['already_assigned']} transaction(s)")
+    print(f"  - No card number: {card_stats['no_card']} transaction(s)")
+    print(f"  - No matching entity: {card_stats['no_match']} transaction(s)")
+    print("By account:")
+    print(f"  [OK] Assigned: {account_stats['assigned']} transaction(s)")
+    print(f"  - Already assigned: {account_stats['already_assigned']} transaction(s)")
+    print(f"  - No account number: {account_stats['no_account']} transaction(s)")
+    print(f"  - No matching entity: {account_stats['no_match']} transaction(s)")
     print()
     
-    if stats['assigned'] > 0:
-        print("[OK] Successfully assigned transactions to entities!")
+    total_assigned = card_stats['assigned'] + account_stats['assigned']
+    if total_assigned > 0:
+        print(f"[OK] Successfully assigned {total_assigned} transaction(s) to entities!")
     else:
         print("No new assignments made.")
     print()

@@ -13,6 +13,7 @@ interface Entity {
   name: string;
   transactions: string[];
   cards?: string[]; // Assigned credit cards (array)
+  accounts?: string[]; // Assigned bank account numbers (array)
 }
 
 interface EntityManagerProps {

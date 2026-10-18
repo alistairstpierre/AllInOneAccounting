@@ -20,8 +20,10 @@ AllInOneAccounting helps you categorize bank transactions by importing CSV files
 - `categorize_transactions.py` - Imports CSV files into storage/transactions (used by process_new_transactions.py)
 - `identify_and_categorize.py` - Identifies and categorizes transactions in storage by entity type (used by process_new_transactions.py)
 - `update_transactions_with_credit_debit.py` - Script to update existing transactions with credit/debit information
-- `assign_transactions_by_card.py` - Links unassigned transactions to entities by card (runs after CSV import; skips transactions already on any entity so manual assignments persist)
+- `assign_transactions_by_card.py` - Links unassigned transactions to entities by card **or bank account** (runs after CSV import; skips transactions already on any entity so manual assignments persist). Account matching covers Direct Credits (e.g. Stripe) that have no card number.
+- `web/app/api/entities/assign-by-account/route.ts` - API to link a bank account to an entity and assign its transactions (including income)
 - `export_century_6788_expenses.py` - Exports Century-assigned transactions on credit card *6788 to dated CSVs under `storage/`
+- `export_century_digital_pdf_report.py` - PDF report for Century Digital Main Account: income vs expenses, expenses grouped by category (writes to `storage/`)
 - `web/` - Next.js web application
   - `web/app/lib/transaction-update.ts` - Utility function for updating transactions (marks as updated only when values change)
 

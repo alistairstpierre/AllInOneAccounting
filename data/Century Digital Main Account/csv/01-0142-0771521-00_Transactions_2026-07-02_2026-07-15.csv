@@ -1,0 +1,21 @@
+Type,Details,Particulars,Code,Reference,Amount,Date,ForeignCurrencyAmount,ConversionCharge
+Automatic Payment,Go,Drawings,,,-350.00,15/07/2026,,
+Visa Purchase,4037-****-****-6505  If,      0.57,Neo,        0.05,-4.39,15/07/2026,USD 2.49 converted at 0.57,This includes a currency conversion charge of $0.05
+Visa Purchase,4037-****-****-6505  If,,Anthropic* C,,-200.00,13/07/2026,,
+Visa Purchase,4037-****-****-6505  If,,Facebk *L2Ae,,-162.00,13/07/2026,,
+Visa Purchase,4037-****-****-6505  Df,,Google One,,-4.99,13/07/2026,,
+Direct Credit,Stripe Payments,,Trf Qmizvv9R,Stripe,4116.31,13/07/2026,,
+Visa Purchase,4037-****-****-6505  If,,Upwork -9338,,-92.79,09/07/2026,,
+Visa Purchase,4037-****-****-6505  If,      0.56,P.Skool.Com/,        0.75,-58.95,09/07/2026,USD 33.00 converted at 0.56,This includes a currency conversion charge of $0.75
+Direct Credit,Stripe Payments,,Trf Ldnhfucb,Stripe,9149.66,09/07/2026,,
+Automatic Payment,Go,Drawings,,,-350.00,08/07/2026,,
+Direct Credit,Stripe Payments,,Trf Cw0I7Fwg,Stripe,347.27,07/07/2026,,
+Visa Purchase,4037-****-****-6505  If,      0.56,Openart Ai,        0.31,-24.93,06/07/2026,USD 14.00 converted at 0.56,This includes a currency conversion charge of $0.31
+Visa Purchase,4037-****-****-6505  Df,,Wu,,-621.95,03/07/2026,,
+Visa Purchase,4037-****-****-6505  If,      0.56,Elevenlabs.I,        0.13,-10.30,03/07/2026,USD 5.75 converted at 0.56,This includes a currency conversion charge of $0.13
+Visa Purchase,4037-****-****-6505  If,      0.56,Descript,        1.61,-126.00,02/07/2026,USD 70.00 converted at 0.56,This includes a currency conversion charge of $1.61
+Visa Purchase,4037-****-****-6505  If,,Upwork -9320,,-112.19,02/07/2026,,
+Visa Purchase,4037-****-****-6505  If,      0.56,Clickup,        1.31,-102.39,02/07/2026,USD 57.00 converted at 0.56,This includes a currency conversion charge of $1.31
+Visa Purchase,4037-****-****-6505  If,      0.56,Vercel Inc.,        0.46,-36.00,02/07/2026,USD 20.00 converted at 0.56,This includes a currency conversion charge of $0.46
+Visa Purchase,4037-****-****-6505  Df,,Google Works,,-28.98,02/07/2026,,
+Visa Purchase,4037-****-****-6505  Df,,Google Works,,-28.98,02/07/2026,,

@@ -39,6 +39,7 @@ interface Entity {
   type: 'Personal' | 'Business';
   transactions: string[];
   cards?: string[]; // Assigned credit cards (array)
+  accounts?: string[]; // Assigned bank account numbers (array)
 }
 
 interface TransactionCardProps {

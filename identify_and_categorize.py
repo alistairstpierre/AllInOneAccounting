@@ -75,6 +75,7 @@ BUSINESS_CATEGORIES = [
     'Legal/Accounting',
     'Telecommunications',
     'Bank Fees',
+    'Taxes',
     'Uncategorized',
 ]
 

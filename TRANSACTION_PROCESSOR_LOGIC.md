@@ -280,6 +280,7 @@ Available categories:
 - **Legal/Accounting**: Legal services, accounting services, tax preparation
 - **Telecommunications**: Phone services, internet, communication tools
 - **Bank Fees**: Banking fees, transaction fees, account maintenance
+- **Taxes**: Tax payments (GST, income tax, PAYE, provisional tax, IRD payments) — not tax preparation services
 - **Uncategorized**: Expenses that don't fit other categories
 
 ## Categorization Guidelines
